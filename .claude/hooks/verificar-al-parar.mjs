@@ -16,6 +16,14 @@
 // - El build va a una carpeta temporal: verificar no toca el dist/ del
 //   proyecto. Por eso se ejecutan `vite build --outDir` y `tsc --noEmit` por
 //   separado: con `npm run build -- --outDir` el argumento acabaría en tsc.
+//
+// Añadido el 2026-11-07, en la revisión del harness tras T1:
+// - Siempre, haya o no cambios de código: ninguna tarea ✅ de docs/tareas.md
+//   puede tener la línea «Verificación: —». Hace cumplir el ciclo «✅ solo
+//   tras el verificador» (antes era solo un consejo de CLAUDE.md).
+// - Con cambios de código, antes que los tests: check-estatico de verify-task
+//   (capas, pods, key por índice, .only/.skip, react-router…). Bloquea solo
+//   con [FALLA]; los [AVISO] no.
 
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
@@ -32,6 +40,26 @@ try { datos = JSON.parse(entrada); } catch {}
 if (datos.stop_hook_active === true) process.exit(0);
 
 const raiz = resolve(process.env.CLAUDE_PROJECT_DIR || datos.cwd || process.cwd());
+
+// ---- Tareas ✅ sin verificación (siempre) ----
+const rutaTareas = join(raiz, "docs", "tareas.md");
+if (existsSync(rutaTareas)) {
+  const texto = readFileSync(rutaTareas, "utf8").replace(/\r\n/g, "\n");
+  const re = /^## (T\d+) · (.+?) — ✅[^\n]*\n([\s\S]*?)(?=^## |^---|(?![\s\S]))/gm;
+  const sinVerificar = [];
+  for (const m of texto.matchAll(re)) {
+    const linea = m[3].match(/^\*\*Verificación:\*\*\s*(.*)$/m);
+    if (!linea || /^(—|-|)$/.test(linea[1].trim())) sinVerificar.push(`${m[1]} · ${m[2]}`);
+  }
+  if (sinVerificar.length) {
+    process.stderr.write(
+      `En docs/tareas.md hay tareas ✅ con la línea «Verificación» vacía: ${sinVerificar.join(", ")}.\n` +
+        "Una tarea solo es ✅ tras pasar el verificador (skill verify-task). Lánzalo y rellena la línea con su resultado, o vuelve a dejar la tarea en 🔄.\n",
+    );
+    process.exit(2);
+  }
+}
+
 const pkgRuta = join(raiz, "package.json");
 if (!existsSync(pkgRuta)) process.exit(0);
 
@@ -43,6 +71,16 @@ const fallar = (que, detalle) => {
   process.stderr.write(`Hay cambios sin commit en el código y «${que}» falla. Arréglalo antes de dar el trabajo por terminado:\n${detalle}\n`);
   process.exit(2);
 };
+
+// ---- Comprobación estática (rápida, sin dependencias) ----
+const rutaCheck = join(raiz, ".claude", "skills", "verify-task", "scripts", "check-estatico.mjs");
+if (existsSync(rutaCheck)) {
+  const check = spawnSync(process.execPath, [rutaCheck, raiz], { cwd: raiz, encoding: "utf8" });
+  if (check.status === 1) {
+    const fallos = (check.stdout ?? "").split(/\r?\n/).filter((l) => l.startsWith("[FALLA]")).join("\n");
+    fallar("check-estatico", fallos + "\n(Si es un falso positivo del script, arregla el script con el usuario; no cambies el código para callarlo.)");
+  }
+}
 
 if (!existsSync(join(raiz, "node_modules"))) fallar("npm install", "No hay node_modules: ejecuta npm install.");
 

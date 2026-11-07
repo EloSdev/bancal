@@ -128,7 +128,8 @@ informe, nunca se "arregla" el código para callar al script.
 2. **Herramientas**: MCP `playwright` (`browser_navigate`, `browser_snapshot`,
    `browser_click`, `browser_type`, `browser_fill_form`, `browser_press_key`,
    `browser_resize`, `browser_evaluate`, `browser_take_screenshot`,
-   `browser_wait_for`, `browser_console_messages`, `browser_emulate_media`).
+   `browser_wait_for`, `browser_console_messages`, `browser_emulate_media`,
+   `browser_run_code_unsafe` para el lote del paso 5).
    Si no está disponible, la puerta 4 queda **NO COMPROBADA** (nunca PASA).
 3. **Estado de partida conocido**: los datos viven en `localStorage`. Antes
    de empezar, `browser_evaluate(() => localStorage.clear())` y recarga; si
@@ -138,16 +139,26 @@ informe, nunca se "arregla" el código para callar al script.
    guardar, espera con `browser_wait_for` a que desaparezca «Cargando…» o
    aparezca el contenido esperado; no midas un estado intermedio.
 5. **Cada ruta que toca la tarea, en 360×800 y 1440×900** (y 768×1024 si
-   hay rejillas que cambian de columnas):
-   - Ejecuta la sonda: lee `scripts/sonda-pagina.js` y pásala entera como
-     función de `browser_evaluate`. Devuelve desbordamiento, contraste medido
-     de cada texto, encabezados, imágenes rotas, interactivos sin nombre o
-     de menos de 24 px.
-   - Haz una captura y **mírala**. La sonda no ve un solapamiento, un texto
-     cortado o una celda deformada; tus ojos sí. Guarda las capturas en
-     `.playwright-mcp/` (git la ignora; el MCP de Playwright solo puede
-     escribir dentro del proyecto, no en el scratchpad), salvo que se pidan
-     para el README.
+   hay rejillas que cambian de columnas), **en un solo lote**:
+   ```powershell
+   node .claude/skills/verify-task/scripts/preparar-lote.mjs <url> /ruta1 /ruta2 --anchos 360,1440
+   ```
+   y después `browser_run_code_unsafe({ filename: ".playwright-mcp/lote.js" })`.
+   Para cada ruta × ancho pasa la sonda (`scripts/sonda-pagina.js`:
+   desbordamiento, contraste medido de cada texto, encabezados, imágenes,
+   interactivos sin nombre o de menos de 24 px), saca una captura a
+   `.playwright-mcp/lote-<ruta>-<ancho>.png`, escucha consola, errores y
+   respuestas ≥ 400, y repite con movimiento reducido (paso 9). Devuelve los
+   problemas agrupados. La sonda no pasa por tu contexto: no la pegues en
+   `browser_evaluate` salvo para medir un estado concreto tras interactuar.
+   - **Mira las capturas** (Read de los `.png`). La sonda no ve un
+     solapamiento, un texto cortado o una celda deformada; tus ojos sí. Las
+     capturas van a `.playwright-mcp/` (git la ignora; el MCP de Playwright
+     solo puede escribir dentro del proyecto, no en el scratchpad), salvo
+     que se pidan para el README.
+   - Si una pantalla necesita datos o una interacción previa (un bancal
+     creado, un formulario abierto), prepárala a mano y pasa la sonda con
+     `browser_evaluate` en ese estado; el lote solo navega a URLs.
    - **Enlace profundo**: navega directamente a la URL con sus *search
      params* (`/cultivos?sol=pleno`, `/bancales/1?mes=5`) y comprueba que
      el estado sale de la URL.
@@ -161,11 +172,11 @@ informe, nunca se "arregla" el código para callar al script.
    cerrar algo, borrar o guardar.
 8. **Anuncios**: si la tarea promete `aria-live`, lee el texto de la región
    antes y después de la acción (`browser_evaluate`) y apúntalo.
-9. **Movimiento reducido**: `browser_emulate_media` con
-   `reducedMotion: "reduce"`, recarga y vuelve a pasar la sonda:
-   `animacionesEnMarcha` tiene que estar vacío. El navegador es compartido y
-   la emulación se queda puesta: al empezar, comprueba con la sonda que
-   `reducedMotion` es `false`.
+9. **Movimiento reducido**: el lote ya lo hace (`animacionesConReduce`
+   tiene que estar vacío, `reducedMotionAlEmpezar` tiene que ser `false`) y
+   deja la emulación quitada. Para un estado preparado a mano:
+   `browser_emulate_media` con `reducedMotion: "reduce"`, recarga, sonda, y
+   vuelve a quitar la emulación (el navegador es compartido).
 10. **Contraste que la sonda no puede medir** (`revisarAMano`): míralo en la
     captura y dilo.
 
