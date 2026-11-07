@@ -1,0 +1,104 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this is
+
+**Bancal**, a Spanish-language SPA for planning urban vegetable gardens: the user draws raised beds (*bancales*) with real measurements, places crops on a 30 × 30 cm grid, and the app reports **live** which neighbours help or harm each other, whether there is enough sun, and how the garden evolves month by month. Final project of the course *Front End Moderno y Herramientas IA* (Fundación Luckia + Lemoncode): individual, frontend only, simulated data.
+
+Sources of truth:
+
+- `docs/tareas.md` — **the MVP plan**: tasks T1–T17 with checkable criteria `C<n>.<m>`, each tagged with how it is verified (`test`, `build`, `nav`, `leer`, `datos`), plus the common gates, coverage table and the post-MVP iterations list. Work happens task by task, in order.
+- `docs/guia-proyecto.md` — the full project guide (scope, domain, stack, quality). **Private: git-ignored, only on the author's machine.** This `CLAUDE.md` is its versioned summary; if the guide is missing, rely on this file and `docs/tareas.md`.
+- `docs/brief.md` — visual direction, created in T2 (skill `brief-grill`).
+
+Use the Spanish domain terms (Cultivo, Bancal, Celda, Plantación, Vecindad, Exposición, Zona climática, Estado de la planta, Aviso) in code, UI and conversation.
+
+## Current state
+
+**Not scaffolded yet**: no `package.json` or `src/`; git is initialised with no commits. Next task: **T1 · Proyecto base**, copying stack, versions and structure from `../lab-react` (read its `CLAUDE.md` and `package.json`) and adding Vitest + Testing Library + jsdom. When T1 lands, replace this section with the real commands.
+
+Expected scripts (T1, C1.1):
+
+- `npm start` — Vite dev server
+- `npm run build` — `vite build && tsc --noEmit`. Order matters: the router plugin generates `src/routeTree.gen.ts` during the Vite build and `tsc` needs it. Never edit that file by hand (a hook blocks it).
+- `npm run typecheck`, `npm run preview`
+- `npm test` — Vitest, single run. One test: `npx vitest run <path> -t "<name>"` (test names carry the criterion id, e.g. `"C5.2 · …"`).
+
+## Stack
+
+Node.js ≥ 22.12 on **Windows 11 ARM64** (arm64 builds of native deps). TypeScript 7 strict with `verbatimModuleSyntax` (`import type`), React 19, Vite 8, Tailwind CSS 4 via `@tailwindcss/vite` (tokens in `@theme`, container queries in the editor), TanStack Router file-based (search params validated with Zod), TanStack Form + Zod 4 (Spanish messages), Vitest + Testing Library (`react`, `user-event`, `jest-dom`) + jsdom.
+
+**No dependencies outside this list without justification** (no React Router, TanStack Query, MSW, axe, clsx/cva, animation libraries). Drag & drop uses native Pointer Events; animations use CSS and the View Transitions API.
+
+## Architecture
+
+Same layering as `lab-react` (detail and examples in the skill `react-bancal`):
+
+```
+src/
+  routes/   navigation only: read params / search params, render a scene
+  scenes/   compose a screen and decide navigation
+  pods/     catalogo/, bancales/, editor/ — *.container.tsx (data, state) and
+            *.component.tsx (props → render); imported only via index.ts, never from each other
+  core/     <dominio>/model.ts, *.schema.ts, api.ts, hooks.ts and pure domain logic (+ tests)
+  common/   shared components (loading, error…)
+```
+
+- **The heart of the project is pure functions in `core/`, built with TDD** (skill `tdd-core`): neighbours of a cell, compatibility, warnings for a bed, plant state in a month, tasks of the month. `core/` imports no React except `hooks.ts`.
+- Data: `public/crops.json` (~24 crops) + `localStorage`, behind an **async `api` layer with simulated latency** validated with Zod, so the UI handles loading and error as if there were a backend. Data hooks return `{ data, loading, error }` and cancel with `AbortController`.
+- Derived values (warnings, plant states, monthly tasks, counts) are computed during render, never stored. Filters and the month live in the URL.
+- Routes: `/cultivos?q=&sol=&temporada=`, `/cultivos/$cultivoId`, `/bancales`, `/bancales/nuevo`, `/bancales/$bancalId/editar`, `/bancales/$bancalId?mes=5`.
+
+## Reglas del dominio
+
+Versioned record of domain decisions. Items marked *(propuesta)* are not final until T3 confirms them here (C3.5); never encode an undecided rule in a test — ask the user.
+
+- Grid: cells of 30 × 30 cm; columns = ⌊width / 30⌋, rows = ⌊length / 30⌋ *(propuesta)*; one crop per cell.
+- Neighbourhood = the 8 surrounding cells *(propuesta)*; compatibility between neighbours is favourable, unfavourable or neutral, and symmetric.
+- Exposure: full sun ≥ 6 h, partial shade 3–6 h, shade < 3 h *(propuesta)*. A crop needing more sun than the bed has → warning.
+- Climate zones: atlántica (default), mediterránea, interior; they set sowing and harvest windows.
+- Plant state in a month: por sembrar → sembrada → creciendo → cosecha, **derived from the calendar, never stored**. Default sowing month = first valid month of its window. *Open: state after the harvest window.*
+- Warnings (unfavourable neighbour, insufficient sun, out-of-season sowing) are **recommendations with an explanation, never blocks**. `EstadoPlanta` and `Aviso` are discriminated unions.
+- Open: maximum bed size.
+- Every horticulture data point is verified against cited sources (agent `revisor-datos`); sources go in the README. This is the project's main risk of errors.
+
+## How work is done (harness)
+
+Per task in `docs/tareas.md`: mark it 🔄 → build it with the matching skill → verify with the **`verificador`** agent (skill `verify-task`) → for UI tasks also **`react-reviewer`** and **`design-reviewer`** → fix and re-verify until ✅ → update the task's **Verificación** line → one commit per task.
+
+| Piece | Use it for |
+|---|---|
+| skill `plan-tasks` | adding, splitting or reordering tasks; turning an iteration into tasks |
+| skill `tdd-core` | any function in `src/core/` (T3–T8) |
+| skill `react-bancal` | any `.tsx`, hook, route or form (T1, T9–T15) |
+| skill `react-testing` | component, container and hook tests |
+| skill `frontend-a11y` | forms, the editor grid (roving tabindex), `aria-live` warnings, focus |
+| skills `brief-grill` → `tailwind-design-system` | T2: visual direction into `docs/brief.md`, then `@theme` tokens |
+| skills `design-taste-frontend`, `tailwind-clases-limpias`, `ux-copy` | building and polishing screens; UI copy in Spanish |
+| skill `verify-task` | the verification procedure (gates, evidence per tag, report format) |
+| agent `verificador` | runs `verify-task` with fresh eyes; has no edit tools |
+| agent `react-reviewer` | read-only code review of React/TS against `react-bancal` |
+| agent `design-reviewer` | read-only design review against `docs/brief.md`, walks the demo flow |
+| agent `revisor-datos` | checks `crops.json` against real sources (criteria tagged `datos`) |
+
+Hooks (`.claude/hooks/`, registered in `.claude/settings.json`) — expect them:
+
+- `test-primero` blocks **creating** a module in `src/core/` without its `.test.ts` next to it (except `index.ts`, `model.ts`, `*.d.ts`).
+- `guardia-irreversible` blocks `git push --force`, `git reset --hard`, `git clean -f`, recursive deletes of the root/home/`.git`, secrets files and edits to `src/routeTree.gen.ts`; asks before writing outside the repo.
+- `verificar-al-parar` (Stop) runs `npm test`, `vite build` (to a temp dir) and `tsc --noEmit` when build-relevant files have uncommitted changes, and won't let the session stop while they fail.
+
+Browser checks use the Playwright MCP from `.mcp.json` (pinned `@playwright/mcp`); Lighthouse runs via `npx`. The user-level `ecc` plugin is disabled for this project (`enabledPlugins`); its useful React pieces were copied and adapted into the skills above.
+
+## Quality bar
+
+- `npm run build` and the tests pass with no errors; no `only`/`skip`; tests are never weakened to go green.
+- Fully keyboard-usable, visible focus, labelled fields, warnings announced with `aria-live`; **compatibility is never conveyed by colour alone** (colour + icon + text).
+- Responsive from 360 px to desktop; UI in Spanish (`<html lang="es">`).
+- README documents how to run, route map, screenshots, data sources and an AI-usage log.
+
+## Working with this user
+
+- Give exactly what is asked; don't create unrequested documents or artifacts. When proposing ideas, be bold rather than obvious.
+- Harness decisions (skills, agents, hooks) are made together with the user.
+- Use the PowerShell tool for shell commands.

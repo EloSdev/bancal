@@ -1,0 +1,44 @@
+# Dependencias
+node_modules/
+
+# Build (Vite)
+dist/
+dist-ssr/
+*.local
+
+# TypeScript y TanStack Router
+*.tsbuildinfo
+.tanstack/
+# src/routeTree.gen.ts NO se ignora: es generado pero se versiona (como en lab-react)
+
+# Tests (Vitest, Playwright)
+coverage/
+test-results/
+playwright-report/
+.playwright-mcp/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Variables de entorno (solo se versiona la plantilla)
+.env
+.env.*
+!.env.example
+
+# Claude Code: ajustes personales
+.claude/settings.local.json
+
+# Editores y sistema operativo
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.sw?
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Custom
+docs/guia-proyecto.md
