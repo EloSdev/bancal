@@ -64,7 +64,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C3.5 Las reglas *(propuesta)* de la guía §3 pasan a decisiones firmes en «Reglas del dominio» de `CLAUDE.md` (la guía es privada) — `leer`
 **Verificación:** 2026-11-07 · verificador: PASA. 39 tests, build, check-estatico y lote sin cambios visuales. C3.2 demostrado en una copia: quitar un `@ts-expect-error` o añadir un estado sin tratar hace fallar `tsc` con el error de `never`. Decisiones del usuario: estado «terminada» tras la cosecha, lado 30–300 cm, ⌊·/30⌋, vecindad de 8, exposición ≥6 / 3–<6 / <3. Tras la verificación, a raíz de sus avisos y con el usuario: cm enteros, nombre ≤ 40 caracteres y «un aviso por pareja» pasan a Reglas del dominio (41 tests y `tsc` en verde); `test-primero` deja pasar `__fixtures__/`.
 
-## T4 · Catálogo de cultivos (datos) — ⬜
+## T4 · Catálogo de cultivos (datos) — ✅
 **Qué:** `public/crops.json` con ~24 cultivos de huerto urbano y sus fuentes.
 **Depende de:** T3
 **Criterios:**
@@ -74,7 +74,8 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C4.4 Están los cultivos de la demo: tomate, albahaca e hinojo, con tomate–albahaca favorable y tomate–hinojo desfavorable — `test` — guía §2 (demo)
 - C4.5 Cada cultivo cita al menos una fuente, listada en el README — `leer` + `datos` — guía §3
 - C4.6 Muestreo: 5 cultivos al azar contrastados con su fuente (plantas por celda, sol, calendario) — `datos` — guía §3 (riesgo principal)
-**Verificación:** —
+- C4.7 Cada cultivo tiene su ciclo (meses hasta la primera cosecha y meses de cosecha, en total ≤ 12), contrastado con fuente para los cultivos de la demo y la muestra — `test` + `datos` — decisión T4
+**Verificación:** 2026-11-07 · verificador: PASA (dos pasadas). 56 tests, build, check-estatico y lote sin cambios visuales; `crops.json` (24 cultivos, 19 fuentes en el README) llega al build. revisor-datos, tres pasadas: C4.6 con muestra al azar (berenjena, capuchina, espinaca, judía verde, remolacha; random.org) → 14 correcciones (sobre todo cultivos de calor en zona atlántica y ventanas de interior), después 0 ❌ y plantas por celda 5/5; C4.7 (ciclos de la demo y la muestra) → 7 correcciones, después 0 ❌. Decisiones del usuario: siembra = entra en el bancal, solo cultivos de una celda, la lista de 24, fuentes divulgativas + método de cuadrados, y **ciclo por cultivo** (cambia el modelo de T3, criterio C4.7 nuevo y C7.1 reescrito). Pendiente para T7, en sus **Notas**: primer mes de cosecha e hinojo atlántico.
 
 ## T5 · Cuadrícula, vecindad y exposición — ⬜
 **Depende de:** T3
@@ -97,11 +98,12 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 ## T7 · Temporada — ⬜
 **Depende de:** T4
 **Criterios:**
-- C7.1 `estadoPlanta(plantacion, cultivo, zona, mes)` recorre por sembrar → sembrada → creciendo → cosecha → terminada a lo largo del año — `test` — guía §3 + decisión T3
+- C7.1 `estadoPlanta(plantacion, cultivo, zona, mes)` recorre por sembrar → sembrada → creciendo → cosecha → terminada a lo largo del año, según el **ciclo** del cultivo contado desde el `mesSiembra` de la plantación — `test` — guía §3 + decisiones T3 y T4
 - C7.2 Ventanas que cruzan el año (siembra en octubre, cosecha en marzo) dan el estado correcto en enero — `test`
 - C7.3 El mes de siembra por defecto es el primero válido de la ventana de su zona — `test` — guía §3
 - C7.4 `tareasDelMes()` lista qué sembrar y qué cosechar ese mes, sin duplicados — `test` — guía §2
 - C7.5 El estado nunca se guarda: no aparece en el modelo persistido — `leer` — guía §3
+**Notas:** (de la verificación de T4) 1) fijar con un test cuál es el primer mes de cosecha: con la lectura natural, tomate sembrado en mayo {2,2} → creciendo junio, cosecha julio–agosto, terminada desde septiembre. 2) El hinojo atlántico de la demo (mayo, {4,1}) se cosecha en septiembre, un mes antes de su ventana orientativa 10–12: decidir con el usuario si se ajusta el ciclo o la ventana antes de que lo muestre la ficha (T14).
 **Verificación:** —
 
 ## T8 · Capa `api` y hooks — ⬜
@@ -240,4 +242,5 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 
 Arrastrar y soltar con vista previa de compatibilidad · deshacer y rehacer ·
 View Transitions · asistente «Mi primer huerto» · rotación por familia
-botánica · PWA sin conexión · compartir e imprimir · tests end-to-end.
+botánica · PWA sin conexión · compartir e imprimir · tests end-to-end ·
+cultivos que ocupan varias celdas (calabacín, calabaza, melón, alcachofa).

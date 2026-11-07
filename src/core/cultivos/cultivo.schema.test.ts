@@ -18,6 +18,7 @@ const cultivoValido = {
   compatibles: [{ cultivoId: "albahaca", motivo: "Motivo de prueba." }],
   incompatibles: [{ cultivoId: "hinojo", motivo: "Motivo de prueba." }],
   fuentes: ["fuente-de-prueba"],
+  ciclo: { mesesHastaCosecha: 3, mesesDeCosecha: 3 },
 };
 
 const conCalendario = (atlantica: unknown) => ({
@@ -50,6 +51,25 @@ describe("cultivoSchema", () => {
   it("acepta una ventana que cruza el año (de octubre a marzo)", () => {
     const invierno = conCalendario({ siembra: { desde: 10, hasta: 11 }, cosecha: { desde: 12, hasta: 3 } });
     expect(cultivoSchema.safeParse(invierno).success).toBe(true);
+  });
+
+  it("C4.7 · rechaza un cultivo sin ciclo", () => {
+    const { ciclo: _sinCiclo, ...sinCiclo } = cultivoValido;
+    expect(cultivoSchema.safeParse(sinCiclo).success).toBe(false);
+  });
+
+  it.each([
+    [{ mesesHastaCosecha: 0, mesesDeCosecha: 2 }, "cero meses hasta la cosecha"],
+    [{ mesesHastaCosecha: 2, mesesDeCosecha: 0 }, "cero meses de cosecha"],
+    [{ mesesHastaCosecha: 1.5, mesesDeCosecha: 2 }, "meses no enteros"],
+    [{ mesesHastaCosecha: 8, mesesDeCosecha: 5 }, "13 meses en total, más de un año"],
+  ])("C4.7 · rechaza el ciclo %o (%s)", (ciclo) => {
+    expect(cultivoSchema.safeParse({ ...cultivoValido, ciclo }).success).toBe(false);
+  });
+
+  it("C4.7 · acepta un ciclo que ocupa el año entero (12 meses)", () => {
+    const ciclo = { mesesHastaCosecha: 4, mesesDeCosecha: 8 };
+    expect(cultivoSchema.safeParse({ ...cultivoValido, ciclo }).success).toBe(true);
   });
 
   it("rechaza un cultivo sin fuentes", () => {

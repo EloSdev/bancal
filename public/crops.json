@@ -1,0 +1,1814 @@
+[
+  {
+    "id": "tomate",
+    "nombre": "Tomate",
+    "familia": "Solanáceas",
+    "plantasPorCelda": 1,
+    "sol": "pleno-sol",
+    "riego": "alto",
+    "dificultad": "media",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 5,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 7,
+          "hasta": 9
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 9
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 10
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 2
+    },
+    "compatibles": [
+      {
+        "cultivoId": "albahaca",
+        "motivo": "Pareja tradicional: crecen bien juntas y combinan en la cocina. Se dice que la albahaca ahuyenta plagas, pero no hay estudios que lo demuestren."
+      },
+      {
+        "cultivoId": "zanahoria",
+        "motivo": "Se suelen asociar: la tomatera da sombra a la zanahoria, que no quiere calor, y la zanahoria ayuda a esponjar la tierra."
+      },
+      {
+        "cultivoId": "lechuga",
+        "motivo": "La lechuga agradece la sombra de la tomatera en pleno verano; por eso se suelen poner juntas."
+      },
+      {
+        "cultivoId": "cebolla",
+        "motivo": "Tomate y cebolla se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "ajo",
+        "motivo": "Tomate y ajo se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "puerro",
+        "motivo": "Tomate y puerro se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "perejil",
+        "motivo": "El perejil se suele poner al pie de las tomateras; las guías de huerto lo citan como buen compañero."
+      },
+      {
+        "cultivoId": "espinaca",
+        "motivo": "Tomate y espinaca se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "hinojo",
+        "motivo": "Ojo: se dice que el hinojo frena el crecimiento de las tomateras; mejor dale su propio rincón."
+      },
+      {
+        "cultivoId": "berenjena",
+        "motivo": "Tomate y berenjena son solanáceas y las guías de huerto desaconsejan juntar cultivos de la misma familia; mejor sepáralas."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "fundacion-vital",
+      "planetahuerto-asociaciones",
+      "wsu-snaped",
+      "portalfruticola-tomate",
+      "uf-ifas-companion",
+      "sfg-jerras"
+    ]
+  },
+  {
+    "id": "pimiento",
+    "nombre": "Pimiento",
+    "familia": "Solanáceas",
+    "plantasPorCelda": 1,
+    "sol": "pleno-sol",
+    "riego": "alto",
+    "dificultad": "media",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 7,
+          "hasta": 10
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 11
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 10
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 3,
+      "mesesDeCosecha": 4
+    },
+    "compatibles": [
+      {
+        "cultivoId": "lechuga",
+        "motivo": "La lechuga, de ciclo corto, se suele intercalar con el pimiento; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "albahaca",
+        "motivo": "La albahaca se suele plantar junto al pimiento, como junto al tomate; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "ajo",
+        "motivo": "Pimiento y ajo se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "espinaca",
+        "motivo": "Pimiento y espinaca se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "puerro",
+        "motivo": "Pimiento y puerro se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "fundacion-vital",
+      "planetahuerto-asociaciones"
+    ]
+  },
+  {
+    "id": "berenjena",
+    "nombre": "Berenjena",
+    "familia": "Solanáceas",
+    "plantasPorCelda": 1,
+    "sol": "pleno-sol",
+    "riego": "alto",
+    "dificultad": "media",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 5,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 7,
+          "hasta": 10
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 11
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 10
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 4
+    },
+    "compatibles": [
+      {
+        "cultivoId": "zanahoria",
+        "motivo": "Zanahoria y berenjena se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "lechuga",
+        "motivo": "La lechuga, de ciclo corto, se suele intercalar con la berenjena; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "ajo",
+        "motivo": "Berenjena y ajo se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "espinaca",
+        "motivo": "Berenjena y espinaca se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "cebolla",
+        "motivo": "Berenjena y cebolla se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "puerro",
+        "motivo": "Berenjena y puerro se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "Tomate y berenjena son solanáceas y las guías de huerto desaconsejan juntar cultivos de la misma familia; mejor sepáralas."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "fundacion-vital",
+      "planetahuerto-asociaciones",
+      "portalfruticola-tomate"
+    ]
+  },
+  {
+    "id": "zanahoria",
+    "nombre": "Zanahoria",
+    "familia": "Apiáceas",
+    "plantasPorCelda": 16,
+    "sol": "pleno-sol",
+    "riego": "medio",
+    "dificultad": "media",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 9
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 9,
+          "hasta": 12
+        },
+        "cosecha": {
+          "desde": 1,
+          "hasta": 5
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 9
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 3,
+      "mesesDeCosecha": 2
+    },
+    "compatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "Se suelen asociar: la tomatera da sombra a la zanahoria, que no quiere calor, y la zanahoria ayuda a esponjar la tierra."
+      },
+      {
+        "cultivoId": "cebolla",
+        "motivo": "Zanahoria y cebolla son una pareja clásica del huerto; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "lechuga",
+        "motivo": "Zanahoria y lechuga se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "rabano",
+        "motivo": "El rábano crece rápido y deja sitio a la zanahoria, que es lenta: se suelen sembrar juntos."
+      },
+      {
+        "cultivoId": "guisante",
+        "motivo": "Zanahoria y guisante se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "judia-verde",
+        "motivo": "Zanahoria y judía se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "berenjena",
+        "motivo": "Zanahoria y berenjena se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "hinojo",
+        "motivo": "Zanahoria e hinojo son de la misma familia (umbelíferas) y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      },
+      {
+        "cultivoId": "perejil",
+        "motivo": "Zanahoria y perejil son de la misma familia (umbelíferas) y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "fundacion-vital",
+      "planetahuerto-asociaciones",
+      "wsu-snaped"
+    ]
+  },
+  {
+    "id": "hinojo",
+    "nombre": "Hinojo",
+    "familia": "Apiáceas",
+    "plantasPorCelda": 1,
+    "sol": "pleno-sol",
+    "riego": "alto",
+    "dificultad": "media",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 5,
+          "hasta": 6
+        },
+        "cosecha": {
+          "desde": 10,
+          "hasta": 12
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 8,
+          "hasta": 12
+        },
+        "cosecha": {
+          "desde": 10,
+          "hasta": 5
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 5,
+          "hasta": 6
+        },
+        "cosecha": {
+          "desde": 10,
+          "hasta": 11
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 4,
+      "mesesDeCosecha": 1
+    },
+    "compatibles": [],
+    "incompatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "Ojo: se dice que el hinojo frena el crecimiento de las tomateras; mejor dale su propio rincón."
+      },
+      {
+        "cultivoId": "judia-verde",
+        "motivo": "Las tablas de asociación desaconsejan poner judías junto al hinojo; mejor sepáralos."
+      },
+      {
+        "cultivoId": "zanahoria",
+        "motivo": "Zanahoria e hinojo son de la misma familia (umbelíferas) y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      }
+    ],
+    "fuentes": [
+      "sfg-jerras",
+      "huertina-toni",
+      "cajamar-hinojo",
+      "planetahuerto-asociaciones",
+      "portalfruticola-tomate",
+      "uf-ifas-companion"
+    ]
+  },
+  {
+    "id": "perejil",
+    "nombre": "Perejil",
+    "familia": "Apiáceas",
+    "plantasPorCelda": 1,
+    "sol": "semisombra",
+    "riego": "alto",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 1,
+          "hasta": 12
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 1,
+          "hasta": 12
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 1,
+          "hasta": 12
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 3,
+      "mesesDeCosecha": 9
+    },
+    "compatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "El perejil se suele poner al pie de las tomateras; las guías de huerto lo citan como buen compañero."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "zanahoria",
+        "motivo": "Zanahoria y perejil son de la misma familia (umbelíferas) y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "plantea-calendario",
+      "fundacion-vital",
+      "uw-hortlib",
+      "planetahuerto-asociaciones",
+      "portalfruticola-tomate",
+      "infoagro-perejil"
+    ]
+  },
+  {
+    "id": "cilantro",
+    "nombre": "Cilantro",
+    "familia": "Apiáceas",
+    "plantasPorCelda": 9,
+    "sol": "semisombra",
+    "riego": "medio",
+    "dificultad": "media",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 7
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 7
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 7
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 1
+    },
+    "compatibles": [],
+    "incompatibles": [],
+    "fuentes": [
+      "sfg-phipps",
+      "huertina-toni",
+      "fundacion-vital",
+      "uw-hortlib",
+      "infoagro-cilantro"
+    ]
+  },
+  {
+    "id": "lechuga",
+    "nombre": "Lechuga",
+    "familia": "Asteráceas",
+    "plantasPorCelda": 4,
+    "sol": "semisombra",
+    "riego": "alto",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 9
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 9,
+          "hasta": 3
+        },
+        "cosecha": {
+          "desde": 11,
+          "hasta": 6
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 2,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 4,
+          "hasta": 7
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 1
+    },
+    "compatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "La lechuga agradece la sombra de la tomatera en pleno verano; por eso se suelen poner juntas."
+      },
+      {
+        "cultivoId": "zanahoria",
+        "motivo": "Zanahoria y lechuga se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "rabano",
+        "motivo": "Lechuga y rábano son de ciclo corto y se suelen intercalar; las tablas de asociación los dan por buenos vecinos."
+      },
+      {
+        "cultivoId": "cebolla",
+        "motivo": "Lechuga y cebolla se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "ajo",
+        "motivo": "Lechuga y ajo se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "puerro",
+        "motivo": "Lechuga y puerro se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "espinaca",
+        "motivo": "Lechuga y espinaca se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "guisante",
+        "motivo": "Lechuga y guisante se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "haba",
+        "motivo": "Lechuga y haba se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "pimiento",
+        "motivo": "La lechuga, de ciclo corto, se suele intercalar con el pimiento; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "berenjena",
+        "motivo": "La lechuga, de ciclo corto, se suele intercalar con la berenjena; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "remolacha",
+        "motivo": "Lechuga y remolacha se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "fundacion-vital",
+      "planetahuerto-asociaciones",
+      "wsu-snaped"
+    ]
+  },
+  {
+    "id": "calendula",
+    "nombre": "Caléndula",
+    "familia": "Asteráceas",
+    "plantasPorCelda": 4,
+    "sol": "pleno-sol",
+    "riego": "bajo",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 11
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 11
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 11
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 7
+    },
+    "compatibles": [],
+    "incompatibles": [],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "plantea-calendario",
+      "johnnyseeds-calendula"
+    ]
+  },
+  {
+    "id": "rabano",
+    "nombre": "Rábano",
+    "familia": "Brasicáceas",
+    "plantasPorCelda": 16,
+    "sol": "semisombra",
+    "riego": "alto",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 2,
+          "hasta": 11
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 12
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 9,
+          "hasta": 1
+        },
+        "cosecha": {
+          "desde": 10,
+          "hasta": 2
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 7
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 1,
+      "mesesDeCosecha": 1
+    },
+    "compatibles": [
+      {
+        "cultivoId": "zanahoria",
+        "motivo": "El rábano crece rápido y deja sitio a la zanahoria, que es lenta: se suelen sembrar juntos."
+      },
+      {
+        "cultivoId": "lechuga",
+        "motivo": "Lechuga y rábano son de ciclo corto y se suelen intercalar; las tablas de asociación los dan por buenos vecinos."
+      },
+      {
+        "cultivoId": "espinaca",
+        "motivo": "Espinaca y rábano se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "guisante",
+        "motivo": "Guisante y rábano se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "huertina-toni",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "fundacion-vital",
+      "uw-hortlib",
+      "planetahuerto-asociaciones"
+    ]
+  },
+  {
+    "id": "rucula",
+    "nombre": "Rúcula",
+    "familia": "Brasicáceas",
+    "plantasPorCelda": 4,
+    "sol": "semisombra",
+    "riego": "medio",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 4,
+          "hasta": 7
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 11
+        },
+        "cosecha": {
+          "desde": 4,
+          "hasta": 12
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 4,
+          "hasta": 7
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 1,
+      "mesesDeCosecha": 1
+    },
+    "compatibles": [],
+    "incompatibles": [],
+    "fuentes": [
+      "sfg-jerras",
+      "portalfruticola-rucula",
+      "fundacion-vital",
+      "uw-hortlib"
+    ]
+  },
+  {
+    "id": "acelga",
+    "nombre": "Acelga",
+    "familia": "Amarantáceas",
+    "plantasPorCelda": 4,
+    "sol": "semisombra",
+    "riego": "alto",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 1,
+          "hasta": 12
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 8,
+          "hasta": 10
+        },
+        "cosecha": {
+          "desde": 10,
+          "hasta": 5
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 10
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 1
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 3,
+      "mesesDeCosecha": 6
+    },
+    "compatibles": [],
+    "incompatibles": [
+      {
+        "cultivoId": "espinaca",
+        "motivo": "Acelga y espinaca son de la misma familia y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      },
+      {
+        "cultivoId": "remolacha",
+        "motivo": "Acelga y remolacha son de la misma familia y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "fundacion-vital",
+      "planetahuerto-asociaciones"
+    ]
+  },
+  {
+    "id": "espinaca",
+    "nombre": "Espinaca",
+    "familia": "Amarantáceas",
+    "plantasPorCelda": 9,
+    "sol": "semisombra",
+    "riego": "alto",
+    "dificultad": "media",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 6
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 9,
+          "hasta": 10
+        },
+        "cosecha": {
+          "desde": 12,
+          "hasta": 3
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 6
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 1
+    },
+    "compatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "Tomate y espinaca se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "lechuga",
+        "motivo": "Lechuga y espinaca se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "pimiento",
+        "motivo": "Pimiento y espinaca se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "berenjena",
+        "motivo": "Berenjena y espinaca se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "haba",
+        "motivo": "Espinaca y haba se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "rabano",
+        "motivo": "Espinaca y rábano se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "acelga",
+        "motivo": "Acelga y espinaca son de la misma familia y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      },
+      {
+        "cultivoId": "remolacha",
+        "motivo": "Espinaca y remolacha son de la misma familia y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "fundacion-vital",
+      "uw-hortlib",
+      "planetahuerto-asociaciones"
+    ]
+  },
+  {
+    "id": "remolacha",
+    "nombre": "Remolacha",
+    "familia": "Amarantáceas",
+    "plantasPorCelda": 9,
+    "sol": "semisombra",
+    "riego": "medio",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 8,
+          "hasta": 10
+        },
+        "cosecha": {
+          "desde": 11,
+          "hasta": 2
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 9,
+          "hasta": 10
+        },
+        "cosecha": {
+          "desde": 1,
+          "hasta": 4
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 8,
+          "hasta": 10
+        },
+        "cosecha": {
+          "desde": 10,
+          "hasta": 2
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 2
+    },
+    "compatibles": [
+      {
+        "cultivoId": "lechuga",
+        "motivo": "Lechuga y remolacha se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "ajo",
+        "motivo": "Ajo y remolacha se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "acelga",
+        "motivo": "Acelga y remolacha son de la misma familia y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      },
+      {
+        "cultivoId": "espinaca",
+        "motivo": "Espinaca y remolacha son de la misma familia y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "fundacion-vital",
+      "uw-hortlib",
+      "planetahuerto-asociaciones"
+    ]
+  },
+  {
+    "id": "judia-verde",
+    "nombre": "Judía verde",
+    "familia": "Fabáceas",
+    "plantasPorCelda": 4,
+    "sol": "semisombra",
+    "riego": "medio",
+    "dificultad": "media",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 9
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 5,
+          "hasta": 6
+        },
+        "cosecha": {
+          "desde": 7,
+          "hasta": 10
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 8
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 10
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 2
+    },
+    "compatibles": [
+      {
+        "cultivoId": "zanahoria",
+        "motivo": "Zanahoria y judía se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "hinojo",
+        "motivo": "Las tablas de asociación desaconsejan poner judías junto al hinojo; mejor sepáralos."
+      },
+      {
+        "cultivoId": "ajo",
+        "motivo": "Las guías de huerto desaconsejan juntar ajos y leguminosas como la judía; mejor en celdas separadas."
+      },
+      {
+        "cultivoId": "cebolla",
+        "motivo": "Las tablas de asociación desaconsejan poner judías junto a la cebolla; mejor sepáralas."
+      },
+      {
+        "cultivoId": "puerro",
+        "motivo": "Las tablas de asociación desaconsejan juntar puerro y judía; mejor sepáralos."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "uw-hortlib",
+      "planetahuerto-asociaciones"
+    ]
+  },
+  {
+    "id": "guisante",
+    "nombre": "Guisante",
+    "familia": "Fabáceas",
+    "plantasPorCelda": 4,
+    "sol": "semisombra",
+    "riego": "alto",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 11,
+          "hasta": 1
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 6
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 11,
+          "hasta": 1
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 5
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 9,
+          "hasta": 11
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 5
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 4,
+      "mesesDeCosecha": 1
+    },
+    "compatibles": [
+      {
+        "cultivoId": "zanahoria",
+        "motivo": "Zanahoria y guisante se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "lechuga",
+        "motivo": "Lechuga y guisante se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "rabano",
+        "motivo": "Guisante y rábano se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "ajo",
+        "motivo": "Las guías de huerto desaconsejan juntar ajos y leguminosas como el guisante; mejor en celdas separadas."
+      },
+      {
+        "cultivoId": "cebolla",
+        "motivo": "Las guías de huerto desaconsejan juntar cebolla y leguminosas como el guisante; mejor sepáralos."
+      },
+      {
+        "cultivoId": "puerro",
+        "motivo": "Las tablas de asociación desaconsejan juntar puerro y guisante; mejor sepáralos."
+      },
+      {
+        "cultivoId": "haba",
+        "motivo": "Guisante y haba son leguminosas y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "uw-hortlib",
+      "planetahuerto-asociaciones"
+    ]
+  },
+  {
+    "id": "haba",
+    "nombre": "Haba",
+    "familia": "Fabáceas",
+    "plantasPorCelda": 4,
+    "sol": "pleno-sol",
+    "riego": "medio",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 8,
+          "hasta": 2
+        },
+        "cosecha": {
+          "desde": 2,
+          "hasta": 7
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 11,
+          "hasta": 1
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 5
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 9,
+          "hasta": 11
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 5
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 5,
+      "mesesDeCosecha": 2
+    },
+    "compatibles": [
+      {
+        "cultivoId": "lechuga",
+        "motivo": "Lechuga y haba se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "espinaca",
+        "motivo": "Espinaca y haba se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "ajo",
+        "motivo": "Las guías de huerto desaconsejan juntar ajos y leguminosas como el haba; mejor en celdas separadas."
+      },
+      {
+        "cultivoId": "cebolla",
+        "motivo": "Las guías de huerto desaconsejan juntar cebolla y leguminosas como el haba; mejor sepáralos."
+      },
+      {
+        "cultivoId": "puerro",
+        "motivo": "Las tablas de asociación desaconsejan juntar puerro y haba; mejor sepáralos."
+      },
+      {
+        "cultivoId": "guisante",
+        "motivo": "Guisante y haba son leguminosas y las guías de huerto desaconsejan juntar cultivos de la misma familia."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "huertina-toni",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "planetahuerto-asociaciones"
+    ]
+  },
+  {
+    "id": "cebolla",
+    "nombre": "Cebolla",
+    "familia": "Amarilidáceas",
+    "plantasPorCelda": 9,
+    "sol": "pleno-sol",
+    "riego": "medio",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 8,
+          "hasta": 10
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 11,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 3,
+          "hasta": 8
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 2,
+          "hasta": 3
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 8
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 4,
+      "mesesDeCosecha": 1
+    },
+    "compatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "Tomate y cebolla se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "zanahoria",
+        "motivo": "Zanahoria y cebolla son una pareja clásica del huerto; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "lechuga",
+        "motivo": "Lechuga y cebolla se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "berenjena",
+        "motivo": "Berenjena y cebolla se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "guisante",
+        "motivo": "Las guías de huerto desaconsejan juntar cebolla y leguminosas como el guisante; mejor sepáralos."
+      },
+      {
+        "cultivoId": "haba",
+        "motivo": "Las guías de huerto desaconsejan juntar cebolla y leguminosas como el haba; mejor sepáralos."
+      },
+      {
+        "cultivoId": "judia-verde",
+        "motivo": "Las tablas de asociación desaconsejan poner judías junto a la cebolla; mejor sepáralas."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "planetahuerto-asociaciones",
+      "portalfruticola-tomate"
+    ]
+  },
+  {
+    "id": "ajo",
+    "nombre": "Ajo",
+    "familia": "Amarilidáceas",
+    "plantasPorCelda": 4,
+    "sol": "semisombra",
+    "riego": "bajo",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 11,
+          "hasta": 1
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 7
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 12,
+          "hasta": 1
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 7
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 8,
+          "hasta": 1
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 6
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 6,
+      "mesesDeCosecha": 1
+    },
+    "compatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "Tomate y ajo se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "lechuga",
+        "motivo": "Lechuga y ajo se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "pimiento",
+        "motivo": "Pimiento y ajo se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "berenjena",
+        "motivo": "Berenjena y ajo se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "remolacha",
+        "motivo": "Ajo y remolacha se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "guisante",
+        "motivo": "Las guías de huerto desaconsejan juntar ajos y leguminosas como el guisante; mejor en celdas separadas."
+      },
+      {
+        "cultivoId": "haba",
+        "motivo": "Las guías de huerto desaconsejan juntar ajos y leguminosas como el haba; mejor en celdas separadas."
+      },
+      {
+        "cultivoId": "judia-verde",
+        "motivo": "Las guías de huerto desaconsejan juntar ajos y leguminosas como la judía; mejor en celdas separadas."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario",
+      "uw-hortlib",
+      "planetahuerto-asociaciones",
+      "portalfruticola-tomate"
+    ]
+  },
+  {
+    "id": "puerro",
+    "nombre": "Puerro",
+    "familia": "Amarilidáceas",
+    "plantasPorCelda": 4,
+    "sol": "semisombra",
+    "riego": "alto",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 5,
+          "hasta": 8
+        },
+        "cosecha": {
+          "desde": 8,
+          "hasta": 2
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 10,
+          "hasta": 11
+        },
+        "cosecha": {
+          "desde": 2,
+          "hasta": 4
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 8
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 2
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 5,
+      "mesesDeCosecha": 2
+    },
+    "compatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "Tomate y puerro se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "lechuga",
+        "motivo": "Lechuga y puerro se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "pimiento",
+        "motivo": "Pimiento y puerro se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      },
+      {
+        "cultivoId": "berenjena",
+        "motivo": "Berenjena y puerro se suelen asociar; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [
+      {
+        "cultivoId": "guisante",
+        "motivo": "Las tablas de asociación desaconsejan juntar puerro y guisante; mejor sepáralos."
+      },
+      {
+        "cultivoId": "haba",
+        "motivo": "Las tablas de asociación desaconsejan juntar puerro y haba; mejor sepáralos."
+      },
+      {
+        "cultivoId": "judia-verde",
+        "motivo": "Las tablas de asociación desaconsejan juntar puerro y judía; mejor sepáralos."
+      }
+    ],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-jerras",
+      "asturias-guerta",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "uw-hortlib",
+      "planetahuerto-asociaciones"
+    ]
+  },
+  {
+    "id": "cebollino",
+    "nombre": "Cebollino",
+    "familia": "Amarilidáceas",
+    "plantasPorCelda": 16,
+    "sol": "pleno-sol",
+    "riego": "alto",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 2,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 9
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 2,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 9
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 2,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 9
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 3,
+      "mesesDeCosecha": 5
+    },
+    "compatibles": [],
+    "incompatibles": [],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "huertina-toni",
+      "plantea-calendario",
+      "fundacion-vital"
+    ]
+  },
+  {
+    "id": "albahaca",
+    "nombre": "Albahaca",
+    "familia": "Lamiáceas",
+    "plantasPorCelda": 2,
+    "sol": "pleno-sol",
+    "riego": "alto",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 5,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 7,
+          "hasta": 10
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 10
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 10
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 4
+    },
+    "compatibles": [
+      {
+        "cultivoId": "tomate",
+        "motivo": "Pareja tradicional: crecen bien juntas y combinan en la cocina. Se dice que la albahaca ahuyenta plagas, pero no hay estudios que lo demuestren."
+      },
+      {
+        "cultivoId": "pimiento",
+        "motivo": "La albahaca se suele plantar junto al pimiento, como junto al tomate; las tablas de asociación las dan por buenas vecinas."
+      }
+    ],
+    "incompatibles": [],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "sfg-phipps",
+      "huertina-toni",
+      "plantea-calendario",
+      "fundacion-vital",
+      "planetahuerto-asociaciones",
+      "wsu-snaped",
+      "uf-ifas-companion",
+      "sfg-jerras"
+    ]
+  },
+  {
+    "id": "fresa",
+    "nombre": "Fresa",
+    "familia": "Rosáceas",
+    "plantasPorCelda": 4,
+    "sol": "pleno-sol",
+    "riego": "alto",
+    "dificultad": "media",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 4,
+          "hasta": 8
+        },
+        "cosecha": {
+          "desde": 6,
+          "hasta": 7
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 11,
+          "hasta": 3
+        },
+        "cosecha": {
+          "desde": 4,
+          "hasta": 11
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 11,
+          "hasta": 4
+        },
+        "cosecha": {
+          "desde": 4,
+          "hasta": 6
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 3,
+      "mesesDeCosecha": 5
+    },
+    "compatibles": [],
+    "incompatibles": [],
+    "fuentes": [
+      "sfg-jerras",
+      "huertina-toni",
+      "agapa-macetohuertos",
+      "zaragoza-huertos-escolares",
+      "plantea-calendario"
+    ]
+  },
+  {
+    "id": "capuchina",
+    "nombre": "Capuchina",
+    "familia": "Tropeoláceas",
+    "plantasPorCelda": 1,
+    "sol": "pleno-sol",
+    "riego": "medio",
+    "dificultad": "facil",
+    "calendario": {
+      "atlantica": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 11
+        }
+      },
+      "mediterranea": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 11
+        }
+      },
+      "interior": {
+        "siembra": {
+          "desde": 3,
+          "hasta": 5
+        },
+        "cosecha": {
+          "desde": 5,
+          "hasta": 11
+        }
+      }
+    },
+    "ciclo": {
+      "mesesHastaCosecha": 2,
+      "mesesDeCosecha": 6
+    },
+    "compatibles": [],
+    "incompatibles": [],
+    "fuentes": [
+      "huerto-metro-cuadrado",
+      "plantea-calendario"
+    ]
+  }
+]
