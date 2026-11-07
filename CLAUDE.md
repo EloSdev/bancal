@@ -54,6 +54,8 @@ Versioned record of domain decisions, confirmed with the user in T3 (2026-11-07)
 
 - Grid: cells of 30 × 30 cm; columns = ⌊width / 30⌋, rows = ⌊length / 30⌋ (leftover cm are unused: 120 × 90 → 4 × 3, 100 × 50 → 3 × 1); one crop per cell.
 - Bed: each side from **30 cm** (one cell) to **300 cm** (10 cells), in **whole centimetres**; sun hours 0–24, decimals allowed (2.5 h); name required, **at most 40 characters** (fits the list card and the editor header at 360 px).
+- **Shrinking a bed** (decided in T8, 2026-11-07): saving a bed with smaller dimensions **removes the plantations left outside** the new grid; the edit form warns how many before saving (T12). The api rejects plantations outside the grid or two in the same cell.
+- Corrupt `localStorage` (T8): the unreadable data are set aside under another key and the app starts empty and warns; when the user dismisses the warning, the set-aside copy is deleted.
 - Neighbourhood = the **8 surrounding cells**, diagonals included (corner 3, edge 5, centre 8); compatibility between neighbours is favourable, unfavourable or neutral, and symmetric.
 - Exposure: full sun **≥ 6 h**, partial shade **3 to < 6 h**, shade **< 3 h**; limits count upwards (6 h → pleno sol, 3 h → semisombra). A crop needing more sun than the bed has → warning.
 - Climate zones: atlántica (default), mediterránea, interior; they set sowing and harvest windows.

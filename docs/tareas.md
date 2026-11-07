@@ -105,7 +105,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C7.5 El estado nunca se guarda: no aparece en el modelo persistido — `leer` — guía §3
 **Verificación:** 2026-11-07 · verificador: PASA. 128 tests (19 nuevos en `core/bancales/temporada.test.ts`), build (vite + tsc) y `check-estatico` sin fallos; 14 mutantes (año cortado en diciembre, primer mes de cosecha desplazado, duplicados en tareas, ventana en vez de ciclo…) rompen todos algún test. Decidido con el usuario y anotado en «Reglas del dominio»: año que se repite (ajo de octubre creciendo en enero), primer mes de cosecha = `mesSiembra + mesesHastaCosecha` (tomate de mayo {2,2}: cosecha julio–agosto, fijado en test; resuelve la nota 1 de T4) y qué entra en las tareas del mes. `estadoPlanta` no recibe `zona` (el estado sale del ciclo). C7.5: `Plantacion` y los esquemas no tienen estado. La nota 2 de T4 (hinojo) resultó ser un desfase ciclo/ventana en 16 pares cultivo × zona: va a una tarea de datos antes de T14.
 
-## T8 · Capa `api` y hooks — ⬜
+## T8 · Capa `api` y hooks — ✅
 **Depende de:** T3, T4
 **Criterios:**
 - C8.1 `getCultivos` / `getCultivo` leen `crops.json` (comprobando `response.ok`) y validan con Zod — `test`
@@ -113,7 +113,8 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C8.3 Un fallo de red o un JSON inválido llega como error tipado, no como excepción sin capturar — `test`
 - C8.4 Los hooks devuelven `{ data, loading, error }`, cancelan con `AbortController` y no actualizan el estado tras desmontarse — `test`
 - C8.5 Un `localStorage` corrupto no rompe la app: se descarta y se avisa — `test`
-**Verificación:** —
+- C8.6 Encoger un bancal quita las plantaciones que quedan fuera de la cuadrícula nueva; `savePlantaciones` rechaza celdas fuera de la cuadrícula o repetidas — `test` — decisión T8
+**Verificación:** 2026-11-07 · verificador: FALLA → PASA (2.ª vuelta); react-reviewer: bloquea → aviso. 1.ª vuelta: faltaba el test de latencia de `savePlantaciones` (mutante superviviente); el reviewer pidió `EstadoCarga` como unión discriminada, `recargar()`, que una copia fallida de lo descartado no atascara la app y decidir la coherencia plantaciones–cuadrícula. Arreglado todo; el usuario decidió encoger = quitar las de fuera con aviso (C8.6 nuevo, C12.6 para T12) y borrar la copia de lo descartado al cerrar el aviso (en «Reglas del dominio»). 2.ª vuelta: 202 tests, build (vite + tsc) y `check-estatico` sin fallos, sin avisos de `act()`; 26 de 28 mutantes mueren; el de filas/columnas traspuestas al encoger se tapó después con un test de rectángulo, el de `Object.hasOwn` es equivalente en la práctica. La app carga sin errores de consola (ningún componente usa aún los hooks). Pendiente para T11 (en sus **Notas**): `recargar` vuelve a «cargando» y el foco se perdería tras borrar.
 
 ## T18 · Ciclo y ventanas de cosecha coherentes (datos) — ⬜
 **Qué:** corregir el desfase que se encontró al cerrar T7. El ciclo es el mismo en todas las zonas y, en 16 pares cultivo × zona, su primer mes de cosecha cae fuera de la ventana de cosecha de la zona (hinojo atlántico, ajo de interior, haba, cebolla…).
@@ -158,6 +159,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C11.1 Cada bancal muestra nombre, medidas, celdas, número de plantas y avisos pendientes — `nav` — guía §2
 - C11.2 Sin bancales: estado vacío con un botón «Crear mi primer bancal» — `nav`
 - C11.3 Borrar un bancal pide confirmación y el foco vuelve a un sitio lógico — `nav`
+**Notas:** (de la revisión de T8) `recargar()` de `useCarga` vuelve a «cargando» y desmonta la lista, así que el foco se perdería tras borrar. Antes de construir, decidir: (a) quitar el bancal de la lista en local tras `deleteBancal`, sin recargar; o (b) que `useCarga` conserve los datos mientras recarga la misma clave, con un indicador aparte.
 **Verificación:** —
 
 ## T12 · Alta y edición de bancal — ⬜
@@ -169,6 +171,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C12.3 Vista previa en vivo de la cuadrícula resultante («4 × 3 celdas») — `nav`
 - C12.4 Al guardar navega al editor del bancal; al editar, conserva las plantaciones que siguen cabiendo — `nav` + `test`
 - C12.5 Botón de enviar deshabilitado durante la latencia simulada — `nav`
+- C12.6 Si al encoger el bancal quedan plantaciones fuera, el formulario avisa de cuántas se quitarán antes de guardar — `nav` + `test` — decisión T8
 **Verificación:** —
 
 ## T13 · Editor: cuadrícula y colocación — ⬜

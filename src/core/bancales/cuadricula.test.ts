@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dimensiones, vecinos } from "./cuadricula";
+import { dentroDeCuadricula, dimensiones, vecinos } from "./cuadricula";
 import type { Celda } from "./model";
 
 describe("dimensiones", () => {
@@ -14,6 +14,20 @@ describe("dimensiones", () => {
   it("los límites del bancal dan 1 × 1 y 10 × 10 celdas", () => {
     expect(dimensiones(30, 30)).toEqual({ columnas: 1, filas: 1 });
     expect(dimensiones(300, 300)).toEqual({ columnas: 10, filas: 10 });
+  });
+});
+
+describe("dentroDeCuadricula", () => {
+  const demo = { columnas: 4, filas: 3 };
+
+  it.each([
+    [{ fila: 0, columna: 0 }, true],
+    [{ fila: 2, columna: 3 }, true],
+    [{ fila: 3, columna: 0 }, false],
+    [{ fila: 0, columna: 4 }, false],
+    [{ fila: -1, columna: 0 }, false],
+  ])("C8.6 · en una cuadrícula 4 × 3, la celda %o está dentro: %s", (celda, esperado) => {
+    expect(dentroDeCuadricula(celda, demo)).toBe(esperado);
   });
 });
 

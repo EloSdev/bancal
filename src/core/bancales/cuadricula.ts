@@ -16,17 +16,19 @@ export function dimensiones(ancho: number, largo: number): Dimensiones {
   };
 }
 
+/** ¿Cabe la celda en la cuadrícula? (al encoger un bancal, las de fuera se quitan) */
+export function dentroDeCuadricula({ fila, columna }: Celda, { columnas, filas }: Dimensiones): boolean {
+  return fila >= 0 && fila < filas && columna >= 0 && columna < columnas;
+}
+
 /** Las 8 celdas de alrededor, diagonales incluidas, sin salir de la cuadrícula. */
-export function vecinos({ fila, columna }: Celda, { columnas, filas }: Dimensiones): Celda[] {
+export function vecinos({ fila, columna }: Celda, dims: Dimensiones): Celda[] {
   const resultado: Celda[] = [];
   for (let df = -1; df <= 1; df++) {
     for (let dc = -1; dc <= 1; dc++) {
-      const f = fila + df;
-      const c = columna + dc;
+      const celda = { fila: fila + df, columna: columna + dc };
       const esElla = df === 0 && dc === 0;
-      if (!esElla && f >= 0 && f < filas && c >= 0 && c < columnas) {
-        resultado.push({ fila: f, columna: c });
-      }
+      if (!esElla && dentroDeCuadricula(celda, dims)) resultado.push(celda);
     }
   }
   return resultado;
