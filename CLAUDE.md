@@ -50,15 +50,15 @@ src/
 
 ## Reglas del dominio
 
-Versioned record of domain decisions. Items marked *(propuesta)* are not final until T3 confirms them here (C3.5); never encode an undecided rule in a test — ask the user.
+Versioned record of domain decisions, confirmed with the user in T3 (2026-11-07). A new or changed rule is decided with the user and written here before any test encodes it.
 
-- Grid: cells of 30 × 30 cm; columns = ⌊width / 30⌋, rows = ⌊length / 30⌋ *(propuesta)*; one crop per cell.
-- Neighbourhood = the 8 surrounding cells *(propuesta)*; compatibility between neighbours is favourable, unfavourable or neutral, and symmetric.
-- Exposure: full sun ≥ 6 h, partial shade 3–6 h, shade < 3 h *(propuesta)*. A crop needing more sun than the bed has → warning.
+- Grid: cells of 30 × 30 cm; columns = ⌊width / 30⌋, rows = ⌊length / 30⌋ (leftover cm are unused: 120 × 90 → 4 × 3, 100 × 50 → 3 × 1); one crop per cell.
+- Bed: each side from **30 cm** (one cell) to **300 cm** (10 cells), in **whole centimetres**; sun hours 0–24, decimals allowed (2.5 h); name required, **at most 40 characters** (fits the list card and the editor header at 360 px).
+- Neighbourhood = the **8 surrounding cells**, diagonals included (corner 3, edge 5, centre 8); compatibility between neighbours is favourable, unfavourable or neutral, and symmetric.
+- Exposure: full sun **≥ 6 h**, partial shade **3 to < 6 h**, shade **< 3 h**; limits count upwards (6 h → pleno sol, 3 h → semisombra). A crop needing more sun than the bed has → warning.
 - Climate zones: atlántica (default), mediterránea, interior; they set sowing and harvest windows.
-- Plant state in a month: por sembrar → sembrada → creciendo → cosecha, **derived from the calendar, never stored**. Default sowing month = first valid month of its window. *Open: state after the harvest window.*
-- Warnings (unfavourable neighbour, insufficient sun, out-of-season sowing) are **recommendations with an explanation, never blocks**. `EstadoPlanta` and `Aviso` are discriminated unions.
-- Open: maximum bed size.
+- Plant state in a month: por sembrar → sembrada → creciendo → cosecha → **terminada** (after the harvest window: the cell is free again, drawn as stubble), **derived from the calendar, never stored**. Default sowing month = first valid month of its window.
+- Warnings (unfavourable neighbour, insufficient sun, out-of-season sowing) are **recommendations with an explanation, never blocks**. An unfavourable neighbourhood gives **one warning per pair of cells**, not one per side (C6.2); its explanation comes from the `motivo` stored in the crop's relation. `EstadoPlanta` and `Aviso` are discriminated unions.
 - Every horticulture data point is verified against cited sources (agent `revisor-datos`); sources go in the README. This is the project's main risk of errors.
 
 ## How work is done (harness)
@@ -82,7 +82,7 @@ Per task in `docs/tareas.md`: mark it 🔄 → build it with the matching skill 
 
 Hooks (`.claude/hooks/`, registered in `.claude/settings.json`) — expect them:
 
-- `test-primero` blocks **creating** a module in `src/core/` without its `.test.ts` next to it (except `index.ts`, `model.ts`, `*.d.ts`).
+- `test-primero` blocks **creating** a module in `src/core/` without its `.test.ts` next to it (except `index.ts`, `model.ts`, `*.d.ts` and anything under `__fixtures__/`).
 - `guardia-irreversible` blocks `git push --force`, `git reset --hard`, `git clean -f`, recursive deletes of the root/home/`.git`, secrets files and edits to `src/routeTree.gen.ts`; asks before writing outside the repo.
 - `tarea-en-curso` (SessionStart, also after `/compact`) injects the 🔄 task from `docs/tareas.md` (else the first ❌, else the first ⬜) plus uncommitted files. Task state lives only in `tareas.md`; if a task outlives a session, add a short **Notas:** line to it (decisions, blockers) and fold it into **Verificación** when it closes.
 - `verificar-al-parar` (Stop) won't let the session stop while (a) any ✅ task in `docs/tareas.md` has an empty **Verificación** line — always checked — or (b) build-relevant files have uncommitted changes and `check-estatico` (`[FALLA]` only), `npm test`, `vite build` (to a temp dir) or `tsc --noEmit` fail.

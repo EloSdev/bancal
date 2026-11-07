@@ -5,10 +5,8 @@
 // pesar parecido (el rombo y la cápsula, más grandes que el círculo).
 // Las mismas palabras («Se ayudan», «Se perjudican», «Sin efecto») en el panel
 // de avisos y en el nombre accesible de las celdas: un dato se dice siempre igual.
-// En T3 el tipo pasa a importarse del modelo de core/.
 import type { ReactNode } from "react";
-
-type Compatibilidad = "favorable" | "desfavorable" | "neutra";
+import type { Compatibilidad } from "../../core/cultivos/model";
 
 export const textoCompatibilidad: Record<Compatibilidad, string> = {
   favorable: "Se ayudan",

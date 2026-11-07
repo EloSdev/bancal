@@ -52,7 +52,7 @@ landing) y su traducción a `@theme`: paleta, fuentes, radios, estilos base.
 
 ## Fase 1 · Dominio (`core/`, con TDD)
 
-## T3 · Modelo y esquemas — ⬜
+## T3 · Modelo y esquemas — ✅
 **Qué:** tipos del dominio y esquemas Zod. Aquí se **confirman las reglas
 marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 **Depende de:** T1
@@ -60,9 +60,9 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C3.1 Tipos `Cultivo`, `Bancal`, `Plantacion`, `ZonaClimatica`, `Exposicion` — `build` — guía §3
 - C3.2 `EstadoPlanta` y `Aviso` son *discriminated unions*; un `switch` sin todos los casos no compila (`never`) — `build` — guía §4
 - C3.3 El esquema de cultivo acepta un cultivo válido y rechaza uno sin calendario o con un mes fuera de 1–12 — `test`
-- C3.4 El esquema de bancal rechaza medidas < 30 cm o por encima del máximo acordado y horas de sol fuera de 0–24, con mensajes en español — `test` — guía §4
+- C3.4 El esquema de bancal rechaza medidas < 30 cm o por encima del máximo acordado (300 cm) y horas de sol fuera de 0–24, con mensajes en español — `test` — guía §4
 - C3.5 Las reglas *(propuesta)* de la guía §3 pasan a decisiones firmes en «Reglas del dominio» de `CLAUDE.md` (la guía es privada) — `leer`
-**Verificación:** —
+**Verificación:** 2026-11-07 · verificador: PASA. 39 tests, build, check-estatico y lote sin cambios visuales. C3.2 demostrado en una copia: quitar un `@ts-expect-error` o añadir un estado sin tratar hace fallar `tsc` con el error de `never`. Decisiones del usuario: estado «terminada» tras la cosecha, lado 30–300 cm, ⌊·/30⌋, vecindad de 8, exposición ≥6 / 3–<6 / <3. Tras la verificación, a raíz de sus avisos y con el usuario: cm enteros, nombre ≤ 40 caracteres y «un aviso por pareja» pasan a Reglas del dominio (41 tests y `tsc` en verde); `test-primero` deja pasar `__fixtures__/`.
 
 ## T4 · Catálogo de cultivos (datos) — ⬜
 **Qué:** `public/crops.json` con ~24 cultivos de huerto urbano y sus fuentes.
@@ -97,7 +97,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 ## T7 · Temporada — ⬜
 **Depende de:** T4
 **Criterios:**
-- C7.1 `estadoPlanta(plantacion, cultivo, zona, mes)` recorre por sembrar → sembrada → creciendo → cosecha a lo largo del año — `test` — guía §3
+- C7.1 `estadoPlanta(plantacion, cultivo, zona, mes)` recorre por sembrar → sembrada → creciendo → cosecha → terminada a lo largo del año — `test` — guía §3 + decisión T3
 - C7.2 Ventanas que cruzan el año (siembra en octubre, cosecha en marzo) dan el estado correcto en enero — `test`
 - C7.3 El mes de siembra por defecto es el primero válido de la ventana de su zona — `test` — guía §3
 - C7.4 `tareasDelMes()` lista qué sembrar y qué cosechar ese mes, sin duplicados — `test` — guía §2
