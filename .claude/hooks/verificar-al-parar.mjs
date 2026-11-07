@@ -67,8 +67,16 @@ const estado = spawnSync("git", ["status", "--porcelain", "--", ...VIGILADOS], {
 if (estado.status !== 0 || !estado.stdout.trim()) process.exit(0);
 
 const ultimas = (r) => `${r.stdout ?? ""}\n${r.stderr ?? ""}`.trim().split(/\r?\n/).slice(-30).join("\n");
+// Rojo intencionado (añadido el 2026-11-07, revisión del harness tras T4): en
+// TDD, o mientras otro agente escribe lo que pondrá el test en verde, el test
+// falla a propósito. No hay vía de escape automática: el agente lo dice y,
+// como stop_hook_active deja pasar la segunda parada, puede parar.
 const fallar = (que, detalle) => {
-  process.stderr.write(`Hay cambios sin commit en el código y «${que}» falla. Arréglalo antes de dar el trabajo por terminado:\n${detalle}\n`);
+  process.stderr.write(
+    `Hay cambios sin commit en el código y «${que}» falla. Arréglalo antes de dar el trabajo por terminado:\n${detalle}\n\n` +
+      "Si el rojo es INTENCIONADO (un test de TDD escrito antes del código, o datos que otro agente aún está escribiendo): " +
+      "no toques el test para callar al hook; di al usuario qué test falla y por qué es esperado, y vuelve a parar.\n",
+  );
   process.exit(2);
 };
 

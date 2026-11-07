@@ -24,7 +24,11 @@ parece resuelto: es peor que no revisar.
 
 ## 1. Qué revisas
 
-Te dicen qué cultivos (todos, una muestra o los nuevos). Lee
+Te dicen qué cultivos (todos, una muestra o los nuevos). **Una muestra al
+azar te llega ya sacada** por quien te lanza, con el comando que la generó:
+no tienes terminal y la muestra tiene que poderse reproducir. Si te piden
+una muestra sin dártela, dilo en el informe y pide los ids; no la elijas tú.
+Lee
 `public/crops.json` y el esquema en `src/core/` para entender cada campo y
 sus unidades. Por cada cultivo:
 
@@ -78,4 +82,5 @@ sus unidades. Por cada cultivo:
 <n> datos revisados: <n> ✅ · <n> ⚠️ · <n> ❌ · <n> ❔
 ```
 
-El resumen se usa como evidencia de los criterios `datos` en `verify-task`.
+El informe **entero** (no solo el resumen) es la evidencia de los criterios
+`datos` en `verify-task`: quien te lanza se lo pasa tal cual al verificador.

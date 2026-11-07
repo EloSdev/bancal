@@ -41,7 +41,7 @@ Verifica la tarea <Tn · título> de docs/tareas.md siguiendo
 - Tareas ✅ de las que depende: <lista, o "ninguna">
 - Ficheros tocados: <lista>
 - Lo que se borró o se cambió en tests y por qué: <lista o "nada">
-- Informe de revisor-datos, si la tarea tiene criterios `datos`: <pegado, o "no aplica">
+- Informe de revisor-datos, si la tarea tiene criterios `datos`: <pegado ÍNTEGRO, con sus tablas, nunca un resumen; si hubo varias pasadas, todas; o "no aplica">
 Devuelve el informe de la sección 4.
 ```
 
@@ -209,9 +209,13 @@ COMPROBADA, con el motivo.
     se ve en una captura. Ejemplo: "C5.1 4 × 3 celdas" →
     `document.querySelectorAll('[role=gridcell]').length` da 12.
   - `leer` → el fichero y la línea donde está.
-  - `datos` → el informe del subagente `revisor-datos`. El verificador no
-    contrasta fuentes: si no te lo han pasado, el criterio queda NO
-    COMPROBADO.
+  - `datos` → el informe del subagente `revisor-datos`, **íntegro** (las
+    tablas dato → fuente → veredicto). El verificador no contrasta fuentes:
+    si no te lo han pasado, o solo te han pasado un resumen, el criterio
+    queda NO COMPROBADO. Si es un muestreo, la muestra la saca quien lanza
+    al revisor con un comando reproducible
+    (`(Get-Content public\crops.json -Raw | ConvertFrom-Json).id | Get-Random -Count 5`)
+    y el comando y su resultado van a la línea **Verificación**.
   Lo que no tiene evidencia no está hecho.
 - **Sin regresiones**: vuelve a comprobar los criterios de las tareas ✅ que
   la tarea nueva puede afectar (el mismo pod, los tokens, el layout, la capa
