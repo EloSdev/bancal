@@ -3,22 +3,24 @@ import { Link, Outlet } from "@tanstack/react-router";
 export function AppLayout() {
   return (
     <>
-      <header className="border-b border-stone-300">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-4 py-3">
-          <Link to="/bancales" className="text-xl font-bold">
+      <header className="border-b border-lapiz">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-2">
+          {/* El logo lleva a la portada (/ redirige a /bancales) con coincidencia
+              exacta: nunca está activo, así que no repite el aria-current del <nav>. */}
+          <Link
+            to="/"
+            activeOptions={{ exact: true }}
+            className="py-2 font-titulos text-xl font-semibold tracking-wide text-tinta no-underline"
+          >
             Bancal
           </Link>
           <nav aria-label="Principal">
-            <ul className="flex gap-4">
+            <ul className="flex gap-2">
               <li>
-                <Link to="/cultivos" className="hover:underline [&.active]:font-semibold [&.active]:underline">
-                  Cultivos
-                </Link>
+                <EnlaceNav to="/cultivos">Cultivos</EnlaceNav>
               </li>
               <li>
-                <Link to="/bancales" className="hover:underline [&.active]:font-semibold [&.active]:underline">
-                  Mis bancales
-                </Link>
+                <EnlaceNav to="/bancales">Mis bancales</EnlaceNav>
               </li>
             </ul>
           </nav>
@@ -28,5 +30,17 @@ export function AppLayout() {
         <Outlet />
       </main>
     </>
+  );
+}
+
+function EnlaceNav({ to, children }: { to: "/cultivos" | "/bancales"; children: string }) {
+  return (
+    <Link
+      to={to}
+      // La ruta activa se subraya con la pluma azul: la primera firma del brief.
+      className="inline-block px-2 py-2.5 text-tinta-suave no-underline decoration-acento decoration-2 hover:text-tinta hover:underline active:text-tinta aria-[current=page]:font-semibold aria-[current=page]:text-tinta aria-[current=page]:underline"
+    >
+      {children}
+    </Link>
   );
 }

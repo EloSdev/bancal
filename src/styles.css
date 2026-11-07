@@ -1,12 +1,101 @@
 @import "tailwindcss" source("./");
+@import "@fontsource-variable/fraunces/full.css"; /* ejes wght + opsz + SOFT + WONK */
+@import "@fontsource-variable/public-sans";
 
-/* Base provisional: los tokens y la dirección visual llegan en T2 (docs/brief.md). */
+/*
+ * Tokens de Bancal: dirección «papel y tinta azul» de docs/brief.md.
+ * La paleta por defecto de Tailwind se vacía: solo existen estos colores.
+ * Contrastes medidos (WCAG): tinta 12,6 · tinta suave 6,0 · acento 7,2 sobre
+ * el papel; favorable 4,6 / 4,0, desfavorable 5,7 / 5,0 y neutra 3,6 / 3,2
+ * sobre papel / tierra (mínimo 3 para iconos; su texto va siempre en tinta).
+ */
+@theme {
+  --color-*: initial;
+
+  /* Papel y tinta */
+  --color-superficie: #f4eee2;
+  --color-superficie-elevada: #fbf8f1;
+  --color-tinta: #2a2925;
+  --color-tinta-suave: #5f594e;
+  --color-lapiz: #b5a88c; /* cuadrícula y separadores: decorativo, no lleva texto */
+
+  /* El bancal */
+  --color-tierra: #ebe0ca;
+  --color-marco: #6e5a40;
+
+  /* Pluma azul: acciones, enlaces y foco */
+  --color-acento: #1f4e8c;
+  --color-acento-intenso: #173c6c;
+  --color-sobre-acento: #fbf8f1;
+
+  /* Compatibilidad: siempre con icono de forma propia y texto */
+  --color-favorable: #2f7a3b;
+  --color-desfavorable: #b3261e;
+  --color-neutra: #8c7a55;
+
+  --font-sans: "Public Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-titulos: "Fraunces Variable", ui-serif, Georgia, serif;
+
+  /* Radios: casi rectos, de cuaderno. Control = botones, campos, celdas;
+     hoja = lo que flota (banda móvil, diálogo). Solo existen estos dos. */
+  --radius-*: initial;
+  --radius-control: 0.25rem;
+  --radius-hoja: 0.5rem;
+
+  /* Celda de la cuadrícula: 44 px mínimos para el dedo (size-celda, w-celda…) */
+  --spacing-celda: 2.75rem;
+
+  /* Solo lo que flota (banda fija en móvil, diálogos) lleva sombra */
+  --shadow-flota: 0 -1px 0 rgb(42 41 37 / 0.06), 0 -6px 20px rgb(42 41 37 / 0.08);
+
+  /* La pluma: arranca rápido y se posa */
+  --ease-pluma: cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
 @layer base {
-  body { @apply bg-stone-50 text-stone-900 antialiased; }
-  h1 { @apply text-3xl font-bold; }
+  html {
+    @apply bg-superficie font-sans text-tinta antialiased;
+  }
+  body {
+    @apply min-h-dvh;
+  }
+  ::selection {
+    @apply bg-acento text-sobre-acento;
+  }
+
+  h1, h2, h3 {
+    @apply font-titulos text-balance text-tinta;
+    /* Fraunces «suave»: la serif de cuaderno del brief, no la de corte afilado */
+    font-variation-settings: "SOFT" 100;
+    font-optical-sizing: auto;
+  }
+  h1 { @apply text-3xl leading-tight font-semibold; }
   h2 { @apply text-xl font-semibold; }
-  a { @apply underline-offset-4; }
-  button, input, select, textarea, a {
-    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-800;
+  h3 { @apply text-lg font-medium; }
+  p { @apply text-pretty; }
+
+  a {
+    @apply text-acento underline decoration-1 underline-offset-4 transition-colors;
+    @apply hover:decoration-2 active:text-acento-intenso;
+  }
+
+  /* Neutro a propósito: los botones con estilo (primario, secundario, peligro)
+     son el componente <Boton>; las celdas del editor también son <button>. */
+  button {
+    @apply cursor-pointer disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  label { @apply font-medium; }
+  input, select, textarea {
+    @apply rounded-control border border-tinta-suave bg-superficie-elevada px-3 py-2 text-base text-tinta;
+    @apply placeholder:text-tinta-suave aria-invalid:border-desfavorable;
+  }
+
+  /* El anillo sigue el radio del propio elemento: el foco no cambia su forma. */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-acento;
+  }
+  a:focus-visible {
+    @apply rounded-control;
   }
 }

@@ -36,7 +36,7 @@ Testing Library + jsdom; layout con navegación y rutas vacías.
 - C1.7 Repositorio git con un primer commit y el `.gitignore` en vigor (`node_modules/` y `dist/` sin seguimiento) — `leer` — bases (Git)
 **Verificación:** 2026-11-07 · verificador: PASA. 4 tests, build (vite + tsc) y navegador en 360/768/1440 (`/`, `/bancales`, `/cultivos`, `/no-existe`): sin scroll horizontal, consola vacía, foco visible, `aria-current` correcto. `check-estatico` marcó `core/router/router.ts` por importar `@tanstack/react-router`: falso positivo del script (la skill react-bancal pone ahí el router). Pendiente para T2: zonas de toque de los enlaces de 22 px de alto (≥ 24).
 
-## T2 · Dirección visual y tokens — ⬜
+## T2 · Dirección visual y tokens — ✅
 **Qué:** `docs/brief.md` con la dirección visual de una *app* (no una
 landing) y su traducción a `@theme`: paleta, fuentes, radios, estilos base.
 **Depende de:** T1
@@ -46,7 +46,7 @@ landing) y su traducción a `@theme`: paleta, fuentes, radios, estilos base.
 - C2.3 Los tres colores de compatibilidad tienen contraste ≥ 3:1 con la superficie y vienen siempre acompañados de un icono distinto — `nav` — guía §4 (no solo color)
 - C2.4 Fuentes instaladas con `@fontsource-variable/*`; `getComputedStyle(h1).fontFamily` empieza por la de títulos — `nav`
 - C2.5 Estilos base en `@layer base` (encabezados, botones, campos, `:focus-visible`) — `leer`
-**Verificación:** —
+**Verificación:** 2026-11-07 · verificador: PASA (dos pasadas, antes y después de design-reviewer). 7 tests, build, check-estatico y lote de 4 rutas × 360/1440 sin problemas ni errores de consola. Compatibilidad medida: favorable 4,58, desfavorable 5,66 y neutra 3,61 sobre la superficie (3,19 la neutra sobre tierra, la más justa); tres formas distintas, legibles en gris a 20 y 16 px. h1 en «Fraunces Variable» con `"SOFT" 100`. design-reviewer: arreglados el radio que cambiaba con el foco, la pluma azul en la ruta activa, los pesos de los iconos, los radios propios y el favicon. Pendiente de T2 en T1 resuelto (enlaces de 44 px). La leyenda está provisionalmente en `/bancales` hasta T11/T14.
 
 ---
 

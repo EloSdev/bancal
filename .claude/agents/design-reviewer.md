@@ -48,6 +48,10 @@ Tienes cargadas cuatro skills; son tu vara de medir:
    septiembre (lo que exista ya según las tareas ✅).
 3. Capturas a **360 px y 1440 px** de cada pantalla, también de los
    estados vacío, error (si se puede provocar) y con avisos. **Míralas**.
+   En `browser_take_screenshot`, el `filename` siempre con la carpeta
+   delante (`.playwright-mcp/rev-<pantalla>-360.png`): un nombre suelto
+   acaba en la raíz del repo. Para recorrer muchas rutas sin interacción,
+   el lote de `verify-task` (`scripts/preparar-lote.mjs`) ya hace capturas.
 4. Mide el contraste en vez de estimarlo (`browser_evaluate` con
    `getComputedStyle` del texto y su fondo efectivo) cuando dudes.
 5. Una captura del editor **en escala de grises**
