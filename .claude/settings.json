@@ -53,6 +53,13 @@
         ]
       }
     ],
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/tarea-en-curso.mjs\"", "timeout": 10 }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

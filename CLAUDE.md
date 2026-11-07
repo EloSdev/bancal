@@ -86,6 +86,7 @@ Hooks (`.claude/hooks/`, registered in `.claude/settings.json`) — expect them:
 
 - `test-primero` blocks **creating** a module in `src/core/` without its `.test.ts` next to it (except `index.ts`, `model.ts`, `*.d.ts`).
 - `guardia-irreversible` blocks `git push --force`, `git reset --hard`, `git clean -f`, recursive deletes of the root/home/`.git`, secrets files and edits to `src/routeTree.gen.ts`; asks before writing outside the repo.
+- `tarea-en-curso` (SessionStart, also after `/compact`) injects the 🔄 task from `docs/tareas.md` (else the first ❌, else the first ⬜) plus uncommitted files. Task state lives only in `tareas.md`; if a task outlives a session, add a short **Notas:** line to it (decisions, blockers) and fold it into **Verificación** when it closes.
 - `verificar-al-parar` (Stop) runs `npm test`, `vite build` (to a temp dir) and `tsc --noEmit` when build-relevant files have uncommitted changes, and won't let the session stop while they fail.
 
 Browser checks use the Playwright MCP from `.mcp.json` (pinned `@playwright/mcp`); Lighthouse runs via `npx`. The user-level `ecc` plugin is disabled for this project (`enabledPlugins`); its useful React pieces were copied and adapted into the skills above.
