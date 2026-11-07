@@ -117,6 +117,29 @@
       fallosContraste.push({ el: nombre(el), texto: texto(el), ratio: +r.toFixed(2), minimo, color: hex(tc), fondo: hex(fo.color) });
   }
 
+  // ---- Contraste de lo que no es texto (WCAG 1.4.11, mínimo 3:1) ----
+  // Iconos SVG: el color de su primera figura rellena (o con trazo) contra
+  // el fondo efectivo del svg. Cubre las marcas de compatibilidad y los
+  // iconos de cultivo, que llevan aria-hidden pero transmiten información.
+  const fallosNoTexto = [];
+  let noTextoRevisados = 0;
+  for (const svg of document.querySelectorAll("svg")) {
+    if (!visible(svg)) continue;
+    const figura = [...svg.querySelectorAll("circle,rect,path,polygon,ellipse,line,polyline")].find((n) => {
+      const cs = getComputedStyle(n);
+      return (cs.fill !== "none" && aRGBA(cs.fill).a > 0) || (cs.stroke !== "none" && aRGBA(cs.stroke).a > 0);
+    });
+    if (!figura) continue;
+    const cs = getComputedStyle(figura);
+    const pintura = cs.fill !== "none" && aRGBA(cs.fill).a > 0 ? cs.fill : cs.stroke;
+    const fo = fondo(svg);
+    if (fo.conImagen) continue;
+    noTextoRevisados++;
+    const r = ratio(mezcla(aRGBA(pintura), fo.color), fo.color);
+    if (r < 3 && fallosNoTexto.length < 15)
+      fallosNoTexto.push({ el: nombre(svg), forma: svg.dataset.forma ?? figura.tagName, ratio: +r.toFixed(2), color: hex(aRGBA(pintura)), fondo: hex(fo.color) });
+  }
+
   // ---- Encabezados ----
   const hs = [...document.querySelectorAll("h1,h2,h3,h4,h5,h6")].map((h) => ({ n: +h.tagName[1], texto: texto(h) }));
   const saltos = hs.filter((h, i) => h.n > (i ? hs[i - 1].n : 0) + 1).map((h) => `h${h.n}: ${h.texto}`);
@@ -156,6 +179,11 @@
       return { el: nombre(el), texto: texto(el), tam: `${Math.round(r.width)}×${Math.round(r.height)}` };
     })
     .slice(0, 10);
+  // Cifra para la evidencia aunque no haya problemas: el lado menor del
+  // interactivo más pequeño de la pantalla.
+  const ladoMenorMinimo = interactivos.length
+    ? Math.round(Math.min(...interactivos.map((el) => { const r = el.getBoundingClientRect(); return Math.min(r.width, r.height); })))
+    : null;
 
   // ---- Animaciones en marcha (con reduced-motion emulado debería ser []) ----
   const animaciones = document.getAnimations()
@@ -176,9 +204,10 @@
       culpables,
     },
     contraste: { textosRevisados: revisados, fallos: fallosContraste, revisarAMano: revisarContraste },
+    noTexto: { iconosRevisados: noTextoRevisados, fallos: fallosNoTexto },
     encabezados: { h1: hs.filter((h) => h.n === 1).length, saltos, lista: hs.slice(0, 30) },
     imagenes: { total: imgs.length, sinAlt, rotas, deformadas },
-    interactivos: { total: interactivos.length, sinNombre, pequenos },
+    interactivos: { total: interactivos.length, ladoMenorMinimo, sinNombre, pequenos },
     animacionesEnMarcha: animaciones,
   };
 }

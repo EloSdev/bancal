@@ -6,7 +6,8 @@
 //
 // - Solo actúa al crear: editar un fichero que ya existe no se frena.
 // - Excepciones, porque no tienen lógica que probar: index.ts (reexporta),
-//   model.ts (solo tipos) y *.d.ts.
+//   model.ts (solo tipos), *.d.ts y lo que hay en __fixtures__/ (datos de
+//   prueba compartidos que manda la skill tdd-core; añadido el 2026-11-07).
 // - Los propios tests (*.test.ts) siempre se pueden crear: son el paso 1.
 // Sale con 2 (bloquea, el motivo le llega al agente) o con 0 (deja pasar).
 
@@ -33,6 +34,7 @@ const nombre = basename(abs);
 if (!/\.tsx?$/.test(nombre)) process.exit(0);
 if (/\.(test|spec)\.tsx?$/.test(nombre) || /\.d\.ts$/.test(nombre)) process.exit(0);
 if (["index.ts", "model.ts"].includes(nombre)) process.exit(0);
+if (partes.includes("__fixtures__")) process.exit(0);
 if (existsSync(abs)) process.exit(0);
 
 const base = nombre.replace(/\.tsx?$/, "");

@@ -77,6 +77,7 @@ const codigo = `async (page) => {
     if (s.desbordamiento.hayScrollHorizontal || s.desbordamiento.tapadoConOverflowHidden) p.push(["desbordamiento", s.desbordamiento]);
     for (const f of s.contraste.fallos) p.push(["contraste", f]);
     for (const f of s.contraste.revisarAMano) p.push(["contrasteRevisarAMano", f]);
+    for (const f of s.noTexto.fallos) p.push(["contrasteIcono", f]);
     if (s.encabezados.h1 !== 1) p.push(["h1", s.encabezados.h1 + " h1"]);
     for (const f of s.encabezados.saltos) p.push(["saltoDeEncabezado", f]);
     for (const k of ["sinAlt", "rotas", "deformadas"]) for (const f of s.imagenes[k]) p.push(["imagen " + k, f]);
@@ -96,7 +97,7 @@ const codigo = `async (page) => {
         const donde = ruta + "@" + ancho;
         await page.screenshot({ path: carpeta + "/lote-" + slug(ruta) + "-" + ancho + ".png", fullPage: true });
         const final = new URL(page.url());
-        pantallas.push(donde + (final.pathname + final.search !== ruta ? " → " + final.pathname + final.search : "") + " · " + s.titulo.slice(0, 40) + " · textos " + s.contraste.textosRevisados + " · interactivos " + s.interactivos.total);
+        pantallas.push(donde + (final.pathname + final.search !== ruta ? " → " + final.pathname + final.search : "") + " · " + s.titulo.slice(0, 40) + " · textos " + s.contraste.textosRevisados + " · iconos " + s.noTexto.iconosRevisados + " · interactivos " + s.interactivos.total + (s.interactivos.ladoMenorMinimo === null ? "" : " (lado menor mín. " + s.interactivos.ladoMenorMinimo + " px)"));
         for (const [tipo, detalle] of problemas(s)) {
           const clave = tipo + JSON.stringify(detalle);
           if (!agrupados.has(clave)) agrupados.set(clave, { tipo, detalle, en: [] });
@@ -115,7 +116,7 @@ const codigo = `async (page) => {
     await page.emulateMedia({ reducedMotion: null });
     await page.setViewportSize({ width: 1440, height: 900 });
 
-    return { pantallas, reducedMotionAlEmpezar, consola, animacionesConReduce, problemas: [...agrupados.values()], capturas: carpeta + "/lote-<ruta>-<ancho>.png" };
+    return { pantallas, reducedMotionAlEmpezar, consola, animacionesConReduce, problemas: [...agrupados.values()], capturas: carpeta.replace(/\\\\/g, "/") + "/lote-<ruta>-<ancho>.png" };
   } finally {
     page.off("console", alConsole); page.off("pageerror", alError); page.off("response", alResponder);
   }

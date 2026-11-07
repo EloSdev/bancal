@@ -167,8 +167,10 @@ informe, nunca se "arregla" el código para callar al script.
    `favicon.ico` es solo un aviso.
 7. **Teclado** (a 1440): recorre con Tab lo interactivo de la pantalla y, si
    la tarea lo pide, las flechas, Intro y Supr del editor. Tras cada tecla,
-   ejecuta `scripts/sonda-foco.js`: cada elemento enfocado debe tener
-   `visible: true`. Comprueba también **adónde va el foco** tras abrir o
+   **espera ~300 ms** (`browser_wait_for` con `time: 0.3`: los enlaces y
+   botones tienen transiciones de color de 150 ms y medir antes da un color
+   intermedio) y ejecuta `scripts/sonda-foco.js`: cada elemento enfocado
+   debe tener `visible: true`. Comprueba también **adónde va el foco** tras abrir o
    cerrar algo, borrar o guardar.
 8. **Anuncios**: si la tarea promete `aria-live`, lee el texto de la región
    antes y después de la acción (`browser_evaluate`) y apúntalo.
@@ -178,7 +180,16 @@ informe, nunca se "arregla" el código para callar al script.
    `browser_emulate_media` con `reducedMotion: "reduce"`, recarga, sonda, y
    vuelve a quitar la emulación (el navegador es compartido).
 10. **Contraste que la sonda no puede medir** (`revisarAMano`): míralo en la
-    captura y dilo.
+    captura y dilo. Los iconos SVG sí los mide (`noTexto`, mínimo 3:1, el
+    color de su primera figura contra el fondo efectivo; en el lote salen
+    como `contrasteIcono`). Para la evidencia sin problemas, cita las cifras
+    de `pantallas` del lote (textos e iconos revisados, lado menor mínimo de
+    los interactivos).
+11. **Tokens que no se usan no existen en el navegador**: Tailwind v4 solo
+    emite las variables de `@theme` que alguna clase usa, así que
+    `getComputedStyle(:root).getPropertyValue("--color-tierra")` puede salir
+    vacío. Para medir contra un token sin usar, toma su valor de
+    `src/styles.css`.
 
 ### Puerta 5 · Lighthouse (cuando un criterio lo pide)
 
