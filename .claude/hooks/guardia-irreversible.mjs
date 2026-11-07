@@ -5,9 +5,11 @@
 // (deja pasar).
 //
 // Qué frena y por qué:
-// - Comandos git que pierden trabajo (push --force, reset --hard, clean -f) y
-//   borrados recursivos de la raíz, del home o de .git: la sesión puede ir en
-//   modo auto y nadie confirma cada paso.
+// - Comandos git que pierden trabajo (push --force, reset --hard, clean -f,
+//   checkout -- / restore / stash drop / branch -D) y borrados recursivos de la
+//   raíz, del home o de .git: la sesión puede ir en modo auto, nadie confirma
+//   cada paso y el repo no tiene remoto.
+// - Pide confirmación (no bloquea) al instalar un paquete con nombre.
 // - Ficheros de secretos o claves: Bancal no tiene backend ni credenciales.
 // - src/routeTree.gen.ts: lo genera @tanstack/router-plugin al construir;
 //   editarlo a mano se pierde en el siguiente build (se cambian las rutas en
@@ -27,7 +29,21 @@ const COMANDOS = [
   [/\brm\s+(-[a-z]*r[a-z]*f|-[a-z]*f[a-z]*r)\b[^|;&]*\s(\/|~|\*|\.|\.\.)(\s|$)/i, "borrado recursivo de una carpeta raíz, del home o de todo"],
   [/\bRemove-Item\b(?=.*-Recurse)[^|;]*\s(\/|~|\*|\.|\.\.|[A-Z]:\\?)(\s|$)/i, "borrado recursivo de una carpeta raíz, del home o de todo"],
   [/(\brm\s+-[a-z]*r|\bRemove-Item\b(?=.*-Recurse)|\brmdir\s+\/s|\brd\s+\/s)[^|;&]*(^|[\s"'./\\])\.git([\s"'/\\]|$)/i, "borrado de .git (todo el historial)"],
+  // Descartar cambios sin commit: sin remoto, no hay de dónde recuperarlos
+  // (revisión del harness, 2026-11-07).
+  [/\bgit\s+checkout\b[^|;&]*\s(--(\s|$)|\.(\s|$))/i, "git checkout -- <ruta> / git checkout . descarta cambios sin commit"],
+  [/\bgit\s+(checkout|switch)\b[^|;&]*\s(-f|--force|--discard-changes)(\s|$)/i, "git checkout/switch forzado descarta cambios sin commit"],
+  [/\bgit\s+restore\b(?=[^|;&]*--worktree|(?![^|;&]*--staged))/i, "git restore (sin --staged) descarta cambios sin commit"],
+  [/\bgit\s+stash\s+(drop|clear)\b/i, "git stash drop/clear borra cambios guardados"],
+  [/\bgit\s+branch\b[^|;&]*\s(-D|--delete\s+--force|--force\s+--delete)(\s|$)/, "git branch -D borra una rama aunque no esté fusionada"],
 ];
+
+// Instalar un paquete con nombre pide confirmación: CLAUDE.md dice «no
+// dependencies outside this list without justification», y en modo auto nadie
+// lo vería. ignore-scripts (~/.npmrc) frena los postinstall, pero no el código
+// que corre al importar ni los nombres alucinados. `npm install` / `npm ci` a
+// secas (instalar lo del lockfile) siguen libres.
+const INSTALAR = /\b(npm|pnpm|yarn)\s+(i|install|add)\b([^|;&\r\n]*)/gi;
 
 const FICHEROS_SECRETOS = /(^|[\\/])\.env(\.(?!example$|sample$|template$)[^\\/]+)?$|\.(pem|key|p12|pfx)$|(^|[\\/])id_(rsa|ed25519)$/i;
 
@@ -54,6 +70,11 @@ const dentro = (base, p) => { const r = relative(base, p); return r === "" || (!
 if (/^(Bash|PowerShell)$/.test(herramienta)) {
   const cmd = String(params.command ?? "");
   for (const [re, motivo] of COMANDOS) if (re.test(cmd)) bloquear(motivo);
+  for (const m of cmd.matchAll(INSTALAR)) {
+    const paquetes = m[3].trim().split(/\s+/).filter((t) => t && !t.startsWith("-"));
+    if (paquetes.length)
+      preguntar(`Vas a añadir dependencias: ${paquetes.join(", ")}. CLAUDE.md: nada fuera del stack sin justificarlo. ¿Están en el stack o está justificado?`);
+  }
 }
 
 if (/^(Edit|Write|MultiEdit|NotebookEdit)$/.test(herramienta)) {
