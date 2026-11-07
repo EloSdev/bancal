@@ -115,6 +115,17 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C8.5 Un `localStorage` corrupto no rompe la app: se descarta y se avisa — `test`
 **Verificación:** —
 
+## T18 · Ciclo y ventanas de cosecha coherentes (datos) — ⬜
+**Qué:** corregir el desfase que se encontró al cerrar T7. El ciclo es el mismo en todas las zonas y, en 16 pares cultivo × zona, su primer mes de cosecha cae fuera de la ventana de cosecha de la zona (hinojo atlántico, ajo de interior, haba, cebolla…).
+**Orden:** va justo después de T8, aunque se llame T18. Se añadió al cerrar T7 y no se renumera para no romper las referencias a T9–T17.
+**Depende de:** T4, T7
+**Criterios:**
+- C18.1 Antes de tocar datos, se decide con el usuario cómo resolverlo (ciclo por zona, o ajustar ciclos y ventanas) y queda escrito en «Reglas del dominio» de `CLAUDE.md` — `leer`
+- C18.2 Test de coherencia del catálogo: para cada cultivo y zona, sembrando en el mes por defecto (C7.3), el primer mes de cosecha cae dentro de la ventana de cosecha de esa zona — `test`
+- C18.3 El hinojo de la demo, sembrado en mayo en zona atlántica, sale «cosecha» en un mes de su ventana de cosecha atlántica — `test` — guía §2 (demo)
+- C18.4 Cada ciclo o ventana que cambia se contrasta con su fuente (agente `revisor-datos`): 0 ❌ — `datos` — guía §3
+**Verificación:** —
+
 ---
 
 ## Fase 2 · Pantallas
@@ -224,10 +235,10 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 | Alta y edición de bancal | T12 |
 | Editor (clic, toque, teclado) | T13 |
 | Compatibilidades en vivo con explicación | T6, T14 |
-| Temporada (mes en la URL) | T7, T15 |
+| Temporada (mes en la URL) | T7, T18, T15 |
 | Momento estrella de la demo | T4, T6, T14, T15, T17 |
 | Conceptos del dominio (§3) | T3, T5, T6, T7 |
-| Datos verificados con fuentes | T4, T17 |
+| Datos verificados con fuentes | T4, T18, T17 |
 | Capa `api` con latencia, carga y error | T8, T9 |
 | Build y tests sin errores | puertas comunes, T1 |
 | Teclado, foco, etiquetas, `aria-live` | T12, T13, T14, T16 |
