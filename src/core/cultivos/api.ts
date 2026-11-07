@@ -33,7 +33,10 @@ export async function getCultivos(signal?: AbortSignal): Promise<Cultivo[]> {
   await esperar(LATENCIA_MS, signal);
   const respuesta = await descargar(signal);
   if (!respuesta.ok) {
-    throw new ErrorApi("red", `No se ha podido descargar el catálogo de cultivos (HTTP ${respuesta.status}).`);
+    // El código HTTP no le dice nada a quien usa la app: va en `cause`, no en el mensaje.
+    throw new ErrorApi("red", "Puede ser un fallo pasajero del catálogo de cultivos: vuelve a intentarlo en un momento.", {
+      cause: { status: respuesta.status },
+    });
   }
   const resultado = catalogoSchema.safeParse(await leerJson(respuesta));
   if (!resultado.success) {

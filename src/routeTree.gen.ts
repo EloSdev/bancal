@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BancalesIndexRouteImport } from './routes/bancales/index'
 import { Route as CultivosIndexRouteImport } from './routes/cultivos/index'
+import { Route as CultivosCultivoIdRouteImport } from './routes/cultivos/$cultivoId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,33 +29,42 @@ const CultivosIndexRoute = CultivosIndexRouteImport.update({
   path: '/cultivos/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CultivosCultivoIdRoute = CultivosCultivoIdRouteImport.update({
+  id: '/cultivos/$cultivoId',
+  path: '/cultivos/$cultivoId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cultivos/$cultivoId': typeof CultivosCultivoIdRoute
   '/bancales/': typeof BancalesIndexRoute
   '/cultivos/': typeof CultivosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cultivos/$cultivoId': typeof CultivosCultivoIdRoute
   '/bancales': typeof BancalesIndexRoute
   '/cultivos': typeof CultivosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cultivos/$cultivoId': typeof CultivosCultivoIdRoute
   '/bancales/': typeof BancalesIndexRoute
   '/cultivos/': typeof CultivosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bancales/' | '/cultivos/'
+  fullPaths: '/' | '/cultivos/$cultivoId' | '/bancales/' | '/cultivos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bancales' | '/cultivos'
-  id: '__root__' | '/' | '/bancales/' | '/cultivos/'
+  to: '/' | '/cultivos/$cultivoId' | '/bancales' | '/cultivos'
+  id: '__root__' | '/' | '/cultivos/$cultivoId' | '/bancales/' | '/cultivos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CultivosCultivoIdRoute: typeof CultivosCultivoIdRoute
   BancalesIndexRoute: typeof BancalesIndexRoute
   CultivosIndexRoute: typeof CultivosIndexRoute
 }
@@ -82,11 +92,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CultivosIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cultivos/$cultivoId': {
+      id: '/cultivos/$cultivoId'
+      path: '/cultivos/$cultivoId'
+      fullPath: '/cultivos/$cultivoId'
+      preLoaderRoute: typeof CultivosCultivoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CultivosCultivoIdRoute: CultivosCultivoIdRoute,
   BancalesIndexRoute: BancalesIndexRoute,
   CultivosIndexRoute: CultivosIndexRoute,
 }

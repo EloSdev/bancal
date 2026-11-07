@@ -1,8 +1,23 @@
-export function CultivosScene() {
+import { useNavigate } from "@tanstack/react-router";
+import type { FiltrosCatalogo } from "../core/cultivos/filtros";
+import { CatalogoContainer } from "../pods/catalogo";
+
+export function CultivosScene({ filtros }: { filtros: FiltrosCatalogo }) {
+  const navigate = useNavigate({ from: "/cultivos/" });
+
+  // Cambiar un filtro es navegar: recargar o compartir la URL conserva el
+  // resultado. Siempre sobre `prev`, la última búsqueda pedida aunque el
+  // router aún no la haya confirmado: así un desplegable no pisa letras
+  // recién escritas. Escribir sustituye la entrada del historial (no una por
+  // tecla); filtrar y quitar filtros añaden una, para poder volver atrás.
+  const buscar = (q?: string) => navigate({ search: (prev) => ({ ...prev, q }), replace: true });
+  const filtrar = (cambio: Omit<FiltrosCatalogo, "q">) => navigate({ search: (prev) => ({ ...prev, ...cambio }) });
+  const quitarFiltros = () => navigate({ search: (prev) => ({ zona: prev.zona }) });
+
   return (
-    <section className="space-y-3">
+    <section className="space-y-5">
       <h1>Cultivos</h1>
-      <p>Aquí estará el catálogo de cultivos.</p>
+      <CatalogoContainer filtros={filtros} onBuscar={buscar} onFiltrar={filtrar} onQuitarFiltros={quitarFiltros} />
     </section>
   );
 }

@@ -90,6 +90,10 @@
     @apply rounded-control border border-tinta-suave bg-superficie-elevada px-3 py-2 text-base text-tinta;
     @apply placeholder:text-tinta-suave aria-invalid:border-desfavorable;
   }
+  /* Misma altura para campos y desplegables, y zona de toque de 44 px. */
+  input, select {
+    @apply min-h-11;
+  }
 
   /* El anillo sigue el radio del propio elemento: el foco no cambia su forma. */
   :focus-visible {

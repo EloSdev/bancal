@@ -2,7 +2,8 @@
 // («Reglas del dominio» de CLAUDE.md). Se derivan en cada render.
 import { nunca } from "../comun/nunca";
 import { relacionEntre } from "../cultivos/compatibilidad";
-import type { Cultivo, Exposicion, Mes, Ventana, ZonaClimatica } from "../cultivos/model";
+import { etiquetaExposicion, etiquetaZona, nombreMes, ventanaEnTexto } from "../cultivos/etiquetas";
+import type { Cultivo, Exposicion, ZonaClimatica } from "../cultivos/model";
 import { enVentana } from "../cultivos/ventana";
 import { dimensiones, vecinos } from "./cuadricula";
 import { exposicion } from "./exposicion";
@@ -70,19 +71,9 @@ export function avisosBancal(bancal: Bancal, plantaciones: Plantacion[], cultivo
   return [...vecindad, ...porPlantacion];
 }
 
-const MESES = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
-] as const;
-
-const nombreMes = (mes: Mes) => MESES[mes - 1] ?? `mes ${mes}`;
-
-const ventanaEnTexto = ({ desde, hasta }: Ventana) =>
-  desde === hasta ? `en ${nombreMes(desde)}` : `de ${nombreMes(desde)} a ${nombreMes(hasta)}`;
-
-const EXPOSICION: Record<Exposicion, string> = { "pleno-sol": "pleno sol", semisombra: "semisombra", sombra: "sombra" };
-
-const ZONA: Record<ZonaClimatica, string> = { atlantica: "atlántica", mediterranea: "mediterránea", interior: "interior" };
+// En mitad de la frase, las etiquetas van en minúscula («necesita pleno sol»).
+const exposicionEnFrase = (e: Exposicion) => etiquetaExposicion[e].toLowerCase();
+const zonaEnFrase = (z: ZonaClimatica) => etiquetaZona[z].toLowerCase();
 
 /** La explicación del aviso para el usuario: nombra los cultivos y el porqué. */
 export function textoAviso(aviso: Aviso, cultivos: Cultivo[]): string {
@@ -95,12 +86,12 @@ export function textoAviso(aviso: Aviso, cultivos: Cultivo[]): string {
       return `${nombre(a)} junto a ${nombre(b).toLowerCase()}. ${aviso.motivo}`;
     }
     case "sol":
-      return `${nombre(aviso.cultivoId)} necesita ${EXPOSICION[aviso.necesita]} y este bancal está en ${EXPOSICION[aviso.tiene]}.`;
+      return `${nombre(aviso.cultivoId)} necesita ${exposicionEnFrase(aviso.necesita)} y este bancal está en ${exposicionEnFrase(aviso.tiene)}.`;
     case "fuera-de-temporada": {
       const ventana = cultivo(aviso.cultivoId)?.calendario[aviso.zona].siembra;
       const mes = nombreMes(aviso.mesSiembra);
       if (!ventana) return `${nombre(aviso.cultivoId)}: ${mes} queda fuera de su temporada de siembra.`;
-      return `${nombre(aviso.cultivoId)} se siembra ${ventanaEnTexto(ventana)} en la zona ${ZONA[aviso.zona]}; ${mes} queda fuera de temporada.`;
+      return `${nombre(aviso.cultivoId)} se siembra ${ventanaEnTexto(ventana)} en la zona ${zonaEnFrase(aviso.zona)}; ${mes} queda fuera de temporada.`;
     }
     default:
       return nunca(aviso);

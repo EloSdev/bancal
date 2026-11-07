@@ -132,16 +132,16 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 
 ## Fase 2 · Pantallas
 
-## T9 · Catálogo — ⬜
-**Ruta:** `/cultivos?q=&sol=&temporada=`
+## T9 · Catálogo — ✅
+**Ruta:** `/cultivos?q=&sol=&temporada=&zona=`
 **Depende de:** T2, T8
 **Criterios:**
 - C9.1 Lista de cultivos con nombre, sol y dificultad, que enlaza a su ficha — `nav` — guía §2
-- C9.2 Búsqueda por nombre y filtros de sol y temporada actualizan la URL; recargar mantiene el resultado — `nav` — guía §2
+- C9.2 Búsqueda por nombre y filtros de sol y temporada (mes de siembra en la zona elegida, decisión T9) actualizan la URL; recargar mantiene el resultado — `nav` — guía §2
 - C9.3 Parámetros inválidos (`?sol=xyz`) se ignoran sin romper la página (validación Zod de *search params*) — `nav` + `test`
 - C9.4 Estados de carga, error y «sin resultados» visibles; el error usa `role="alert"` — `nav` + `test`
 - C9.5 El número de resultados se anuncia con `aria-live` — `nav` — guía §4
-**Verificación:** —
+**Verificación:** 2026-11-07 · verificador: FALLA → PASA → PASA (3 vueltas); react-reviewer: bloquea → aprobado; design-reviewer: 2 rondas aplicadas. Decisión del usuario: «temporada» = mes de siembra en la zona elegida, con `zona` en la URL (en «Reglas del dominio», que también fija `q` y `sol` exacto). 1.ª vuelta: el foco caía en `<body>` tras «Quitar filtros» y «Reintentar», y el separador «·» daba 2,03:1; el reviewer pidió navegar sobre `prev` (filtros desfasados), separar buscar/filtrar y quitar los `as`. Arreglado: foco a la búsqueda, un solo «Quitar filtros» en la línea del recuento, escena con `onBuscar`/`onFiltrar`/`onQuitarFiltros`, cola de ecos de la búsqueda (la URL va por detrás del texto). Diseño: regla de 12 meses a lápiz con la siembra en madera y una cota de pluma en el mes filtrado (`common/components/regla-meses.tsx`, reutilizable en T10/T15), orden alfabético, mensajes sin resultados concretos, error sin «HTTP», esqueleto de carga. Final: 246 tests, build (vite + tsc), `check-estatico` sin fallos; navegador a 360/1440 sin scroll horizontal ni errores de consola, contraste ≥ 5,68:1 en la regla, 10/10 paradas de Tab visibles, movimiento reducido respetado. Queda: ~20 px de más entre formulario y alerta en el estado de error (estético); foco al cambiar de ruta, en las Notas de T16; los iconos de cultivo del brief no tienen tarea todavía.
 
 ## T10 · Ficha de cultivo — ⬜
 **Ruta:** `/cultivos/$cultivoId`
@@ -217,6 +217,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C16.1 Todas las rutas funcionan a 360, 768 y 1440 px (capturas) — `nav` — guía §4
 - C16.2 El flujo completo de la demo se hace solo con teclado — `nav` — guía §4
 - C16.3 Lighthouse Accesibilidad ≥ 95 en catálogo, editor y formulario — `nav` — guía §4
+**Notas:** (de la verificación de T9) al cambiar de ruta el foco se queda en `<body>`; `frontend-a11y` §6 pide llevarlo al `<h1>` de la pantalla nueva. Afecta al layout de toda la app (T1), no a una pantalla.
 **Verificación:** —
 
 ## T17 · README y demo — ⬜
