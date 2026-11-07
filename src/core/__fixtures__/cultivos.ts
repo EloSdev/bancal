@@ -81,4 +81,20 @@ export const lechuga: Cultivo = {
   fuentes: ["prueba"],
 };
 
-export const cultivosDePrueba: Cultivo[] = [tomate, albahaca, hinojo, lechuga];
+/** Su ciclo cruza el año: sembrado en octubre, se cosecha en marzo y abril. */
+export const ajo: Cultivo = {
+  id: "ajo",
+  nombre: "Ajo",
+  familia: "Amarilidáceas",
+  plantasPorCelda: 9,
+  sol: "pleno-sol",
+  riego: "bajo",
+  dificultad: "facil",
+  calendario: calendario({}, { siembra: { desde: 10, hasta: 12 }, cosecha: { desde: 3, hasta: 6 } }),
+  ciclo: { mesesHastaCosecha: 5, mesesDeCosecha: 2 },
+  compatibles: [],
+  incompatibles: [],
+  fuentes: ["prueba"],
+};
+
+export const cultivosDePrueba: Cultivo[] = [tomate, albahaca, hinojo, lechuga, ajo];

@@ -95,16 +95,15 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C6.5 Escenario de la demo: 120 × 90 con tomates, albahaca e hinojo junto al tomate → aviso del hinojo; tras moverlo lejos → 0 avisos de vecindad — `test` — guía §2 (demo)
 **Verificación:** 2026-11-07 · verificador: PASA. 109 tests (37 nuevos: `cultivos/compatibilidad`, `cultivos/ventana`, `bancales/avisos`), build (vite + tsc) y `check-estatico` sin fallos. Prueba de 11 mutantes (dos avisos por pareja, sin diagonales, límites de sol, ventana sin cruce de año, zona ignorada, compatibilidad asimétrica, texto sin motivo…): todos rompen algún test. Los tests usan `core/__fixtures__/`, no `crops.json`. El texto del aviso sale de `textoAviso()` aparte, sin cambiar el tipo `Aviso` de T3; los textos se pulirán con `ux-copy` en el editor. Ojo: en los fixtures la lechuga es neutra con el tomate (en el catálogo real es favorable).
 
-## T7 · Temporada — ⬜
+## T7 · Temporada — ✅
 **Depende de:** T4
 **Criterios:**
-- C7.1 `estadoPlanta(plantacion, cultivo, zona, mes)` recorre por sembrar → sembrada → creciendo → cosecha → terminada a lo largo del año, según el **ciclo** del cultivo contado desde el `mesSiembra` de la plantación — `test` — guía §3 + decisiones T3 y T4
+- C7.1 `estadoPlanta(plantacion, cultivo, mes)` recorre por sembrar → sembrada → creciendo → cosecha → terminada a lo largo del año, según el **ciclo** del cultivo contado desde el `mesSiembra` de la plantación — `test` — guía §3 + decisiones T3 y T4
 - C7.2 Ventanas que cruzan el año (siembra en octubre, cosecha en marzo) dan el estado correcto en enero — `test`
 - C7.3 El mes de siembra por defecto es el primero válido de la ventana de su zona — `test` — guía §3
 - C7.4 `tareasDelMes()` lista qué sembrar y qué cosechar ese mes, sin duplicados — `test` — guía §2
 - C7.5 El estado nunca se guarda: no aparece en el modelo persistido — `leer` — guía §3
-**Notas:** (de la verificación de T4) 1) fijar con un test cuál es el primer mes de cosecha: con la lectura natural, tomate sembrado en mayo {2,2} → creciendo junio, cosecha julio–agosto, terminada desde septiembre. 2) El hinojo atlántico de la demo (mayo, {4,1}) se cosecha en septiembre, un mes antes de su ventana orientativa 10–12: decidir con el usuario si se ajusta el ciclo o la ventana antes de que lo muestre la ficha (T14).
-**Verificación:** —
+**Verificación:** 2026-11-07 · verificador: PASA. 128 tests (19 nuevos en `core/bancales/temporada.test.ts`), build (vite + tsc) y `check-estatico` sin fallos; 14 mutantes (año cortado en diciembre, primer mes de cosecha desplazado, duplicados en tareas, ventana en vez de ciclo…) rompen todos algún test. Decidido con el usuario y anotado en «Reglas del dominio»: año que se repite (ajo de octubre creciendo en enero), primer mes de cosecha = `mesSiembra + mesesHastaCosecha` (tomate de mayo {2,2}: cosecha julio–agosto, fijado en test; resuelve la nota 1 de T4) y qué entra en las tareas del mes. `estadoPlanta` no recibe `zona` (el estado sale del ciclo). C7.5: `Plantacion` y los esquemas no tienen estado. La nota 2 de T4 (hinojo) resultó ser un desfase ciclo/ventana en 16 pares cultivo × zona: va a una tarea de datos antes de T14.
 
 ## T8 · Capa `api` y hooks — ⬜
 **Depende de:** T3, T4

@@ -30,13 +30,13 @@ export interface Plantacion {
   mesSiembra: Mes;
 }
 
-/** Estado de una plantación en un mes. Se deriva del calendario de su zona. */
+/** Estado de una plantación en un mes. Se deriva del ciclo del cultivo y de su mesSiembra. */
 export type EstadoPlanta =
   | { tipo: "por-sembrar"; siembraEn: Mes }
   | { tipo: "sembrada" }
   | { tipo: "creciendo"; cosechaDesde: Mes }
   | { tipo: "cosecha"; cosechaHasta: Mes }
-  /** Pasada la ventana de cosecha: la celda vuelve a estar libre (rastrojo). */
+  /** Pasados los meses de cosecha del ciclo: la celda vuelve a estar libre (rastrojo). */
   | { tipo: "terminada" };
 
 /** Recomendación con explicación; nunca bloquea. */
