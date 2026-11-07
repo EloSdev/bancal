@@ -77,13 +77,13 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C4.7 Cada cultivo tiene su ciclo (meses hasta la primera cosecha y meses de cosecha, en total ≤ 12), contrastado con fuente para los cultivos de la demo y la muestra — `test` + `datos` — decisión T4
 **Verificación:** 2026-11-07 · verificador: PASA (dos pasadas). 56 tests, build, check-estatico y lote sin cambios visuales; `crops.json` (24 cultivos, 19 fuentes en el README) llega al build. revisor-datos, tres pasadas: C4.6 con muestra al azar (berenjena, capuchina, espinaca, judía verde, remolacha; random.org) → 14 correcciones (sobre todo cultivos de calor en zona atlántica y ventanas de interior), después 0 ❌ y plantas por celda 5/5; C4.7 (ciclos de la demo y la muestra) → 7 correcciones, después 0 ❌. Decisiones del usuario: siembra = entra en el bancal, solo cultivos de una celda, la lista de 24, fuentes divulgativas + método de cuadrados, y **ciclo por cultivo** (cambia el modelo de T3, criterio C4.7 nuevo y C7.1 reescrito). Pendiente para T7, en sus **Notas**: primer mes de cosecha e hinojo atlántico.
 
-## T5 · Cuadrícula, vecindad y exposición — ⬜
+## T5 · Cuadrícula, vecindad y exposición — ✅
 **Depende de:** T3
 **Criterios:**
 - C5.1 `dimensiones(120, 90)` → 4 columnas × 3 filas; `dimensiones(100, 50)` → 3 × 1 (redondeo hacia abajo) — `test` — guía §3
 - C5.2 `vecinos()` devuelve 3 en una esquina, 5 en un borde y 8 en el centro, nunca fuera de la cuadrícula — `test` — guía §3
 - C5.3 `exposicion(6)` → pleno sol, `exposicion(3)` → semisombra, `exposicion(2.9)` → sombra (límites incluidos) — `test` — guía §3
-**Verificación:** —
+**Verificación:** 2026-11-07 · verificador: PASA. 72 tests (16 nuevos en `core/bancales/cuadricula.test.ts` y `exposicion.test.ts`), build (vite + tsc) y `check-estatico` sin fallos. C5.1 comprueba ⌊/30⌋ (fallaría con `round`/`ceil`); C5.2 compara la lista exacta de vecinos en esquina, borde y centro y recorre toda la cuadrícula 4 × 3 sin salirse; C5.3 fija los límites hacia arriba (6 y 3 h). Casos extra: 1 × 1, 10 × 10, 3 × 1, 0/5,9/24 h. Navegador no aplica (solo `core/`).
 
 ## T6 · Compatibilidad y avisos — ⬜
 **Depende de:** T4, T5
