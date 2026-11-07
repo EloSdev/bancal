@@ -85,7 +85,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C5.3 `exposicion(6)` → pleno sol, `exposicion(3)` → semisombra, `exposicion(2.9)` → sombra (límites incluidos) — `test` — guía §3
 **Verificación:** 2026-11-07 · verificador: PASA. 72 tests (16 nuevos en `core/bancales/cuadricula.test.ts` y `exposicion.test.ts`), build (vite + tsc) y `check-estatico` sin fallos. C5.1 comprueba ⌊/30⌋ (fallaría con `round`/`ceil`); C5.2 compara la lista exacta de vecinos en esquina, borde y centro y recorre toda la cuadrícula 4 × 3 sin salirse; C5.3 fija los límites hacia arriba (6 y 3 h). Casos extra: 1 × 1, 10 × 10, 3 × 1, 0/5,9/24 h. Navegador no aplica (solo `core/`).
 
-## T6 · Compatibilidad y avisos — ⬜
+## T6 · Compatibilidad y avisos — ✅
 **Depende de:** T4, T5
 **Criterios:**
 - C6.1 `compatibilidad(a, b)` da favorable / desfavorable / neutra y es simétrica — `test` — guía §3
@@ -93,7 +93,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C6.3 Aviso de falta de sol si el cultivo pide más exposición que la del bancal — `test` — guía §3
 - C6.4 Aviso de siembra fuera de temporada según la zona climática — `test` — guía §3
 - C6.5 Escenario de la demo: 120 × 90 con tomates, albahaca e hinojo junto al tomate → aviso del hinojo; tras moverlo lejos → 0 avisos de vecindad — `test` — guía §2 (demo)
-**Verificación:** —
+**Verificación:** 2026-11-07 · verificador: PASA. 109 tests (37 nuevos: `cultivos/compatibilidad`, `cultivos/ventana`, `bancales/avisos`), build (vite + tsc) y `check-estatico` sin fallos. Prueba de 11 mutantes (dos avisos por pareja, sin diagonales, límites de sol, ventana sin cruce de año, zona ignorada, compatibilidad asimétrica, texto sin motivo…): todos rompen algún test. Los tests usan `core/__fixtures__/`, no `crops.json`. El texto del aviso sale de `textoAviso()` aparte, sin cambiar el tipo `Aviso` de T3; los textos se pulirán con `ux-copy` en el editor. Ojo: en los fixtures la lechuga es neutra con el tomate (en el catálogo real es favorable).
 
 ## T7 · Temporada — ⬜
 **Depende de:** T4
