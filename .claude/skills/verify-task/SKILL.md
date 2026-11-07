@@ -113,7 +113,7 @@ node .claude/skills/verify-task/scripts/check-estatico.mjs .
 Revisa Tailwind v4, `index.html` (`lang="es"`, viewport, título), tokens
 (nada de colores a pelo fuera de `@theme`), `motion-safe:`, foco, capas
 (pods que no se importan entre sí, pods solo por su `index.ts`, `core/` sin
-React salvo `hooks.ts`), `key` por índice, `react-router`, tests aislados o
+React salvo `hooks.ts` y `core/router/`), `key` por índice, `react-router`, tests aislados o
 desactivados y elementos con clic que no son botones. Cada `[FALLA]` cuenta.
 Cada `[AVISO]` se mira y se decide; un falso positivo se justifica en el
 informe, nunca se "arregla" el código para callar al script.
@@ -144,8 +144,10 @@ informe, nunca se "arregla" el código para callar al script.
      de cada texto, encabezados, imágenes rotas, interactivos sin nombre o
      de menos de 24 px.
    - Haz una captura y **mírala**. La sonda no ve un solapamiento, un texto
-     cortado o una celda deformada; tus ojos sí. Guarda las capturas fuera
-     del proyecto, salvo que se pidan para el README.
+     cortado o una celda deformada; tus ojos sí. Guarda las capturas en
+     `.playwright-mcp/` (git la ignora; el MCP de Playwright solo puede
+     escribir dentro del proyecto, no en el scratchpad), salvo que se pidan
+     para el README.
    - **Enlace profundo**: navega directamente a la URL con sus *search
      params* (`/cultivos?sol=pleno`, `/bancales/1?mes=5`) y comprueba que
      el estado sale de la URL.

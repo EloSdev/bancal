@@ -138,7 +138,8 @@ for (const ruta of codigo) {
   for (const m of texto.matchAll(/\bfrom\s+["']([^"']+)["']|\bimport\s*\(\s*["']([^"']+)["']\s*\)/g)) {
     const spec = m[1] ?? m[2];
     if (/^react-router(-dom)?$/.test(spec)) anotar("FALLA", "stack", en(m.index), `import de ${spec}: usa TanStack Router`);
-    if (capa === "core" && !/(^|\/)hooks?\.tsx?$/.test(f) && /^(react|react-dom|@tanstack\/react-)/.test(spec))
+    // Excepciones: hooks.ts y core/router/ (createRouter + Register, como en lab-react y la skill react-bancal).
+    if (capa === "core" && !/(^|\/)hooks?\.tsx?$/.test(f) && !/(^|\/)core\/router\//.test(f) && /^(react|react-dom|@tanstack\/react-)/.test(spec))
       anotar("FALLA", "capas", en(m.index), `core/ importa ${spec}: la lógica de dominio son funciones puras (los hooks, en hooks.ts)`);
 
     let destino = null;

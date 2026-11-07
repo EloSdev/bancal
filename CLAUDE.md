@@ -14,16 +14,14 @@ Sources of truth:
 
 Use the Spanish domain terms (Cultivo, Bancal, Celda, Plantación, Vecindad, Exposición, Zona climática, Estado de la planta, Aviso) in code, UI and conversation.
 
-## Current state
-
-**Not scaffolded yet**: no `package.json` or `src/`; git is initialised with no commits. Next task: **T1 · Proyecto base**, copying stack, versions and structure from `../lab-react` (read its `CLAUDE.md` and `package.json`) and adding Vitest + Testing Library + jsdom. When T1 lands, replace this section with the real commands.
-
-Expected scripts (T1, C1.1):
+## Commands
 
 - `npm start` — Vite dev server
-- `npm run build` — `vite build && tsc --noEmit`. Order matters: the router plugin generates `src/routeTree.gen.ts` during the Vite build and `tsc` needs it. Never edit that file by hand (a hook blocks it).
+- `npm run build` — `vite build && tsc --noEmit`. Order matters: the router plugin generates `src/routeTree.gen.ts` during the Vite build and `tsc` needs it. Never edit that file by hand (a hook blocks it). It is versioned.
 - `npm run typecheck`, `npm run preview`
-- `npm test` — Vitest, single run. One test: `npx vitest run <path> -t "<name>"` (test names carry the criterion id, e.g. `"C5.2 · …"`).
+- `npm test` — Vitest, single run (`npm run test:watch` to watch). One test: `npx vitest run <path> -t "<name>"` (test names carry the criterion id, e.g. `"C5.2 · …"`).
+
+Vitest config lives in `vite.config.ts` (jsdom, setup in `src/test/setup.ts`: jest-dom matchers, cleanup, `scrollTo` stub). No Vitest globals: import `describe/it/expect` explicitly. Component tests that need routing render `RouterProvider` with `createMemoryHistory` over the real `routeTree` (see `src/layouts/app-layout.test.tsx`).
 
 ## Stack
 

@@ -27,8 +27,10 @@ contar lo que has visto**, con evidencias, siguiendo la skill `verify-task`
   `npx vitest run`, `npx vite build --outDir <tmp>`, `npx tsc --noEmit`,
   `node .claude/skills/verify-task/scripts/…`, `npx --yes lighthouse`),
   `npm install` si faltan dependencias, y `git status` / `git diff` /
-  `git log` para leer. Todo lo que generes (build, capturas, JSON) va al
-  scratchpad o a una carpeta temporal, nunca dentro del proyecto.
+  `git log` para leer. Todo lo que generes (build, JSON) va al
+  scratchpad o a una carpeta temporal, nunca dentro del proyecto. Las
+  capturas de Playwright, en `.playwright-mcp/` (ignorada por git): el MCP
+  no puede escribir fuera del proyecto.
 - **Sin evidencia no hay ✅.** Si no has podido ejecutar una puerta (sin
   navegador, sin informe de `revisor-datos`…), es NO COMPROBADA y el
   veredicto como mucho es PASA CON HUECOS.

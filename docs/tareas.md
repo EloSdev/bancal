@@ -22,7 +22,7 @@ textos de interfaz en español · las tareas ✅ anteriores siguen pasando.
 
 ## Fase 0 · Cimientos
 
-## T1 · Proyecto base — ⬜
+## T1 · Proyecto base — ✅
 **Qué:** proyecto desde `../lab-react` (mismas versiones), más Vitest +
 Testing Library + jsdom; layout con navegación y rutas vacías.
 **Depende de:** —
@@ -34,7 +34,7 @@ Testing Library + jsdom; layout con navegación y rutas vacías.
 - C1.5 La cabecera enlaza a «Cultivos» y «Mis bancales» con `<nav>` y marca la ruta activa con `aria-current="page"` — `nav`
 - C1.6 `<html lang="es">` y `<title>` propio — `leer` — guía §4
 - C1.7 Repositorio git con un primer commit y el `.gitignore` en vigor (`node_modules/` y `dist/` sin seguimiento) — `leer` — bases (Git)
-**Verificación:** —
+**Verificación:** 2026-11-07 · verificador: PASA. 4 tests, build (vite + tsc) y navegador en 360/768/1440 (`/`, `/bancales`, `/cultivos`, `/no-existe`): sin scroll horizontal, consola vacía, foco visible, `aria-current` correcto. `check-estatico` marcó `core/router/router.ts` por importar `@tanstack/react-router`: falso positivo del script (la skill react-bancal pone ahí el router). Pendiente para T2: zonas de toque de los enlaces de 22 px de alto (≥ 24).
 
 ## T2 · Dirección visual y tokens — ⬜
 **Qué:** `docs/brief.md` con la dirección visual de una *app* (no una

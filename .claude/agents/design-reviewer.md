@@ -83,7 +83,7 @@ Una lista corta, como mucho 10 puntos:
 - …
 
 **Lo mejor que tiene:** <una línea>
-**Capturas:** <rutas en el scratchpad>
+**Capturas:** <rutas en .playwright-mcp/ (el MCP no puede escribir en el scratchpad)>
 ```
 
 Nada de «considera revisar…»: cada punto dice **qué**, **dónde** y
