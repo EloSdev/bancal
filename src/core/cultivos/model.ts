@@ -26,11 +26,6 @@ export interface Ventana {
   hasta: Mes;
 }
 
-export interface CalendarioZona {
-  siembra: Ventana;
-  cosecha: Ventana;
-}
-
 /**
  * Ciclo de una plantación, en meses enteros contados desde SU mes de siembra:
  * creciendo hasta `mesesHastaCosecha`, luego cosecha durante `mesesDeCosecha`
@@ -39,6 +34,13 @@ export interface CalendarioZona {
 export interface Ciclo {
   mesesHastaCosecha: number;
   mesesDeCosecha: number;
+}
+
+export interface CalendarioZona {
+  siembra: Ventana;
+  cosecha: Ventana;
+  /** Cada clima tiene su ritmo (lo que pasa el invierno crece más despacio). */
+  ciclo: Ciclo;
 }
 
 /** Relación con otro cultivo del catálogo, con el porqué (lo explica el aviso). */
@@ -59,11 +61,10 @@ export interface Cultivo {
   dificultad: Dificultad;
   /**
    * Un calendario por zona climática. La siembra decide el aviso «fuera de
-   * temporada»; la cosecha es orientativa (ficha, tareas del mes): el estado
-   * de cada plantación sale de su `ciclo`.
+   * temporada»; la ventana de cosecha es orientativa (ficha): el estado de
+   * cada plantación sale del `ciclo` de la zona de su bancal.
    */
   calendario: Record<ZonaClimatica, CalendarioZona>;
-  ciclo: Ciclo;
   compatibles: Relacion[];
   incompatibles: Relacion[];
   /** Fuentes de horticultura que respaldan los datos (se listan en el README). */

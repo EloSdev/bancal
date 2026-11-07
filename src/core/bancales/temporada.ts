@@ -10,11 +10,11 @@ const sumarMeses = (mes: Mes, meses: number): Mes => ((mes - 1 + meses) % 12) + 
  * El bancal muestra un año tipo que se repite: el ciclo se cuenta desde el
  * `mesSiembra` de la plantación y, si pasa de diciembre, sigue en enero. Los
  * meses que el ciclo no ocupa son «por sembrar» antes del mes de siembra y
- * «terminada» después.
+ * «terminada» después. El ciclo es el de la zona del bancal.
  */
-export function estadoPlanta(plantacion: Plantacion, cultivo: Cultivo, mes: Mes): EstadoPlanta {
+export function estadoPlanta(plantacion: Plantacion, cultivo: Cultivo, zona: ZonaClimatica, mes: Mes): EstadoPlanta {
   const { mesSiembra } = plantacion;
-  const { mesesHastaCosecha, mesesDeCosecha } = cultivo.ciclo;
+  const { mesesHastaCosecha, mesesDeCosecha } = cultivo.calendario[zona].ciclo;
   const desdeSiembra = (mes - mesSiembra + 12) % 12;
 
   if (desdeSiembra === 0) return { tipo: "sembrada" };
@@ -40,14 +40,19 @@ export interface TareasDelMes {
 }
 
 /** Qué sembrar y qué cosechar en un bancal ese mes, sin repetir cultivos. */
-export function tareasDelMes(plantaciones: Plantacion[], cultivos: Cultivo[], mes: Mes): TareasDelMes {
+export function tareasDelMes(
+  plantaciones: Plantacion[],
+  cultivos: Cultivo[],
+  zona: ZonaClimatica,
+  mes: Mes,
+): TareasDelMes {
   const porId = new Map(cultivos.map((c) => [c.id, c]));
   const sembrar = new Set<string>();
   const cosechar = new Set<string>();
   for (const plantacion of plantaciones) {
     const cultivo = porId.get(plantacion.cultivoId);
     if (!cultivo) continue;
-    const { tipo } = estadoPlanta(plantacion, cultivo, mes);
+    const { tipo } = estadoPlanta(plantacion, cultivo, zona, mes);
     if (tipo === "sembrada") sembrar.add(cultivo.id);
     if (tipo === "cosecha") cosechar.add(cultivo.id);
   }

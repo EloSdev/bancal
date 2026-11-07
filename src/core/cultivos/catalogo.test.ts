@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import catalogoJson from "../../../public/crops.json";
 import readme from "../../../README.md?raw";
-import { cultivoSchema } from "./cultivo.schema";
+import { estadoPlanta, mesSiembraPorDefecto } from "../bancales/temporada";
+import { cultivoSchema, zonas } from "./cultivo.schema";
 import type { Cultivo } from "./model";
+import { enVentana } from "./ventana";
 
 // Tests de coherencia del CATÁLOGO real: la única excepción a «los tests de
 // lógica no leen public/crops.json» (skill tdd-core §4). Existen para leerlo.
@@ -75,6 +77,35 @@ describe("catálogo (public/crops.json)", () => {
     expect(porId.has("hinojo")).toBe(true);
     expect(ids(tomate?.compatibles ?? [])).toContain("albahaca");
     expect(ids(tomate?.incompatibles ?? [])).toContain("hinojo");
+  });
+
+  it("C18.2 · sembrando en el mes por defecto, el primer mes de cosecha cae dentro de la ventana de cosecha de la zona", () => {
+    const desfases = cultivos.flatMap((c) =>
+      zonas.flatMap((zona) => {
+        const { siembra, cosecha } = c.calendario[zona];
+        const mesSiembra = mesSiembraPorDefecto(c, zona);
+        const plantacion = { cultivoId: c.id, celda: { fila: 0, columna: 0 }, mesSiembra };
+        // El primer mes, contando desde la siembra, en que estadoPlanta dice «cosecha».
+        const primeraCosecha = Array.from({ length: 12 }, (_, i) => ((mesSiembra - 1 + i) % 12) + 1).find(
+          (mes) => estadoPlanta(plantacion, c, zona, mes).tipo === "cosecha",
+        );
+        return primeraCosecha !== undefined && enVentana(primeraCosecha, cosecha)
+          ? []
+          : [`${c.id} (${zona}): siembra ${siembra.desde} → cosecha ${primeraCosecha}, ventana ${cosecha.desde}–${cosecha.hasta}`];
+      }),
+    );
+    expect(desfases).toEqual([]);
+  });
+
+  it("C18.3 · el hinojo de la demo, sembrado en mayo en zona atlántica, sale «cosecha» dentro de su ventana atlántica", () => {
+    const hinojo = porId.get("hinojo");
+    expect(hinojo).toBeDefined();
+    const plantacion = { cultivoId: "hinojo", celda: { fila: 1, columna: 0 }, mesSiembra: 5 };
+    const mesesDeCosecha = [6, 7, 8, 9, 10, 11, 12].filter(
+      (mes) => estadoPlanta(plantacion, hinojo!, "atlantica", mes).tipo === "cosecha",
+    );
+    expect(mesesDeCosecha.length).toBeGreaterThan(0);
+    expect(enVentana(mesesDeCosecha[0]!, hinojo!.calendario.atlantica.cosecha)).toBe(true);
   });
 
   it("C4.5 · cada fuente citada está en la sección de fuentes del README", () => {

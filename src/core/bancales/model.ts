@@ -30,7 +30,7 @@ export interface Plantacion {
   mesSiembra: Mes;
 }
 
-/** Estado de una plantación en un mes. Se deriva del ciclo del cultivo y de su mesSiembra. */
+/** Estado de una plantación en un mes. Se deriva del ciclo del cultivo en la zona del bancal y de su mesSiembra. */
 export type EstadoPlanta =
   | { tipo: "por-sembrar"; siembraEn: Mes }
   | { tipo: "sembrada" }

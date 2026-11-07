@@ -16,6 +16,10 @@
         "cosecha": {
           "desde": 7,
           "hasta": 9
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 2
         }
       },
       "mediterranea": {
@@ -26,6 +30,10 @@
         "cosecha": {
           "desde": 6,
           "hasta": 9
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 2
         }
       },
       "interior": {
@@ -36,12 +44,12 @@
         "cosecha": {
           "desde": 6,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 2
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 2
     },
     "compatibles": [
       {
@@ -119,6 +127,10 @@
         "cosecha": {
           "desde": 7,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 4
         }
       },
       "mediterranea": {
@@ -129,6 +141,10 @@
         "cosecha": {
           "desde": 6,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 4
         }
       },
       "interior": {
@@ -139,12 +155,12 @@
         "cosecha": {
           "desde": 6,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 4
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 3,
-      "mesesDeCosecha": 4
     },
     "compatibles": [
       {
@@ -197,6 +213,10 @@
         "cosecha": {
           "desde": 7,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 4
         }
       },
       "mediterranea": {
@@ -207,6 +227,10 @@
         "cosecha": {
           "desde": 6,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 4
         }
       },
       "interior": {
@@ -217,12 +241,12 @@
         "cosecha": {
           "desde": 6,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 4
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 4
     },
     "compatibles": [
       {
@@ -285,6 +309,10 @@
         "cosecha": {
           "desde": 6,
           "hasta": 9
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 2
         }
       },
       "mediterranea": {
@@ -295,6 +323,10 @@
         "cosecha": {
           "desde": 1,
           "hasta": 5
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 4,
+          "mesesDeCosecha": 2
         }
       },
       "interior": {
@@ -305,12 +337,12 @@
         "cosecha": {
           "desde": 6,
           "hasta": 9
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 2
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 3,
-      "mesesDeCosecha": 2
     },
     "compatibles": [
       {
@@ -381,6 +413,10 @@
         "cosecha": {
           "desde": 10,
           "hasta": 12
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 1
         }
       },
       "mediterranea": {
@@ -391,6 +427,10 @@
         "cosecha": {
           "desde": 10,
           "hasta": 5
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 4,
+          "mesesDeCosecha": 1
         }
       },
       "interior": {
@@ -401,12 +441,12 @@
         "cosecha": {
           "desde": 10,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 1
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 4,
-      "mesesDeCosecha": 1
     },
     "compatibles": [],
     "incompatibles": [
@@ -449,6 +489,10 @@
         "cosecha": {
           "desde": 1,
           "hasta": 12
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 9
         }
       },
       "mediterranea": {
@@ -459,6 +503,10 @@
         "cosecha": {
           "desde": 1,
           "hasta": 12
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 9
         }
       },
       "interior": {
@@ -469,12 +517,12 @@
         "cosecha": {
           "desde": 1,
           "hasta": 12
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 9
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 3,
-      "mesesDeCosecha": 9
     },
     "compatibles": [
       {
@@ -517,6 +565,10 @@
         "cosecha": {
           "desde": 5,
           "hasta": 7
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 1
         }
       },
       "mediterranea": {
@@ -527,6 +579,10 @@
         "cosecha": {
           "desde": 5,
           "hasta": 7
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 1
         }
       },
       "interior": {
@@ -537,12 +593,12 @@
         "cosecha": {
           "desde": 5,
           "hasta": 7
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 1
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 1
     },
     "compatibles": [],
     "incompatibles": [],
@@ -571,6 +627,10 @@
         "cosecha": {
           "desde": 6,
           "hasta": 9
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 1
         }
       },
       "mediterranea": {
@@ -581,6 +641,10 @@
         "cosecha": {
           "desde": 11,
           "hasta": 6
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 1
         }
       },
       "interior": {
@@ -591,12 +655,12 @@
         "cosecha": {
           "desde": 4,
           "hasta": 7
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 1
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 1
     },
     "compatibles": [
       {
@@ -678,6 +742,10 @@
         "cosecha": {
           "desde": 3,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 7
         }
       },
       "mediterranea": {
@@ -688,6 +756,10 @@
         "cosecha": {
           "desde": 3,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 7
         }
       },
       "interior": {
@@ -698,12 +770,12 @@
         "cosecha": {
           "desde": 3,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 7
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 7
     },
     "compatibles": [],
     "incompatibles": [],
@@ -730,6 +802,10 @@
         "cosecha": {
           "desde": 3,
           "hasta": 12
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 1,
+          "mesesDeCosecha": 1
         }
       },
       "mediterranea": {
@@ -740,6 +816,10 @@
         "cosecha": {
           "desde": 10,
           "hasta": 2
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 1,
+          "mesesDeCosecha": 1
         }
       },
       "interior": {
@@ -748,14 +828,14 @@
           "hasta": 5
         },
         "cosecha": {
-          "desde": 5,
-          "hasta": 7
+          "desde": 4,
+          "hasta": 6
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 1,
+          "mesesDeCosecha": 1
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 1,
-      "mesesDeCosecha": 1
     },
     "compatibles": [
       {
@@ -782,6 +862,7 @@
       "huertina-toni",
       "agapa-macetohuertos",
       "zaragoza-huertos-escolares",
+      "zaragoza-calendario-escolar",
       "plantea-calendario",
       "fundacion-vital",
       "uw-hortlib",
@@ -805,6 +886,10 @@
         "cosecha": {
           "desde": 4,
           "hasta": 7
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 1,
+          "mesesDeCosecha": 1
         }
       },
       "mediterranea": {
@@ -815,6 +900,10 @@
         "cosecha": {
           "desde": 4,
           "hasta": 12
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 1,
+          "mesesDeCosecha": 1
         }
       },
       "interior": {
@@ -825,12 +914,12 @@
         "cosecha": {
           "desde": 4,
           "hasta": 7
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 1,
+          "mesesDeCosecha": 1
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 1,
-      "mesesDeCosecha": 1
     },
     "compatibles": [],
     "incompatibles": [],
@@ -858,6 +947,10 @@
         "cosecha": {
           "desde": 1,
           "hasta": 12
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 6
         }
       },
       "mediterranea": {
@@ -868,6 +961,10 @@
         "cosecha": {
           "desde": 10,
           "hasta": 5
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 6
         }
       },
       "interior": {
@@ -878,12 +975,12 @@
         "cosecha": {
           "desde": 6,
           "hasta": 1
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 6
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 3,
-      "mesesDeCosecha": 6
     },
     "compatibles": [],
     "incompatibles": [
@@ -924,6 +1021,10 @@
         "cosecha": {
           "desde": 5,
           "hasta": 6
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 1
         }
       },
       "mediterranea": {
@@ -934,6 +1035,10 @@
         "cosecha": {
           "desde": 12,
           "hasta": 3
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 1
         }
       },
       "interior": {
@@ -944,12 +1049,12 @@
         "cosecha": {
           "desde": 5,
           "hasta": 6
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 1
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 1
     },
     "compatibles": [
       {
@@ -1016,6 +1121,10 @@
         "cosecha": {
           "desde": 11,
           "hasta": 2
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 2
         }
       },
       "mediterranea": {
@@ -1026,6 +1135,10 @@
         "cosecha": {
           "desde": 1,
           "hasta": 4
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 4,
+          "mesesDeCosecha": 2
         }
       },
       "interior": {
@@ -1036,12 +1149,12 @@
         "cosecha": {
           "desde": 10,
           "hasta": 2
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 2
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 2
     },
     "compatibles": [
       {
@@ -1092,6 +1205,10 @@
         "cosecha": {
           "desde": 6,
           "hasta": 9
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 2
         }
       },
       "mediterranea": {
@@ -1102,6 +1219,10 @@
         "cosecha": {
           "desde": 7,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 2
         }
       },
       "interior": {
@@ -1112,12 +1233,12 @@
         "cosecha": {
           "desde": 6,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 2
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 2
     },
     "compatibles": [
       {
@@ -1171,6 +1292,10 @@
         "cosecha": {
           "desde": 3,
           "hasta": 6
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 4,
+          "mesesDeCosecha": 1
         }
       },
       "mediterranea": {
@@ -1181,22 +1306,26 @@
         "cosecha": {
           "desde": 3,
           "hasta": 5
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 4,
+          "mesesDeCosecha": 1
         }
       },
       "interior": {
         "siembra": {
-          "desde": 9,
+          "desde": 10,
           "hasta": 11
         },
         "cosecha": {
           "desde": 3,
           "hasta": 5
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 1
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 4,
-      "mesesDeCosecha": 1
     },
     "compatibles": [
       {
@@ -1236,6 +1365,7 @@
       "asturias-guerta",
       "agapa-macetohuertos",
       "zaragoza-huertos-escolares",
+      "huertina-toni",
       "plantea-calendario",
       "uw-hortlib",
       "planetahuerto-asociaciones"
@@ -1252,12 +1382,16 @@
     "calendario": {
       "atlantica": {
         "siembra": {
-          "desde": 8,
+          "desde": 10,
           "hasta": 2
         },
         "cosecha": {
           "desde": 2,
           "hasta": 7
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 6,
+          "mesesDeCosecha": 2
         }
       },
       "mediterranea": {
@@ -1268,6 +1402,10 @@
         "cosecha": {
           "desde": 3,
           "hasta": 5
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 2
         }
       },
       "interior": {
@@ -1278,12 +1416,12 @@
         "cosecha": {
           "desde": 3,
           "hasta": 5
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 6,
+          "mesesDeCosecha": 2
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 5,
-      "mesesDeCosecha": 2
     },
     "compatibles": [
       {
@@ -1338,6 +1476,10 @@
         "cosecha": {
           "desde": 8,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 1
         }
       },
       "mediterranea": {
@@ -1348,6 +1490,10 @@
         "cosecha": {
           "desde": 3,
           "hasta": 8
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 4,
+          "mesesDeCosecha": 1
         }
       },
       "interior": {
@@ -1358,12 +1504,12 @@
         "cosecha": {
           "desde": 5,
           "hasta": 8
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 4,
+          "mesesDeCosecha": 1
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 4,
-      "mesesDeCosecha": 1
     },
     "compatibles": [
       {
@@ -1425,6 +1571,10 @@
         "cosecha": {
           "desde": 6,
           "hasta": 7
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 7,
+          "mesesDeCosecha": 1
         }
       },
       "mediterranea": {
@@ -1435,22 +1585,26 @@
         "cosecha": {
           "desde": 6,
           "hasta": 7
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 6,
+          "mesesDeCosecha": 1
         }
       },
       "interior": {
         "siembra": {
-          "desde": 8,
+          "desde": 10,
           "hasta": 1
         },
         "cosecha": {
           "desde": 6,
           "hasta": 6
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 8,
+          "mesesDeCosecha": 1
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 6,
-      "mesesDeCosecha": 1
     },
     "compatibles": [
       {
@@ -1494,6 +1648,7 @@
       "asturias-guerta",
       "agapa-macetohuertos",
       "zaragoza-huertos-escolares",
+      "huertina-toni",
       "plantea-calendario",
       "uw-hortlib",
       "planetahuerto-asociaciones",
@@ -1517,6 +1672,10 @@
         "cosecha": {
           "desde": 8,
           "hasta": 2
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 2
         }
       },
       "mediterranea": {
@@ -1527,6 +1686,10 @@
         "cosecha": {
           "desde": 2,
           "hasta": 4
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 2
         }
       },
       "interior": {
@@ -1537,12 +1700,12 @@
         "cosecha": {
           "desde": 6,
           "hasta": 2
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 2
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 5,
-      "mesesDeCosecha": 2
     },
     "compatibles": [
       {
@@ -1603,6 +1766,10 @@
         "cosecha": {
           "desde": 5,
           "hasta": 9
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 5
         }
       },
       "mediterranea": {
@@ -1613,6 +1780,10 @@
         "cosecha": {
           "desde": 5,
           "hasta": 9
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 5
         }
       },
       "interior": {
@@ -1623,12 +1794,12 @@
         "cosecha": {
           "desde": 5,
           "hasta": 9
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 5
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 3,
-      "mesesDeCosecha": 5
     },
     "compatibles": [],
     "incompatibles": [],
@@ -1656,6 +1827,10 @@
         "cosecha": {
           "desde": 7,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 4
         }
       },
       "mediterranea": {
@@ -1666,6 +1841,10 @@
         "cosecha": {
           "desde": 6,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 4
         }
       },
       "interior": {
@@ -1676,12 +1855,12 @@
         "cosecha": {
           "desde": 6,
           "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 4
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 4
     },
     "compatibles": [
       {
@@ -1722,7 +1901,11 @@
         },
         "cosecha": {
           "desde": 6,
-          "hasta": 7
+          "hasta": 10
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 3,
+          "mesesDeCosecha": 5
         }
       },
       "mediterranea": {
@@ -1733,22 +1916,26 @@
         "cosecha": {
           "desde": 4,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 5
         }
       },
       "interior": {
         "siembra": {
           "desde": 11,
-          "hasta": 4
+          "hasta": 3
         },
         "cosecha": {
           "desde": 4,
           "hasta": 6
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 5,
+          "mesesDeCosecha": 3
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 3,
-      "mesesDeCosecha": 5
     },
     "compatibles": [],
     "incompatibles": [],
@@ -1757,6 +1944,7 @@
       "huertina-toni",
       "agapa-macetohuertos",
       "zaragoza-huertos-escolares",
+      "zaragoza-calendario-escolar",
       "plantea-calendario"
     ]
   },
@@ -1777,6 +1965,10 @@
         "cosecha": {
           "desde": 5,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 6
         }
       },
       "mediterranea": {
@@ -1787,6 +1979,10 @@
         "cosecha": {
           "desde": 5,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 6
         }
       },
       "interior": {
@@ -1797,12 +1993,12 @@
         "cosecha": {
           "desde": 5,
           "hasta": 11
+        },
+        "ciclo": {
+          "mesesHastaCosecha": 2,
+          "mesesDeCosecha": 6
         }
       }
-    },
-    "ciclo": {
-      "mesesHastaCosecha": 2,
-      "mesesDeCosecha": 6
     },
     "compatibles": [],
     "incompatibles": [],

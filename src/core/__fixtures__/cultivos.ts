@@ -26,10 +26,9 @@ export const tomate: Cultivo = {
   riego: "alto",
   dificultad: "media",
   calendario: calendario(
-    { atlantica: { siembra: { desde: 5, hasta: 5 }, cosecha: { desde: 7, hasta: 9 } } },
-    { siembra: { desde: 4, hasta: 5 }, cosecha: { desde: 6, hasta: 9 } },
+    { atlantica: { siembra: { desde: 5, hasta: 5 }, cosecha: { desde: 7, hasta: 9 }, ciclo: { mesesHastaCosecha: 2, mesesDeCosecha: 2 } } },
+    { siembra: { desde: 4, hasta: 5 }, cosecha: { desde: 6, hasta: 9 }, ciclo: { mesesHastaCosecha: 2, mesesDeCosecha: 2 } },
   ),
-  ciclo: { mesesHastaCosecha: 2, mesesDeCosecha: 2 },
   compatibles: [{ cultivoId: "albahaca", motivo: "Pareja tradicional." }],
   incompatibles: [{ cultivoId: "hinojo", motivo: MOTIVO_HINOJO_TOMATE }],
   fuentes: ["prueba"],
@@ -43,8 +42,7 @@ export const albahaca: Cultivo = {
   sol: "pleno-sol",
   riego: "medio",
   dificultad: "facil",
-  calendario: calendario({}, { siembra: { desde: 5, hasta: 5 }, cosecha: { desde: 7, hasta: 9 } }),
-  ciclo: { mesesHastaCosecha: 2, mesesDeCosecha: 3 },
+  calendario: calendario({}, { siembra: { desde: 5, hasta: 5 }, cosecha: { desde: 7, hasta: 9 }, ciclo: { mesesHastaCosecha: 2, mesesDeCosecha: 3 } }),
   compatibles: [{ cultivoId: "tomate", motivo: "Pareja tradicional." }],
   incompatibles: [],
   fuentes: ["prueba"],
@@ -58,8 +56,7 @@ export const hinojo: Cultivo = {
   sol: "pleno-sol",
   riego: "medio",
   dificultad: "media",
-  calendario: calendario({}, { siembra: { desde: 5, hasta: 6 }, cosecha: { desde: 8, hasta: 10 } }),
-  ciclo: { mesesHastaCosecha: 3, mesesDeCosecha: 2 },
+  calendario: calendario({}, { siembra: { desde: 5, hasta: 6 }, cosecha: { desde: 8, hasta: 10 }, ciclo: { mesesHastaCosecha: 3, mesesDeCosecha: 2 } }),
   compatibles: [],
   incompatibles: [{ cultivoId: "tomate", motivo: MOTIVO_HINOJO_TOMATE }],
   fuentes: ["prueba"],
@@ -74,14 +71,16 @@ export const lechuga: Cultivo = {
   sol: "semisombra",
   riego: "medio",
   dificultad: "facil",
-  calendario: calendario({}, { siembra: { desde: 10, hasta: 2 }, cosecha: { desde: 12, hasta: 4 } }),
-  ciclo: { mesesHastaCosecha: 2, mesesDeCosecha: 1 },
+  calendario: calendario({}, { siembra: { desde: 10, hasta: 2 }, cosecha: { desde: 12, hasta: 4 }, ciclo: { mesesHastaCosecha: 2, mesesDeCosecha: 1 } }),
   compatibles: [],
   incompatibles: [],
   fuentes: ["prueba"],
 };
 
-/** Su ciclo cruza el año: sembrado en octubre, se cosecha en marzo y abril. */
+/**
+ * Su ciclo cruza el año: sembrado en octubre, se cosecha en marzo y abril. En
+ * interior pasa el invierno más despacio: se cosecha en mayo (ciclo 7 + 1).
+ */
 export const ajo: Cultivo = {
   id: "ajo",
   nombre: "Ajo",
@@ -90,8 +89,10 @@ export const ajo: Cultivo = {
   sol: "pleno-sol",
   riego: "bajo",
   dificultad: "facil",
-  calendario: calendario({}, { siembra: { desde: 10, hasta: 12 }, cosecha: { desde: 3, hasta: 6 } }),
-  ciclo: { mesesHastaCosecha: 5, mesesDeCosecha: 2 },
+  calendario: calendario(
+    { interior: { siembra: { desde: 10, hasta: 12 }, cosecha: { desde: 5, hasta: 6 }, ciclo: { mesesHastaCosecha: 7, mesesDeCosecha: 1 } } },
+    { siembra: { desde: 10, hasta: 12 }, cosecha: { desde: 3, hasta: 6 }, ciclo: { mesesHastaCosecha: 5, mesesDeCosecha: 2 } },
+  ),
   compatibles: [],
   incompatibles: [],
   fuentes: ["prueba"],

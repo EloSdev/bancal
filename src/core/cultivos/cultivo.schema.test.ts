@@ -5,6 +5,7 @@ import { cultivoSchema } from "./cultivo.schema";
 const calendario = {
   siembra: { desde: 3, hasta: 5 },
   cosecha: { desde: 7, hasta: 9 },
+  ciclo: { mesesHastaCosecha: 3, mesesDeCosecha: 3 },
 };
 const cultivoValido = {
   id: "tomate",
@@ -18,7 +19,6 @@ const cultivoValido = {
   compatibles: [{ cultivoId: "albahaca", motivo: "Motivo de prueba." }],
   incompatibles: [{ cultivoId: "hinojo", motivo: "Motivo de prueba." }],
   fuentes: ["fuente-de-prueba"],
-  ciclo: { mesesHastaCosecha: 3, mesesDeCosecha: 3 },
 };
 
 const conCalendario = (atlantica: unknown) => ({
@@ -49,13 +49,21 @@ describe("cultivoSchema", () => {
   });
 
   it("acepta una ventana que cruza el año (de octubre a marzo)", () => {
-    const invierno = conCalendario({ siembra: { desde: 10, hasta: 11 }, cosecha: { desde: 12, hasta: 3 } });
+    const invierno = conCalendario({ ...calendario, siembra: { desde: 10, hasta: 11 }, cosecha: { desde: 12, hasta: 3 } });
     expect(cultivoSchema.safeParse(invierno).success).toBe(true);
   });
 
-  it("C4.7 · rechaza un cultivo sin ciclo", () => {
-    const { ciclo: _sinCiclo, ...sinCiclo } = cultivoValido;
-    expect(cultivoSchema.safeParse(sinCiclo).success).toBe(false);
+  it("C18.5 · rechaza una zona sin ciclo (el ciclo es obligatorio en cada zona)", () => {
+    const { ciclo: _sinCiclo, ...sinCiclo } = calendario;
+    expect(cultivoSchema.safeParse(conCalendario(sinCiclo)).success).toBe(false);
+  });
+
+  it("C18.5 · cada zona puede tener su propio ciclo", () => {
+    const lento = { ...calendario, ciclo: { mesesHastaCosecha: 6, mesesDeCosecha: 2 } };
+    const r = cultivoSchema.safeParse(conCalendario(lento));
+    expect(r.success).toBe(true);
+    expect(r.data?.calendario.atlantica.ciclo).toEqual({ mesesHastaCosecha: 6, mesesDeCosecha: 2 });
+    expect(r.data?.calendario.interior.ciclo).toEqual({ mesesHastaCosecha: 3, mesesDeCosecha: 3 });
   });
 
   it.each([
@@ -63,13 +71,13 @@ describe("cultivoSchema", () => {
     [{ mesesHastaCosecha: 2, mesesDeCosecha: 0 }, "cero meses de cosecha"],
     [{ mesesHastaCosecha: 1.5, mesesDeCosecha: 2 }, "meses no enteros"],
     [{ mesesHastaCosecha: 8, mesesDeCosecha: 5 }, "13 meses en total, más de un año"],
-  ])("C4.7 · rechaza el ciclo %o (%s)", (ciclo) => {
-    expect(cultivoSchema.safeParse({ ...cultivoValido, ciclo }).success).toBe(false);
+  ])("C4.7 · rechaza el ciclo %o en una zona (%s)", (ciclo) => {
+    expect(cultivoSchema.safeParse(conCalendario({ ...calendario, ciclo })).success).toBe(false);
   });
 
   it("C4.7 · acepta un ciclo que ocupa el año entero (12 meses)", () => {
     const ciclo = { mesesHastaCosecha: 4, mesesDeCosecha: 8 };
-    expect(cultivoSchema.safeParse({ ...cultivoValido, ciclo }).success).toBe(true);
+    expect(cultivoSchema.safeParse(conCalendario({ ...calendario, ciclo })).success).toBe(true);
   });
 
   it("rechaza un cultivo sin fuentes", () => {

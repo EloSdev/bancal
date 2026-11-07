@@ -74,7 +74,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C4.4 Están los cultivos de la demo: tomate, albahaca e hinojo, con tomate–albahaca favorable y tomate–hinojo desfavorable — `test` — guía §2 (demo)
 - C4.5 Cada cultivo cita al menos una fuente, listada en el README — `leer` + `datos` — guía §3
 - C4.6 Muestreo: 5 cultivos al azar contrastados con su fuente (plantas por celda, sol, calendario) — `datos` — guía §3 (riesgo principal)
-- C4.7 Cada cultivo tiene su ciclo (meses hasta la primera cosecha y meses de cosecha, en total ≤ 12), contrastado con fuente para los cultivos de la demo y la muestra — `test` + `datos` — decisión T4
+- C4.7 Cada cultivo tiene su ciclo (meses hasta la primera cosecha y meses de cosecha, en total ≤ 12; por zona desde T18), contrastado con fuente para los cultivos de la demo y la muestra — `test` + `datos` — decisión T4
 **Verificación:** 2026-11-07 · verificador: PASA (dos pasadas). 56 tests, build, check-estatico y lote sin cambios visuales; `crops.json` (24 cultivos, 19 fuentes en el README) llega al build. revisor-datos, tres pasadas: C4.6 con muestra al azar (berenjena, capuchina, espinaca, judía verde, remolacha; random.org) → 14 correcciones (sobre todo cultivos de calor en zona atlántica y ventanas de interior), después 0 ❌ y plantas por celda 5/5; C4.7 (ciclos de la demo y la muestra) → 7 correcciones, después 0 ❌. Decisiones del usuario: siembra = entra en el bancal, solo cultivos de una celda, la lista de 24, fuentes divulgativas + método de cuadrados, y **ciclo por cultivo** (cambia el modelo de T3, criterio C4.7 nuevo y C7.1 reescrito). Pendiente para T7, en sus **Notas**: primer mes de cosecha e hinojo atlántico.
 
 ## T5 · Cuadrícula, vecindad y exposición — ✅
@@ -98,7 +98,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 ## T7 · Temporada — ✅
 **Depende de:** T4
 **Criterios:**
-- C7.1 `estadoPlanta(plantacion, cultivo, mes)` recorre por sembrar → sembrada → creciendo → cosecha → terminada a lo largo del año, según el **ciclo** del cultivo contado desde el `mesSiembra` de la plantación — `test` — guía §3 + decisiones T3 y T4
+- C7.1 `estadoPlanta(plantacion, cultivo, zona, mes)` recorre por sembrar → sembrada → creciendo → cosecha → terminada a lo largo del año, según el **ciclo** del cultivo contado desde el `mesSiembra` de la plantación — `test` — guía §3 + decisiones T3 y T4
 - C7.2 Ventanas que cruzan el año (siembra en octubre, cosecha en marzo) dan el estado correcto en enero — `test`
 - C7.3 El mes de siembra por defecto es el primero válido de la ventana de su zona — `test` — guía §3
 - C7.4 `tareasDelMes()` lista qué sembrar y qué cosechar ese mes, sin duplicados — `test` — guía §2
@@ -116,7 +116,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C8.6 Encoger un bancal quita las plantaciones que quedan fuera de la cuadrícula nueva; `savePlantaciones` rechaza celdas fuera de la cuadrícula o repetidas — `test` — decisión T8
 **Verificación:** 2026-11-07 · verificador: FALLA → PASA (2.ª vuelta); react-reviewer: bloquea → aviso. 1.ª vuelta: faltaba el test de latencia de `savePlantaciones` (mutante superviviente); el reviewer pidió `EstadoCarga` como unión discriminada, `recargar()`, que una copia fallida de lo descartado no atascara la app y decidir la coherencia plantaciones–cuadrícula. Arreglado todo; el usuario decidió encoger = quitar las de fuera con aviso (C8.6 nuevo, C12.6 para T12) y borrar la copia de lo descartado al cerrar el aviso (en «Reglas del dominio»). 2.ª vuelta: 202 tests, build (vite + tsc) y `check-estatico` sin fallos, sin avisos de `act()`; 26 de 28 mutantes mueren; el de filas/columnas traspuestas al encoger se tapó después con un test de rectángulo, el de `Object.hasOwn` es equivalente en la práctica. La app carga sin errores de consola (ningún componente usa aún los hooks). Pendiente para T11 (en sus **Notas**): `recargar` vuelve a «cargando» y el foco se perdería tras borrar.
 
-## T18 · Ciclo y ventanas de cosecha coherentes (datos) — ⬜
+## T18 · Ciclo y ventanas de cosecha coherentes (datos) — ✅
 **Qué:** corregir el desfase que se encontró al cerrar T7. El ciclo es el mismo en todas las zonas y, en 16 pares cultivo × zona, su primer mes de cosecha cae fuera de la ventana de cosecha de la zona (hinojo atlántico, ajo de interior, haba, cebolla…).
 **Orden:** va justo después de T8, aunque se llame T18. Se añadió al cerrar T7 y no se renumera para no romper las referencias a T9–T17.
 **Depende de:** T4, T7
@@ -125,7 +125,8 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C18.2 Test de coherencia del catálogo: para cada cultivo y zona, sembrando en el mes por defecto (C7.3), el primer mes de cosecha cae dentro de la ventana de cosecha de esa zona — `test`
 - C18.3 El hinojo de la demo, sembrado en mayo en zona atlántica, sale «cosecha» en un mes de su ventana de cosecha atlántica — `test` — guía §2 (demo)
 - C18.4 Cada ciclo o ventana que cambia se contrasta con su fuente (agente `revisor-datos`): 0 ❌ — `datos` — guía §3
-**Verificación:** —
+- C18.5 El ciclo va en el calendario de cada zona (`calendario[zona].ciclo`, obligatorio, ≤ 12 meses); `estadoPlanta` y `tareasDelMes` usan el de la zona del bancal: el mismo cultivo sembrado el mismo mes avanza distinto en dos zonas — `test` — decisión T18
+**Verificación:** 2026-11-07 · verificador: PASA CON HUECOS → PASA (le faltaba el informe íntegro de revisor-datos para C18.4). Decisión del usuario: **ciclo obligatorio por zona** (`calendario[zona].ciclo`; `estadoPlanta` y `tareasDelMes` reciben `zona`; textos de C4.7 y C7.1 ajustados, tests de T3/T4/T7 adaptados solo en forma). 208 tests, build (vite + tsc), `check-estatico` sin fallos; app y `crops.json` servidos sin errores. Datos en dos pasos: migración mecánica (C18.2 falló con exactamente los 16 desfases) y ciclos propuestos para esos 16 pares. revisor-datos: 19 datos → 11 ✅ · 7 ⚠️ · 1 ❌. Corregido el ❌ (ajo de interior: siembra 10–1, ciclo 8+1; lo de agosto eran ajetes). De los 7 ⚠️, el usuario aplicó 5 (rábano de interior 1+1 y cosecha 4–6; haba atlántica siembra 10–2; fresa de interior siembra 11–3; guisante de interior siembra 10–11 y 5+1; fresa atlántica cosecha 6–10); 2 se quedan con el aval del revisor (hinojo de interior, remolacha mediterránea). Fuente nueva `zaragoza-calendario-escolar`; README actualizado. Contrapruebas: C18.2 y C18.3 fallan con los datos antiguos; los mutantes que ignoran la zona rompen C18.5 y C18.2. Para T9/T14: el ciclo de 5 meses del hinojo atlántico cuenta desde la siembra directa; no llamarla «trasplante» en la interfaz.
 
 ---
 
