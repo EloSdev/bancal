@@ -1,4 +1,4 @@
-import { act, screen, within } from "@testing-library/react";
+import { act, cleanup, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import catalogoJson from "../../../public/crops.json";
@@ -33,6 +33,7 @@ beforeEach(() => {
 afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe("Portada (/)", () => {
@@ -98,6 +99,66 @@ describe("Portada (/)", () => {
     await usuario().click(within(alerta).getByRole("button", { name: "Reintentar" }));
     await act(() => vi.advanceTimersByTimeAsync(LATENCIA_MS));
     expect(screen.getByRole("list", { name: "Cultivos del catálogo" })).toBeInTheDocument();
+  });
+});
+
+describe("Notas de la foto (T23)", () => {
+  /** La nota que contiene un texto: el <p> entero (lleva icono, mes y texto). */
+  const nota = (texto: RegExp) => screen.getByText(texto).closest("p")!;
+
+  it("C23.1 · en noviembre dice noviembre y lo que se siembra entonces en la zona atlántica", async () => {
+    vi.setSystemTime(new Date(2026, 10, 8));
+    await abrir("/");
+
+    const delMes = nota(/^Toca sembrar/);
+    expect(delMes).toHaveTextContent(/noviembre/i);
+    expect(delMes).toHaveTextContent("Toca sembrar ajo y lechuga");
+    expect(delMes.querySelector('[data-cultivo="ajo"]')).not.toBeNull();
+  });
+
+  it("C23.1 · con más de dos cultivos dice los dos primeros y cuántos más", async () => {
+    vi.setSystemTime(new Date(2026, 4, 15));
+    await abrir("/");
+
+    const delMes = nota(/^Toca sembrar/);
+    expect(delMes).toHaveTextContent(/mayo/i);
+    expect(delMes).toHaveTextContent("Toca sembrar albahaca, hinojo y 1 más");
+  });
+
+  it("C23.3 · las notas de vecinos son parejas reales del catálogo", async () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    await abrir("/");
+
+    expect(nota(/se ayudan$/)).toHaveTextContent("Tomate y albahaca se ayudan");
+    expect(nota(/se perjudican$/)).toHaveTextContent("Tomate e hinojo se perjudican");
+  });
+
+  it("C23.3 · cada vez que se abre la portada, la pareja se elige al azar", async () => {
+    // Una segunda pareja que se ayuda, para que haya entre qué elegir.
+    const conOtraPareja = cultivosDePrueba.map((c) =>
+      c.id === "lechuga" ? { ...c, compatibles: [{ cultivoId: "ajo", motivo: "Prueba." }] } : c,
+    );
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response(JSON.stringify(conOtraPareja))),
+    );
+
+    const azar = vi.spyOn(Math, "random").mockReturnValue(0);
+    await abrir("/");
+    expect(nota(/se ayudan$/)).toHaveTextContent("Tomate y albahaca se ayudan");
+
+    cleanup();
+    azar.mockReturnValue(0.99);
+    await abrir("/");
+    expect(nota(/se ayudan$/)).toHaveTextContent("Lechuga y ajo se ayudan");
+  });
+
+  it("C23.4 · mientras el catálogo no ha llegado, las notas no se pintan", async () => {
+    renderRuta("/");
+    await screen.findByRole("heading", { level: 1 });
+
+    expect(screen.queryByText(/se ayudan$/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Toca sembrar/)).not.toBeInTheDocument();
   });
 });
 

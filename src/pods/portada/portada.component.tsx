@@ -2,7 +2,7 @@
 // borde y sombra dura, Fraunces muy gruesa, pegatinas en girasol, una cinta
 // de cultivos que desfila, un bento oscuro con lo que vigila la app (el
 // bancal dibujado a tinta en el centro) y una invitación final en azul.
-// Props → render: la tira de cultivos llega cargada del contenedor.
+// Props → render: la tira de cultivos y las notas de la foto llegan del contenedor.
 import { Link } from "@tanstack/react-router";
 import { useId, type ReactNode } from "react";
 import { claseBoton } from "../../common/components/boton";
@@ -10,15 +10,33 @@ import { IconoCultivo } from "../../common/components/icono-cultivo";
 import { IconoEstado } from "../../common/components/icono-estado";
 import { IconoAvisoPlanta, IconoCompatibilidad, MarcaCompatibilidad } from "../../common/components/marca-compatibilidad";
 import { FOTOS, fuenteFoto, type Foto } from "../../common/fotos";
+import { etiquetaZona, nombreMes } from "../../core/cultivos/etiquetas";
+import type { Cultivo, Mes, ZonaClimatica } from "../../core/cultivos/model";
+import type { Pareja } from "../../core/cultivos/parejas";
 import { BancalEjemplo } from "./bancal-ejemplo.component";
 
 // El mismo ancho que la cabecera y el resto de pantallas: los bordes se alinean.
 const CONTENEDOR = "mx-auto max-w-5xl px-4";
 
-export function Portada({ tira }: { tira: ReactNode }) {
+/** Lo que dicen las notas pegadas a la foto (T23); null mientras llega el catálogo. */
+export interface NotasFoto {
+  mes: Mes;
+  zona: ZonaClimatica;
+  /** Lo que se siembra este mes en esa zona, por orden alfabético. */
+  siembra: Cultivo[];
+  ayudan?: Pareja;
+  perjudican?: Pareja;
+}
+
+interface PortadaProps {
+  notas: NotasFoto | null;
+  tira: ReactNode;
+}
+
+export function Portada({ notas, tira }: PortadaProps) {
   return (
     <>
-      <Presentacion />
+      <Presentacion notas={notas} />
       <Cinta />
       <ComoFunciona />
       <LoQueVigila />
@@ -30,7 +48,7 @@ export function Portada({ tira }: { tira: ReactNode }) {
 
 /* ───────────── Presentación ───────────── */
 
-function Presentacion() {
+function Presentacion({ notas }: { notas: NotasFoto | null }) {
   return (
     // overflow-hidden: las pegatinas que asoman por los bordes no ensanchan la página.
     <section className="overflow-hidden">
@@ -54,7 +72,7 @@ function Presentacion() {
           </div>
           <p className="text-sm text-tinta-suave">Gratis y sin registro: tus bancales se guardan en este navegador.</p>
         </div>
-        <FotoPrincipal />
+        <FotoPrincipal notas={notas} />
       </div>
     </section>
   );
@@ -79,7 +97,7 @@ function Pegatina({ giro, children }: { giro: string; children: ReactNode }) {
   );
 }
 
-function FotoPrincipal() {
+function FotoPrincipal({ notas }: { notas: NotasFoto | null }) {
   return (
     <div className="relative mx-auto w-full max-w-md motion-safe:animate-aparecer motion-safe:[animation-delay:150ms] lg:max-w-none">
       <Imagen
@@ -91,21 +109,59 @@ function FotoPrincipal() {
         className="aspect-[4/5] w-full rotate-1 rounded-tarjeta border-2 border-tinta object-cover shadow-pegatina-lg"
       />
       <Sello />
-      {/* Lo que dice Bancal de ese bancal: en texto, como notas pegadas a la foto. */}
-      <p className="absolute top-14 -right-1 flex rotate-2 items-center gap-2 rounded-full border-2 border-tinta bg-superficie-elevada px-3 py-1.5 text-sm font-semibold shadow-pegatina sm:-right-6">
-        <IconoCompatibilidad tipo="favorable" /> Tomate y albahaca se ayudan
-      </p>
-      <p className="absolute bottom-28 -left-1 flex -rotate-2 items-center gap-2 rounded-full border-2 border-tinta bg-superficie-elevada px-3 py-1.5 text-sm font-semibold shadow-pegatina sm:-left-8">
-        <IconoCompatibilidad tipo="desfavorable" /> Hinojo y tomate se perjudican
-      </p>
-      <p className="absolute right-3 -bottom-6 flex -rotate-1 items-center gap-3 rounded-tarjeta border-2 border-tinta bg-girasol px-4 py-2 font-semibold shadow-pegatina [&>svg]:size-8">
-        <IconoCultivo cultivoId="tomate" />
-        <span className="leading-tight">
-          <span className="block text-xs font-bold tracking-widest uppercase">Mayo</span>
-          Toca sembrar el tomate
-        </span>
-      </p>
+      {/* Lo que diría Bancal, en texto, como notas pegadas a la foto (T23).
+          Llegan con el catálogo: hasta entonces no hay notas, ni provisionales. */}
+      {notas?.ayudan && (
+        <NotaVecinos tipo="favorable" pareja={notas.ayudan} className="top-14 -right-1 rotate-2 sm:-right-6" />
+      )}
+      {notas?.perjudican && (
+        <NotaVecinos tipo="desfavorable" pareja={notas.perjudican} className="bottom-28 -left-1 -rotate-2 sm:-left-8" />
+      )}
+      {notas && notas.siembra.length > 0 && <NotaDelMes notas={notas} />}
     </div>
+  );
+}
+
+// «tomate e hinojo», «ajo, guisante y 2 más»: la conjunción la pone Intl (y → e).
+const enumeracion = new Intl.ListFormat("es", { type: "conjunction" });
+const mayuscula = (texto: string) => texto.charAt(0).toUpperCase() + texto.slice(1);
+
+interface NotaVecinosProps {
+  tipo: "favorable" | "desfavorable";
+  pareja: Pareja;
+  /** Dónde va pegada y su giro. */
+  className: string;
+}
+
+function NotaVecinos({ tipo, pareja, className }: NotaVecinosProps) {
+  const quienes = mayuscula(enumeracion.format([pareja.a.nombre.toLowerCase(), pareja.b.nombre.toLowerCase()]));
+  return (
+    // Hasta 18 rem: «Judía verde y capuchina se perjudican» parte en dos líneas sin salirse.
+    <p
+      className={`absolute flex max-w-72 items-center gap-2 rounded-tarjeta border-2 border-tinta bg-superficie-elevada px-3 py-1.5 text-sm leading-tight font-semibold text-balance shadow-pegatina ${className}`}
+    >
+      <IconoCompatibilidad tipo={tipo} />
+      <span>
+        {quienes} {tipo === "favorable" ? "se ayudan" : "se perjudican"}
+      </span>
+    </p>
+  );
+}
+
+/** «Noviembre · zona atlántica — Toca sembrar ajo, guisante y 2 más», con el dibujo del primero. */
+function NotaDelMes({ notas }: { notas: NotasFoto }) {
+  const [primero, segundo, ...resto] = notas.siembra.map((c) => c.nombre.toLowerCase());
+  const nombres = [primero, segundo, resto.length > 0 && `${resto.length} más`].filter((n): n is string => Boolean(n));
+  return (
+    <p className="absolute right-3 -bottom-6 flex max-w-72 -rotate-1 items-center gap-3 rounded-tarjeta border-2 border-tinta bg-girasol px-4 py-2 font-semibold shadow-pegatina [&>svg]:size-8 [&>svg]:shrink-0">
+      <IconoCultivo cultivoId={notas.siembra[0]!.id} />
+      <span className="leading-tight">
+        <span className="block text-xs font-bold tracking-widest whitespace-nowrap uppercase">
+          {nombreMes(notas.mes)} · zona {etiquetaZona[notas.zona].toLowerCase()}
+        </span>
+        Toca sembrar {enumeracion.format(nombres)}
+      </span>
+    </p>
   );
 }
 

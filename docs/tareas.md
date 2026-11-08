@@ -279,6 +279,18 @@ dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 
 ---
 
+## T23 · Portada viva: el mes actual y vecinos al azar — ✅
+**Depende de:** T20, T21
+**Motivo:** pedido por el usuario: las notas pegadas a la foto de la portada eran fijas («Mayo · Toca sembrar el tomate», «Tomate y albahaca se ayudan», «Hinojo y tomate se perjudican»).
+**Criterios:**
+- C23.1 La nota del mes dice el mes actual y qué toca sembrar ese mes en la zona atlántica (la zona por defecto), con la misma regla que el filtro «Se siembra en» del catálogo: hasta dos nombres por orden alfabético y «y N más» si hay más; el icono es el del primero — `test`
+- C23.2 `parejas(cultivos, tipo)` da cada pareja del catálogo que se ayuda o se perjudica una sola vez (la relación es simétrica y, si figura de las dos formas, manda la desfavorable, como en el editor) — `test`
+- C23.3 Cada vez que se abre la portada, las notas «se ayudan» y «se perjudican» enseñan una pareja elegida al azar entre las reales — `test`
+- C23.4 Mientras el catálogo no ha llegado, las notas no se pintan (nada de textos provisionales que cambien después); las notas largas caben a 360 px — `test` · `nav`
+**Verificación:** 2026-11-08 · sin verificador, por el límite de uso. C23.2–C23.3 (`test`): `core/cultivos/parejas.test.ts` (7: una vez por pareja, simetría, manda la desfavorable, `elegir` de 0 a 1). C23.1, C23.3, C23.4 (`test`): 5 tests nuevos en `portada.test.tsx` (noviembre → «Toca sembrar ajo y lechuga» con el icono del ajo; mayo → «albahaca, hinojo y 1 más»; parejas reales con «tomate e hinojo»; azar distinto → pareja distinta; sin notas antes del catálogo). 435 tests en verde y build sin errores. C23.4 (`nav`, build): cuatro visitas seguidas a la portada dieron parejas distintas («Pimiento y lechuga», «Lechuga y espinaca», «Berenjena y zanahoria»…; «Haba y ajo», «Zanahoria e hinojo»…), y la nota del mes, «Noviembre · zona atlántica — Toca sembrar ajo, guisante y 2 más»; a 1440 y 360 px sin scroll horizontal, «Judía verde y cebolla se perjudican» cabe.
+
+---
+
 ## Cobertura
 
 | Requisito | Tareas |
