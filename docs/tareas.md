@@ -143,7 +143,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C9.5 El número de resultados se anuncia con `aria-live` — `nav` — guía §4
 **Verificación:** 2026-11-07 · verificador: FALLA → PASA → PASA (3 vueltas); react-reviewer: bloquea → aprobado; design-reviewer: 2 rondas aplicadas. Decisión del usuario: «temporada» = mes de siembra en la zona elegida, con `zona` en la URL (en «Reglas del dominio», que también fija `q` y `sol` exacto). 1.ª vuelta: el foco caía en `<body>` tras «Quitar filtros» y «Reintentar», y el separador «·» daba 2,03:1; el reviewer pidió navegar sobre `prev` (filtros desfasados), separar buscar/filtrar y quitar los `as`. Arreglado: foco a la búsqueda, un solo «Quitar filtros» en la línea del recuento, escena con `onBuscar`/`onFiltrar`/`onQuitarFiltros`, cola de ecos de la búsqueda (la URL va por detrás del texto). Diseño: regla de 12 meses a lápiz con la siembra en madera y una cota de pluma en el mes filtrado (`common/components/regla-meses.tsx`, reutilizable en T10/T15), orden alfabético, mensajes sin resultados concretos, error sin «HTTP», esqueleto de carga. Final: 246 tests, build (vite + tsc), `check-estatico` sin fallos; navegador a 360/1440 sin scroll horizontal ni errores de consola, contraste ≥ 5,68:1 en la regla, 10/10 paradas de Tab visibles, movimiento reducido respetado. Queda: ~20 px de más entre formulario y alerta en el estado de error (estético); foco al cambiar de ruta, en las Notas de T16; los iconos de cultivo del brief no tienen tarea todavía.
 
-## T10 · Ficha de cultivo — ⬜
+## T10 · Ficha de cultivo — ✅
 **Ruta:** `/cultivos/$cultivoId`
 **Depende de:** T9
 **Criterios:**
@@ -151,7 +151,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C10.2 Calendario de siembra y cosecha de las tres zonas, legible sin color (texto o patrón) — `nav` — guía §4
 - C10.3 Compatibles e incompatibles como enlaces a sus fichas — `nav`
 - C10.4 Un id inexistente muestra «Cultivo no encontrado» con un enlace al catálogo — `nav`
-**Verificación:** —
+**Verificación:** 2026-11-08 · verificador: FALLA (midió con el código cambiando: tests de TDD en rojo y foco en `<body>`) → PASA; react-reviewer: bloquea → arreglado; design-reviewer: 1 ronda aplicada. La ficha carga el catálogo entero (`useCultivos`) para dar nombre a los vecinos y no recargar de ficha a ficha. Foco: al `<h1>` (`tabIndex=-1`, `w-fit`) al llegar y al cambiar de cultivo; tras «Reintentar» espera en el envoltorio y pasa al `<h1>`; `role="status"` desde el principio. Diseño: «Se perjudican» antes que «Se ayudan», fila entera pulsable, una sola frase sin vecinos, siembra subrayada y cosecha rellena (`ReglaMeses` con `marca`; `descripcion` opcional solo con la ventana en texto visible), «Buscar «x»» en no encontrado, esqueleto con la forma de la ficha. Final: 256 tests, build (vite + tsc), `check-estatico` sin fallos; navegador a 360/1440 sin scroll horizontal ni errores, 15/15 paradas de Tab visibles, movimiento reducido respetado, T9 sin regresiones. Queda, a decidir con el usuario: la miga «Catálogo» no conserva los filtros (Atrás sí); los iconos de cultivo del brief siguen sin tarea; contorno grande del envoltorio mientras recarga tras «Reintentar» (dura la latencia).
 
 ## T11 · Mis bancales — ⬜
 **Ruta:** `/bancales`

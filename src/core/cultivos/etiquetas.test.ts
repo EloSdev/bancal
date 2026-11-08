@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { etiquetaDificultad, etiquetaExposicion, etiquetaZona, MESES, nombreMes, ventanaEnTexto } from "./etiquetas";
+import { etiquetaDificultad, etiquetaExposicion, etiquetaRiego, etiquetaZona, MESES, nombreMes, ventanaEnTexto } from "./etiquetas";
 
 describe("etiquetas", () => {
   it("los doce meses, de enero a diciembre", () => {
@@ -18,5 +18,9 @@ describe("etiquetas", () => {
     expect(etiquetaExposicion).toEqual({ "pleno-sol": "Pleno sol", semisombra: "Semisombra", sombra: "Sombra" });
     expect(etiquetaZona).toEqual({ atlantica: "Atlántica", mediterranea: "Mediterránea", interior: "Interior" });
     expect(etiquetaDificultad).toEqual({ facil: "Fácil", media: "Media", dificil: "Difícil" });
+  });
+
+  it("riego en español", () => {
+    expect(etiquetaRiego).toEqual({ bajo: "Bajo", medio: "Medio", alto: "Alto" });
   });
 });

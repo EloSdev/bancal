@@ -1,5 +1,5 @@
 // Cómo se dicen en español los valores del dominio (un dato se dice siempre igual).
-import type { Dificultad, Exposicion, Mes, Ventana, ZonaClimatica } from "./model";
+import type { Dificultad, Exposicion, Mes, Riego, Ventana, ZonaClimatica } from "./model";
 
 export const MESES: readonly string[] = [
   "enero", "febrero", "marzo", "abril", "mayo", "junio",
@@ -22,6 +22,12 @@ export const etiquetaZona: Record<ZonaClimatica, string> = {
   atlantica: "Atlántica",
   mediterranea: "Mediterránea",
   interior: "Interior",
+};
+
+export const etiquetaRiego: Record<Riego, string> = {
+  bajo: "Bajo",
+  medio: "Medio",
+  alto: "Alto",
 };
 
 export const etiquetaDificultad: Record<Dificultad, string> = {
