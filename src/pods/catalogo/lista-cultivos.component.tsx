@@ -3,6 +3,7 @@
 // la regla de meses con su siembra en la zona elegida. Toda la fila responde
 // al clic, pero el enlace accesible es solo el nombre.
 import { Link } from "@tanstack/react-router";
+import { IconoCultivo } from "../../common/components/icono-cultivo";
 import { ReglaMeses } from "../../common/components/regla-meses";
 import { etiquetaDificultad, etiquetaExposicion, ventanaEnTexto } from "../../core/cultivos/etiquetas";
 import type { Cultivo, Mes, ZonaClimatica } from "../../core/cultivos/model";
@@ -34,8 +35,9 @@ function FilaCultivo({ cultivo, zona, mes }: { cultivo: Cultivo; zona: ZonaClima
         <Link
           to="/cultivos/$cultivoId"
           params={{ cultivoId: cultivo.id }}
-          className="font-titulos text-lg font-semibold text-tinta no-underline decoration-acento after:absolute after:inset-0 hover:underline"
+          className="inline-flex items-center gap-2 font-titulos text-lg font-semibold text-tinta no-underline decoration-acento after:absolute after:inset-0 hover:underline"
         >
+          <IconoCultivo cultivoId={cultivo.id} />
           {cultivo.nombre}
         </Link>
         <p className="text-sm text-tinta-suave">

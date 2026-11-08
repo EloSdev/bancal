@@ -62,6 +62,14 @@ describe("Ficha de cultivo (/cultivos/$cultivoId)", () => {
     expect(perjudican).toHaveTextContent("Se dice que el hinojo frena el crecimiento de las tomateras.");
   });
 
+  it("C19.3 · el dibujo grande va junto al título y el pequeño junto a cada vecino", async () => {
+    await abrir("/cultivos/tomate");
+    const cabecera = screen.getByRole("heading", { level: 1, name: "Tomate" }).parentElement!;
+    expect(cabecera.querySelector('svg[data-cultivo="tomate"]')).toHaveClass("size-12");
+    const albahaca = screen.getByRole("link", { name: "Albahaca" });
+    expect(albahaca.querySelector('svg[data-cultivo="albahaca"]')).toHaveClass("size-6");
+  });
+
   it("C10.3 · seguir el enlace abre la ficha del vecino sin volver a cargar, con el foco en su título", async () => {
     const router = await abrir("/cultivos/tomate");
     await usuario().click(screen.getByRole("link", { name: "Albahaca" }));

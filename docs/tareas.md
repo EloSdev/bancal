@@ -175,17 +175,18 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C12.6 Si al encoger el bancal quedan plantaciones fuera, el formulario avisa de cuántas se quitarán antes de guardar — `nav` + `test` — decisión T8
 **Verificación:** 2026-11-08 · verificador: PASA (1.ª vuelta, sobre el código ya revisado); react-reviewer: bloquea → arreglado; design-reviewer: 1 ronda aplicada (un Crítico). Formulario único (TanStack Form + `bancalSchema`) con `NuevoBancalContainer` / `EditarBancalContainer`; la escena navega al editor al guardar. Reviewer: salir durante la latencia aborta el guardado (`AbortController`, sin navegación fantasma); el aviso de plantaciones que se quitan se anuncia en la región de estado y va en el `aria-describedby` del botón; campos `required`; foco al primer error en `requestAnimationFrame`. Diseño: el aviso de C12.6 va encima del botón (a 360 quedaba debajo, fuera de pantalla); vista previa con el croquis grande, cotas a lápiz y punto hueco en lo que se quita; campo con error en tinta doble (`inset-ring`), no en rojo, y el error antes de la pista; foco al `<h1>` en Nuevo y Editar (`common/components/titulo-pagina.tsx`); mensaje propio cuando el navegador no deja escribir; enlace «Editar» en las tarjetas de `/bancales`, con «Editar · Borrar» en su línea. «Guardando…» con `aria-disabled` (no `disabled`) para no perder el foco. `core/`: `plantacionesFuera` con TDD. Final: 290 tests, build (vite + tsc), `check-estatico` sin fallos; navegador a 360/1440 sin scroll horizontal ni errores, 7/7 paradas de Tab visibles, movimiento reducido respetado, T9–T11 sin regresiones. Queda: el error de un campo sale al teclear (TanStack marca «tocado» con el primer cambio), no al salir del campo; «Bancal no encontrado» no toma el foco (T16); lector de pantalla real sin probar.
 
-## T19 · Iconos de cultivo — ⬜
+## T19 · Iconos de cultivo — ✅
 **Qué:** el juego de iconos SVG propios del brief («Cultivos en pantalla»),
-un dibujo de la planta por cultivo, que el editor usa en las celdas. Los
-dibujos por estado (semilla, brote, cosecha) del detalle memorable son de T15.
+un dibujo por cultivo de **lo que se cosecha** (el fruto, la raíz o la mata
+entera: es lo que se reconoce a 24 px), que el editor usa en las celdas. Los
+dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 **Depende de:** T2, T4, T10
 **Criterios:**
 - C19.1 Cada cultivo de `public/crops.json` tiene su icono: mismo `viewBox`, trazo de 1,5 px en `currentColor`, sin rellenos de color — `test` + `leer` — brief
 - C19.2 `IconoCultivo` es decorativo (`aria-hidden`, el nombre va en texto) y un id sin icono pinta uno genérico sin romper — `test` — brief
 - C19.3 Junto al nombre en el catálogo (≈ 24 px) y junto al `<h1>` y a cada vecino en la ficha (≈ 48 / 24 px) — `nav` — brief
 - C19.4 Los iconos se distinguen entre sí a 24 px y se entienden en gris (captura de los ~24 juntos) — `nav` + captura — brief
-**Verificación:** —
+**Verificación:** 2026-11-08 · verificador: PASA (1.ª vuelta); react-reviewer: aviso → arreglado (semillas de la fresa a 1,5 y test de C19.1 que ahora prohíbe trazo, color, relleno y estilo propios en los hijos); design-reviewer: 1 ronda aplicada. `common/components/icono-cultivo.tsx`: 24 dibujos y una estaca genérica (no un brote, que se confundiría con el estado de T15); viewBox 24, trazo 1,5 en `currentColor` con `non-scaling-stroke` (mismo grosor a 24 y 48 px), sin rellenos ni círculos geométricos (todo a mano alzada). Redibujados tras la revisión y hojas de muestra: berenjena, judía, lechuga, tomate (achatado, sin gajos: con ellos se leía calabaza), hinojo, cebolla (capas, frente a los dientes del ajo), haba, albahaca, rúcula, capuchina, cilantro, caléndula (pétalos en lazo, no un sol), pimiento, cebollino. En el catálogo, junto al nombre (24 px); en la ficha, junto al `<h1>` (48 px, alineado con `-ml-2`) y en cada vecino (24 px, en tinta y no en el azul del enlace). Decisión anotada en T15: este juego es «lo que se cosecha»; faltan la planta de cada cultivo, la semilla y el brote. Final: 321 tests, build (vite + tsc), `check-estatico` sin fallos; navegador a 360/1440 sin scroll horizontal ni errores, 31/31 paradas de Tab visibles, nombres accesibles intactos, T9–T12 sin regresiones; capturas a 24 px reales en color y en gris (`.playwright-mcp/t19-iconos-24*.png`). Queda: a 24 px se parecen rábano/remolacha y pimiento/tomate; acelga y cilantro cuestan de reconocer.
 
 ## T13 · Editor: cuadrícula y colocación — ⬜
 **Ruta:** `/bancales/$bancalId`
@@ -217,6 +218,7 @@ dibujos por estado (semilla, brote, cosecha) del detalle memorable son de T15.
 - C15.3 El cambio de estado se anima con CSS y se desactiva con `prefers-reduced-motion` — `nav` — guía §4
 - C15.4 La lista de tareas del mes se actualiza con el deslizador — `nav` — guía §2
 - C15.5 Recorrido de la demo: de marzo a septiembre el huerto pasa de «por sembrar» a «cosecha» — `nav` + capturas — guía §2 (demo)
+**Notas:** (de T19) los iconos de `common/components/icono-cultivo.tsx` dibujan **lo que se cosecha** (el fruto, la raíz o la mata entera), que es lo que se reconoce a 24 px: sirven de «cosecha». Para el detalle memorable del brief faltan la semilla y el brote compartidos y la **planta** propia de cada cultivo (24). Revisar el alcance con el usuario al empezar T15.
 **Verificación:** —
 
 ---

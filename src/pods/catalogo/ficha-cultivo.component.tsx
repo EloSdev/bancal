@@ -4,6 +4,7 @@
 // cada uno enlazado a su ficha y con el porqué.
 import { Link } from "@tanstack/react-router";
 import { useEffect, useId, useRef } from "react";
+import { IconoCultivo } from "../../common/components/icono-cultivo";
 import { MarcaCompatibilidad } from "../../common/components/marca-compatibilidad";
 import { ReglaMeses } from "../../common/components/regla-meses";
 import { zonas } from "../../core/cultivos/cultivo.schema";
@@ -46,9 +47,15 @@ export function FichaCultivo({ cultivo, compatibles, incompatibles }: FichaCulti
         <Link to="/cultivos" className="inline-flex min-h-6 items-center text-sm">
           Catálogo
         </Link>
-        <h1 ref={refTitulo} tabIndex={-1} className="w-fit">
-          {cultivo.nombre}
-        </h1>
+        <div className="flex items-center gap-3">
+          {/* -ml-2: el dibujo deja aire en su viewBox; así su trazo se alinea con «Catálogo». */}
+          <span className="-ml-2">
+            <IconoCultivo cultivoId={cultivo.id} grande />
+          </span>
+          <h1 ref={refTitulo} tabIndex={-1} className="w-fit">
+            {cultivo.nombre}
+          </h1>
+        </div>
       </header>
 
       <DatosCultivo cultivo={cultivo} />
@@ -151,8 +158,12 @@ function ListaVecinos({ tipo, vecinos, vacio }: ListaVecinosProps) {
               <Link
                 to="/cultivos/$cultivoId"
                 params={{ cultivoId: vecino.id }}
-                className="inline-flex min-h-6 items-center font-titulos font-semibold after:absolute after:inset-0"
+                className="inline-flex min-h-6 items-center gap-2 font-titulos font-semibold after:absolute after:inset-0"
               >
+                {/* El dibujo, siempre en tinta: el azul es del enlace (el texto). */}
+                <span className="text-tinta">
+                  <IconoCultivo cultivoId={vecino.id} />
+                </span>
                 {vecino.nombre}
               </Link>
               <p className="text-sm text-tinta-suave">{vecino.motivo}</p>

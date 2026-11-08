@@ -48,6 +48,12 @@ describe("Catálogo (/cultivos)", () => {
     expect(fila).toHaveTextContent("Fácil");
   });
 
+  it("C19.3 · cada cultivo lleva su dibujo junto al nombre (decorativo: el enlace se sigue llamando como el cultivo)", async () => {
+    await abrir("/cultivos");
+    const tomate = screen.getByRole("link", { name: "Tomate" });
+    expect(tomate.querySelector('svg[data-cultivo="tomate"][aria-hidden="true"]')).toHaveClass("size-6");
+  });
+
   it("C9.1 · cada cultivo dice cuándo se siembra en la zona elegida, y la lista dice qué zona es", async () => {
     await abrir("/cultivos?zona=mediterranea");
     const tomate = screen.getByRole("link", { name: "Tomate" }).closest("li")!;
