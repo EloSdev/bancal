@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
+import { configurarModoDemo } from "../core/comun/api";
 import { routeTree } from "../routeTree.gen";
 
 const renderEn = (ruta: string) => {
@@ -41,6 +42,24 @@ describe("AppLayout", () => {
     within(nav).getByRole("link", { name: "Cultivos" }).click();
     const titulo = await screen.findByRole("heading", { level: 1, name: "Cultivos" });
     await waitFor(() => expect(titulo).toHaveFocus());
+  });
+
+  it("C22.3 · con el modo demo activo, se avisa a la vista de qué simula y cómo quitarlo", async () => {
+    configurarModoDemo({ lento: true, fallo: true });
+    renderEn("/bancales");
+
+    const aviso = (await screen.findByText("Modo demo:")).closest("p")!;
+    expect(aviso).toHaveTextContent(/servidor lento/i);
+    expect(aviso).toHaveTextContent(/falla una vez/i);
+    expect(screen.getByRole("link", { name: "Quitar el modo demo" })).toHaveAttribute("href", "/bancales");
+  });
+
+  it("C22.3 · sin modo demo, no hay aviso", async () => {
+    configurarModoDemo({ lento: false, fallo: false });
+    renderEn("/bancales");
+    await screen.findByRole("navigation", { name: "Principal" });
+
+    expect(screen.queryByText(/modo demo/i)).not.toBeInTheDocument();
   });
 
   it("C1.4 · una ruta inexistente muestra «Página no encontrada»", async () => {

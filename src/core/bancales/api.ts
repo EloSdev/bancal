@@ -1,9 +1,9 @@
-// Capa api de los bancales: localStorage, validado con Zod y con latencia simulada.
+// Capa api de los bancales: localStorage, validado con Zod (latencia y fallos solo en el modo demo, T22).
 // Todo vive bajo una clave: { bancales, plantaciones por id de bancal }. Si lo
 // guardado está corrupto, se aparta a otra clave (para no perderlo), se sigue
 // sin datos y hayDatosDescartados() permite avisar al usuario.
 import { z } from "zod";
-import { ErrorApi, esperar, LATENCIA_MS } from "../comun/api";
+import { ErrorApi, simularServidor } from "../comun/api";
 import { guardarCache, invalidarCache, versionCache } from "../comun/cache";
 import { bancalGuardadoSchema, bancalSchema, plantacionSchema } from "./bancal.schema";
 import { dentroDeCuadricula, dimensiones } from "./cuadricula";
@@ -136,19 +136,19 @@ function comprobarCeldas(bancal: Bancal, plantaciones: Plantacion[]): void {
 }
 
 export async function getBancales(signal?: AbortSignal): Promise<Bancal[]> {
-  await esperar(LATENCIA_MS, signal);
+  await simularServidor("getBancales", signal);
   return leer().bancales;
 }
 
 /** Todos los bancales, cada uno con sus plantaciones (la lista «Mis bancales»). */
 export async function getBancalesDetalle(signal?: AbortSignal): Promise<BancalDetalle[]> {
-  await esperar(LATENCIA_MS, signal);
+  await simularServidor("getBancalesDetalle", signal);
   return detallesDe(leer());
 }
 
 /** El bancal con sus plantaciones, o undefined si no existe. */
 export async function getBancal(id: string, signal?: AbortSignal): Promise<BancalDetalle | undefined> {
-  await esperar(LATENCIA_MS, signal);
+  await simularServidor("getBancal", signal);
   const almacen = leer();
   const bancal = almacen.bancales.find((b) => b.id === id);
   return bancal && { bancal, plantaciones: plantacionesDe(almacen, id) };
@@ -159,7 +159,7 @@ export async function getBancal(id: string, signal?: AbortSignal): Promise<Banca
  * Si el bancal encoge, se quitan las plantaciones que quedan fuera.
  */
 export async function saveBancal(input: BancalInput, id?: string, signal?: AbortSignal): Promise<Bancal> {
-  await esperar(LATENCIA_MS, signal);
+  await simularServidor("saveBancal", signal);
   const datos = validar(bancalSchema, input);
   const almacen = leer();
   if (id === undefined) {
@@ -181,7 +181,7 @@ export async function saveBancal(input: BancalInput, id?: string, signal?: Abort
 
 /** Borra el bancal y sus plantaciones. Borrar uno que no existe no hace nada. */
 export async function deleteBancal(id: string, signal?: AbortSignal): Promise<void> {
-  await esperar(LATENCIA_MS, signal);
+  await simularServidor("deleteBancal", signal);
   const almacen = leer();
   const { [id]: _borradas, ...plantaciones } = almacen.plantaciones;
   escribir({ bancales: almacen.bancales.filter((b) => b.id !== id), plantaciones });
@@ -193,7 +193,7 @@ export async function savePlantaciones(
   plantaciones: Plantacion[],
   signal?: AbortSignal,
 ): Promise<void> {
-  await esperar(LATENCIA_MS, signal);
+  await simularServidor("savePlantaciones", signal);
   const validas = validar(z.array(plantacionSchema), plantaciones);
   const almacen = leer();
   const bancal = almacen.bancales.find((b) => b.id === bancalId);

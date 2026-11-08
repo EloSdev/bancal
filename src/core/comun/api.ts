@@ -11,8 +11,50 @@ export class ErrorApi extends Error {
   }
 }
 
-/** Latencia simulada de cada llamada, en ms: la interfaz ve «cargando» como con un servidor. */
+/**
+ * Latencia de cada llamada en el modo demo `?lento` (T22), en ms. Por defecto
+ * no hay espera: el backend es un mock y la app no debe fingir lentitud. El
+ * modo sirve para enseñar los estados de carga; los tests lo activan.
+ */
 export const LATENCIA_MS = 400;
+
+/** El modo demo (T22): `?lento` simula un servidor lento; `?fallo`, uno que falla una vez. */
+export interface ModoDemo {
+  lento: boolean;
+  fallo: boolean;
+}
+
+let modo: ModoDemo = { lento: false, fallo: false };
+// Con ?fallo, las operaciones que ya han fallado una vez (la siguiente va bien).
+const yaFallaron = new Set<string>();
+
+/** Lee el modo de la URL con la que se abrió la app («?lento», «?fallo=1», «?mes=5&lento&fallo»). */
+export function leerModoDemo(busqueda: string): ModoDemo {
+  const parametros = new URLSearchParams(busqueda);
+  return { lento: parametros.has("lento"), fallo: parametros.has("fallo") };
+}
+
+/** Fija el modo para toda la sesión (main.tsx, al arrancar; los tests, en su setup). */
+export function configurarModoDemo(nuevo: ModoDemo): void {
+  modo = { ...nuevo };
+  yaFallaron.clear();
+}
+
+export const modoDemo = (): ModoDemo => ({ ...modo });
+
+/**
+ * Lo que haría un servidor antes de responder: nada por defecto; con
+ * `?lento`, esperar LATENCIA_MS; con `?fallo`, fallar la primera vez que se
+ * llama a cada operación. Una petición cancelada se rechaza como `fetch`.
+ */
+export async function simularServidor(operacion: string, signal?: AbortSignal): Promise<void> {
+  if (modo.lento) await esperar(LATENCIA_MS, signal);
+  else if (signal?.aborted) throw cancelacion();
+  if (modo.fallo && !yaFallaron.has(operacion)) {
+    yaFallaron.add(operacion);
+    throw new ErrorApi("red", "Fallo simulado para la demo (?fallo): vuelve a intentarlo.");
+  }
+}
 
 const cancelacion = () => new DOMException("Petición cancelada", "AbortError");
 

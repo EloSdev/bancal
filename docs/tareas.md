@@ -109,7 +109,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 **Depende de:** T3, T4
 **Criterios:**
 - C8.1 `getCultivos` / `getCultivo` leen `crops.json` (comprobando `response.ok`) y validan con Zod — `test`
-- C8.2 `getBancales` / `getBancal` / `saveBancal` / `deleteBancal` / `savePlantaciones` usan `localStorage` con latencia simulada — `test` (temporizadores falsos)
+- C8.2 `getBancales` / `getBancal` / `saveBancal` / `deleteBancal` / `savePlantaciones` usan `localStorage` con latencia simulada (desde T22, solo en el modo demo `?lento`; los tests lo activan) — `test` (temporizadores falsos)
 - C8.3 Un fallo de red o un JSON inválido llega como error tipado, no como excepción sin capturar — `test`
 - C8.4 Los hooks devuelven `{ data, loading, error }`, cancelan con `AbortController` y no actualizan el estado tras desmontarse — `test`
 - C8.5 Un `localStorage` corrupto no rompe la app: se descarta y se avisa — `test`
@@ -171,7 +171,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C12.2 Cada campo tiene `<label>`; los errores salen al tocar el campo o al enviar, enlazados con `aria-describedby` / `aria-invalid` — `nav` + `test` — guía §4
 - C12.3 Vista previa en vivo de la cuadrícula resultante («4 × 3 celdas») — `nav`
 - C12.4 Al guardar navega al editor del bancal; al editar, conserva las plantaciones que siguen cabiendo — `nav` + `test`
-- C12.5 Botón de enviar deshabilitado durante la latencia simulada — `nav`
+- C12.5 Botón de enviar deshabilitado durante la latencia simulada (desde T22, visible con `?lento`) — `nav`
 - C12.6 Si al encoger el bancal quedan plantaciones fuera, el formulario avisa de cuántas se quitarán antes de guardar — `nav` + `test` — decisión T8
 **Verificación:** 2026-11-08 · verificador: PASA (1.ª vuelta, sobre el código ya revisado); react-reviewer: bloquea → arreglado; design-reviewer: 1 ronda aplicada (un Crítico). Formulario único (TanStack Form + `bancalSchema`) con `NuevoBancalContainer` / `EditarBancalContainer`; la escena navega al editor al guardar. Reviewer: salir durante la latencia aborta el guardado (`AbortController`, sin navegación fantasma); el aviso de plantaciones que se quitan se anuncia en la región de estado y va en el `aria-describedby` del botón; campos `required`; foco al primer error en `requestAnimationFrame`. Diseño: el aviso de C12.6 va encima del botón (a 360 quedaba debajo, fuera de pantalla); vista previa con el croquis grande, cotas a lápiz y punto hueco en lo que se quita; campo con error en tinta doble (`inset-ring`), no en rojo, y el error antes de la pista; foco al `<h1>` en Nuevo y Editar (`common/components/titulo-pagina.tsx`); mensaje propio cuando el navegador no deja escribir; enlace «Editar» en las tarjetas de `/bancales`, con «Editar · Borrar» en su línea. «Guardando…» con `aria-disabled` (no `disabled`) para no perder el foco. `core/`: `plantacionesFuera` con TDD. Final: 290 tests, build (vite + tsc), `check-estatico` sin fallos; navegador a 360/1440 sin scroll horizontal ni errores, 7/7 paradas de Tab visibles, movimiento reducido respetado, T9–T11 sin regresiones. Queda: el error de un campo sale al teclear (TanStack marca «tocado» con el primer cambio), no al salir del campo; «Bancal no encontrado» no toma el foco (T16); lector de pantalla real sin probar.
 
@@ -264,6 +264,18 @@ dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 - C21.3 Al arrancar, la app precarga el catálogo y los bancales; una pantalla que los pide mientras llegan espera esa misma carga en vez de pedirlos otra vez — `test`
 - C21.4 En el build, de la portada a Cultivos y a Mis bancales el contenido está en pantalla en menos de 100 ms tras el clic — `nav`
 **Verificación:** 2026-11-08 · sin verificador, por el límite de uso. C21.1–C21.3 (`test`): `core/comun/cache.test.ts` (6), 5 tests nuevos de `useCarga` con caché y 4 de la api de bancales; 420 tests en verde, sin tocar los anteriores salvo uno de T21 que pasó de «invalida» a «sustituye por lo recién guardado» al afinar C21.2; build sin errores. C21.4 (`nav`, build en el navegador, medido con `performance.now()` del clic a la lista en el DOM): portada → Cultivos 46 ms, → Mis bancales 67 ms, → Cultivos otra vez 72 ms, lista → editor 92 ms; tras plantar en el editor, Mis bancales en 25 ms ya con el recuento nuevo (4 de 12) y el editor reabierto en 24 ms con lo plantado. Antes, cada pantalla esperaba al menos los 400 ms de la latencia simulada. Consola sin errores ni avisos.
+
+---
+
+## T22 · Modo demo: `?lento` y `?fallo` — ✅
+**Depende de:** T8, T21
+**Motivo:** revisadas las bases del TFC con el usuario, la latencia simulada no es un requisito (solo dicen que el backend es opcional y se puede *mockear*); era una decisión de la guía. Por defecto la app no espera; la espera y los fallos quedan como modo demo para enseñar los estados de carga y error.
+**Criterios:**
+- C22.1 Sin modo demo, la capa `api` responde sin latencia; con `?lento` en la URL al abrir la app, cada llamada espera `LATENCIA_MS` — `test`
+- C22.2 Con `?fallo`, la primera llamada de cada operación falla con un error de red que lo dice («fallo simulado»), y la siguiente funciona: se ve el error y «Reintentar» lo arregla — `test`
+- C22.3 El modo dura toda la sesión aunque la URL cambie al navegar, se avisa a la vista mientras está activo, y con `?fallo` no hay precarga (se gastaría el fallo sin que nadie lo viera) — `test` · `nav`
+- C22.4 La guía, `CLAUDE.md`, el README y las skills dicen que la espera es un modo demo, no un requisito — `leer`
+**Verificación:** 2026-11-08 · sin verificador, por el límite de uso. C22.1–C22.3 (`test`): 6 tests nuevos en `core/comun/api.test.ts` (leer la URL, sin espera por defecto, cancelación, 400 ms con `?lento`, primer fallo por operación con `?fallo`) y 2 en `app-layout.test.tsx` (la franja del modo demo y su ausencia); el resto de tests corre en modo `?lento` (setup) sin cambios; 428 en verde y build sin errores. C22.3 (`nav`, build): `/cultivos?lento` → la franja «Modo demo: servidor lento» sigue al navegar a Mis bancales; `/cultivos?fallo` → «No se ha podido cargar el catálogo. Fallo simulado para la demo (?fallo): vuelve a intentarlo.» y «Reintentar» trae los 24 cultivos en 43 ms. C22.4 (`leer`): guía (tabla del stack), `CLAUDE.md` (Data), README (sección «Modo demo») y skills `react-bancal` y `verify-task` actualizadas; `react-testing` y `tdd-core` siguen valiendo (los tests usan el modo lento con temporizadores falsos).
 
 ---
 
