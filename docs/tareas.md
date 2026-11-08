@@ -209,7 +209,7 @@ dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 - C14.5 Los avisos nunca impiden colocar nada — `nav` — guía §3
 **Verificación:** 2026-11-08 · verificador: PASA (1.ª vuelta); react-reviewer: bloquea → arreglado («Ver avisos» enfocaba un título tapado por la banda); design-reviewer: 1 ronda aplicada (se cortó por el límite de uso y se reanudó). `core/`: `estadoVecindad` (la marca de cada celda), `diferenciaAvisos`, `claveAviso`, `resumenAviso`; los avisos de sol y temporada dicen qué hacer («Espera a mayo para la siembra.»); textos sin artículo ni género («tomate: le falta sol»). Editor: marca en la esquina con forma propia (✓ círculo, ✕ rombo, – cápsula) y ▲ para sol y temporada, a 12 px por debajo de 60 px de celda sin tapar el icono; nombre accesible con la vecindad («…tomate, se perjudica con hinojo, se ayuda con albahaca»); leyenda con el triángulo; panel con el porqué y un «Ver <cultivo> (fila, columna)» por cultivo implicado (descrito por su aviso; con dos tomates se sabe de cuál habla), que lleva el foco a la celda y la señala 1,5 s; anuncio corto en `role=status` («Nuevo aviso: tomate junto a hinojo (y 1 más).»); en el móvil, «Ver avisos ✕ n ▲ m» en la banda, que trae el panel a la vista; en xl, el panel en una tercera columna. Demo capturada (`.playwright-mcp/t14-verif-demo-*.png`). Final: 381 tests, build (vite + tsc), `check-estatico` sin fallos; navegador a 360/1024/1440 sin scroll horizontal ni errores, 16/16 paradas de Tab visibles, movimiento reducido respetado, T9–T13 y T19 sin regresiones. Queda: a 1024 el panel cae bajo la cuadrícula, fuera de la primera pantalla; en vecindad doble el texto casi se repite; el triángulo en rojo compite con «se perjudican» (el brief lo deja «a revisar»); resaltar la pareja al pasar por un aviso (T16).
 
-## T15 · Temporada — ⬜
+## T15 · Temporada — ✅
 **Ruta:** `/bancales/$bancalId?mes=5`
 **Depende de:** T7, T14
 **Criterios:**
@@ -218,29 +218,27 @@ dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 - C15.3 El cambio de estado se anima con CSS y se desactiva con `prefers-reduced-motion` — `nav` — guía §4
 - C15.4 La lista de tareas del mes se actualiza con el deslizador — `nav` — guía §2
 - C15.5 Recorrido de la demo: de marzo a septiembre el huerto pasa de «por sembrar» a «cosecha» — `nav` + capturas — guía §2 (demo)
-**Notas:** (de T19) los iconos de `common/components/icono-cultivo.tsx` dibujan **lo que se cosecha** (el fruto, la raíz o la mata entera), que es lo que se reconoce a 24 px: sirven de «cosecha». Para el detalle memorable del brief faltan la semilla y el brote compartidos y la **planta** propia de cada cultivo (24). Revisar el alcance con el usuario al empezar T15.
-**Verificación:** —
+**Verificación:** 2026-11-08 · verificador: PASA (1.ª vuelta, junto con T16). Alcance decidido por el usuario por el límite de uso semanal: versión ligera, sin `react-reviewer` ni `design-reviewer`. Dibujos compartidos nuevos: semilla, brote y rastrojo (`common/components/icono-estado.tsx`); la cosecha es el icono del cultivo (T19) y «por sembrar» ese icono a lápiz (tenue). La **planta** propia de cada cultivo y el trazo animado con `stroke-dashoffset` quedan en las mejoras futuras del README. `?mes=` validado con Zod y tolerante (sin mes o inválido → mes actual); deslizador nativo con `aria-valuetext`; el estado va en la descripción accesible de la celda («Julio: en cosecha (hasta agosto)») y en `data-estado`; el dibujo brota al cambiar de estado (`motion-safe:animate-brotar`); tareas del mes con `tareasDelMes`; `textoEstado` en `core/` con TDD. Demo capturada de marzo a septiembre (`.playwright-mcp/t15-demo-mes*.png`, copia en `docs/capturas/`). Queda: la marca de vecindad sigue a color pleno sobre el icono tenue de «por sembrar»; el deslizador queda en el orden de Tab entre la paleta y la cuadrícula.
 
 ---
 
 ## Fase 3 · Cierre
 
-## T16 · Repaso de responsive y accesibilidad — ⬜
+## T16 · Repaso de responsive y accesibilidad — ✅
 **Depende de:** T9–T15
 **Criterios:**
 - C16.1 Todas las rutas funcionan a 360, 768 y 1440 px (capturas) — `nav` — guía §4
 - C16.2 El flujo completo de la demo se hace solo con teclado — `nav` — guía §4
 - C16.3 Lighthouse Accesibilidad ≥ 95 en catálogo, editor y formulario — `nav` — guía §4
-**Notas:** (de la verificación de T9) al cambiar de ruta el foco se queda en `<body>`; `frontend-a11y` §6 pide llevarlo al `<h1>` de la pantalla nueva. Afecta al layout de toda la app (T1), no a una pantalla.
-**Verificación:** —
+**Verificación:** 2026-11-08 · verificador: PASA (1.ª vuelta, junto con T15). Arreglo de la nota de T9: `layouts/app-layout.tsx` lleva el foco al `<h1>` al cambiar de ruta (no en la primera carga ni si la pantalla ya lo llevó dentro de `<main>`), con test. C16.1: 7 rutas × 360/768/1440 con capturas, sin scroll horizontal ni fallos de contraste, consola vacía. C16.2: la demo entera solo con teclado a 1440 (crear bancal → colocar tomates, albahaca e hinojo → aviso y «Ver…» → quitar y mover → deslizador), con anuncios en `role=status`. C16.3: Lighthouse Accesibilidad **100** en catálogo, formulario y editor con datos. 394 tests, build (vite + tsc), `check-estatico` sin fallos. Queda (en las mejoras futuras del README): Lighthouse marca sin peso `label-content-name-mismatch` en «Ver avisos» del móvil; título de tarjeta de `/bancales` de 22 px (excepción de WCAG 2.5.8); teclado completo solo probado a 1440; sin lector de pantalla real.
 
-## T17 · README y demo — ⬜
+## T17 · README y demo — ✅
 **Depende de:** T16
 **Criterios:**
 - C17.1 El README explica cómo ejecutar, el mapa de rutas, las capturas, las fuentes de los datos y el registro del uso de IA — `leer` — guía §4
 - C17.2 Guion de la demo (§2) ensayado de principio a fin sin errores en consola — `nav`
 - C17.3 La lista de iteraciones pendientes está en el README — `leer` — bases (iteraciones)
-**Verificación:** —
+**Verificación:** 2026-11-08 · por el límite de uso semanal, sin verificador propio. C17.1 y C17.3 (`leer`): el README tiene cómo ejecutar, mapa de rutas, guion de la demo, capturas (`docs/capturas/`), arquitectura, registro del uso de IA, las fuentes de los datos (sin tocar: las lee el test de coherencia del catálogo, que pasa) y «Mejoras futuras (más allá del MVP)» por prioridad. C17.2 (`nav`): el guion de la demo se ensayó de principio a fin sin errores de consola en la verificación de T16 (C16.2), sobre el mismo build. 394 tests en verde.
 
 ---
 

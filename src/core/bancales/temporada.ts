@@ -1,5 +1,7 @@
 // Temporada: estado de cada plantación mes a mes y tareas del mes
 // («Reglas del dominio» de CLAUDE.md). Todo se deriva; nada se guarda.
+import { nunca } from "../comun/nunca";
+import { nombreMes } from "../cultivos/etiquetas";
 import type { Cultivo, Mes, ZonaClimatica } from "../cultivos/model";
 import type { EstadoPlanta, Plantacion } from "./model";
 
@@ -57,4 +59,22 @@ export function tareasDelMes(
     if (tipo === "cosecha") cosechar.add(cultivo.id);
   }
   return { sembrar: [...sembrar], cosechar: [...cosechar] };
+}
+
+/** El estado en palabras, para el nombre accesible de la celda (C15.2). */
+export function textoEstado(estado: EstadoPlanta): string {
+  switch (estado.tipo) {
+    case "por-sembrar":
+      return `por sembrar (se siembra en ${nombreMes(estado.siembraEn)})`;
+    case "sembrada":
+      return "recién sembrado";
+    case "creciendo":
+      return `creciendo (cosecha desde ${nombreMes(estado.cosechaDesde)})`;
+    case "cosecha":
+      return `en cosecha (hasta ${nombreMes(estado.cosechaHasta)})`;
+    case "terminada":
+      return "terminado: la celda queda libre";
+    default:
+      return nunca(estado);
+  }
 }

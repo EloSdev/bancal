@@ -1,6 +1,36 @@
-import { Link, Outlet } from "@tanstack/react-router";
+import { Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
+
+/**
+ * Al cambiar de ruta, el foco va al <h1> de la pantalla nueva para que el
+ * lector anuncie dónde está (frontend-a11y §6). No en la primera carga, y no
+ * si la pantalla ya ha llevado el foco dentro de <main> (TituloPagina, ficha).
+ */
+function useFocoAlCambiarDeRuta() {
+  const ruta = useRouterState({ select: (s) => s.location.pathname });
+  const refMain = useRef<HTMLElement>(null);
+  const anterior = useRef(ruta);
+
+  useEffect(() => {
+    if (anterior.current === ruta) return;
+    anterior.current = ruta;
+    // En el siguiente fotograma: la pantalla nueva ya está pintada.
+    const fotograma = requestAnimationFrame(() => {
+      const main = refMain.current;
+      if (!main || main.contains(document.activeElement)) return;
+      const titulo = main.querySelector("h1");
+      if (!titulo) return;
+      if (!titulo.hasAttribute("tabindex")) titulo.setAttribute("tabindex", "-1");
+      titulo.focus();
+    });
+    return () => cancelAnimationFrame(fotograma);
+  }, [ruta]);
+
+  return refMain;
+}
 
 export function AppLayout() {
+  const refMain = useFocoAlCambiarDeRuta();
   return (
     <>
       <header className="border-b border-lapiz">
@@ -26,7 +56,7 @@ export function AppLayout() {
           </nav>
         </div>
       </header>
-      <main className="mx-auto max-w-5xl space-y-5 px-4 py-6">
+      <main ref={refMain} className="mx-auto max-w-5xl space-y-5 px-4 py-6">
         <Outlet />
       </main>
     </>

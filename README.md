@@ -2,7 +2,97 @@
 
 Planificador de huertos urbanos: dibuja tus bancales con sus medidas reales, coloca cultivos en una cuadrícula de 30 × 30 cm y descubre en vivo qué vecinos se ayudan, si hay sol suficiente y cómo evoluciona el huerto mes a mes.
 
-> README en construcción: el resto (cómo arrancarlo, mapa de rutas, capturas y registro de uso de IA) llega en la tarea T17.
+Proyecto final del curso *Front End Moderno y Herramientas IA* (Fundación Luckia + Lemoncode): individual, solo frontend y con datos simulados (un catálogo de 24 cultivos en `public/crops.json` y los bancales en `localStorage`, detrás de una capa `api` asíncrona con latencia simulada).
+
+## Cómo ejecutarlo
+
+Requisitos: Node.js ≥ 22.12.
+
+```bash
+npm install
+npm start          # servidor de desarrollo (Vite)
+npm test           # tests (Vitest), una pasada
+npm run build      # vite build + tsc --noEmit
+npm run preview    # sirve el build
+```
+
+Un test concreto: `npx vitest run <ruta> -t "C14.4"` (los tests llevan el id del criterio de `docs/tareas.md`).
+
+Stack: React 19, TypeScript 7 estricto, Vite 8, Tailwind CSS 4, TanStack Router (rutas de fichero, *search params* validados con Zod), TanStack Form + Zod 4, Vitest + Testing Library + jsdom.
+
+## Mapa de rutas
+
+| Ruta | Pantalla |
+|---|---|
+| `/` | Redirige a `/bancales` |
+| `/cultivos?q=&sol=&temporada=&zona=` | Catálogo: búsqueda y filtros en la URL (recargar o compartir conserva el resultado) |
+| `/cultivos/$cultivoId` | Ficha de un cultivo: datos, calendario de las tres zonas y vecinos que ayudan o perjudican |
+| `/bancales` | Mis bancales: croquis a escala, medidas, celdas plantadas y avisos; borrar con confirmación |
+| `/bancales/nuevo` | Alta de bancal con vista previa a escala |
+| `/bancales/$bancalId?mes=5` | Editor: cuadrícula, paleta, compatibilidades en vivo, avisos y temporada (el mes en la URL) |
+| `/bancales/$bancalId/editar` | Edición de medidas (avisa de las plantaciones que se quitarían al encoger) |
+
+## Guion de la demo
+
+1. **Mis bancales** → «Crear mi primer bancal»: 120 × 90 cm, 8 h de sol, zona atlántica. La vista previa dice «4 × 3 celdas · pleno sol».
+2. Al guardar se abre el **editor**. En la paleta, elige *Tomate* y coloca dos; elige *Albahaca* y ponla entre ellos: las celdas se marcan con ✓ (se ayudan).
+3. Elige *Hinojo* y colócalo junto a un tomate: aparece el rombo ✕ en las dos celdas y el panel explica por qué y qué hacer. Nada impide colocarlo.
+4. Mueve el hinojo a la otra punta (*Quitar* y volver a colocar): «Sin avisos: todo se lleva bien».
+5. Arrastra el **deslizador de meses** de marzo a septiembre: el huerto pasa de *por sembrar* a semilla, brote, cosecha y rastrojo, y las «Tareas del mes» cambian.
+6. Todo lo anterior se puede hacer solo con el teclado (Tab, flechas, Intro y Supr en la cuadrícula).
+
+## Capturas
+
+| | |
+|---|---|
+| ![Catálogo con los iconos de cultivo y la regla de meses](docs/capturas/catalogo.png) | ![Mis bancales con el croquis a escala de cada bancal](docs/capturas/mis-bancales.png) |
+| Catálogo | Mis bancales |
+| ![Formulario de alta con la vista previa a escala](docs/capturas/formulario.png) | ![Editor: el hinojo junto al tomate, marcado y explicado](docs/capturas/editor-hinojo.png) |
+| Alta de bancal | Editor: hinojo junto al tomate |
+| ![Editor tras mover el hinojo: sin avisos](docs/capturas/editor-sin-avisos.png) | ![Editor en el móvil, con la paleta en una banda fija](docs/capturas/editor-360.png) |
+| Editor: sin avisos | Editor a 360 px |
+| ![Temporada en marzo: por sembrar](docs/capturas/temporada-marzo.png) | ![Temporada en septiembre: cosecha y rastrojo](docs/capturas/temporada-septiembre.png) |
+| Temporada: marzo | Temporada: septiembre |
+
+## Arquitectura
+
+```
+src/
+  routes/   solo navegación: leen params y search params y renderizan una escena
+  scenes/   componen la pantalla y deciden la navegación
+  pods/     catalogo/, bancales/, editor/ — contenedores (datos, estado) y componentes (props → render)
+  core/     dominio puro con TDD: cuadrícula, vecindad, compatibilidad, avisos, estado de la planta,
+            tareas del mes, esquemas Zod y la capa api
+  common/   componentes compartidos (botón, alerta, iconos de cultivo, marcas de compatibilidad…)
+```
+
+Lo derivado (avisos, estado de cada planta, tareas del mes, recuentos) se calcula en el render y nunca se guarda. Las reglas del dominio decididas durante el proyecto están en `CLAUDE.md` («Reglas del dominio») y el plan, con cada criterio y su verificación, en `docs/tareas.md`.
+
+## Registro del uso de IA
+
+El proyecto se construyó con **Claude Code** como asistente de programación, trabajando tarea a tarea sobre `docs/tareas.md` con un *harness* propio (`.claude/`):
+
+- **Skills** con las convenciones del proyecto: `tdd-core` (rojo → verde → refactor en `core/`), `react-bancal` (arquitectura y patrones de React), `react-testing`, `frontend-a11y`, `tailwind-clases-limpias`, `design-taste-frontend`, `brief-grill` (la dirección visual de `docs/brief.md`), `plan-tasks` y `verify-task`.
+- **Agentes** con ojos frescos y sin permiso de edición: `verificador` (tests, build, comprobación estática y navegador real con Playwright, criterio a criterio), `react-reviewer` (revisión de código), `design-reviewer` (revisión de diseño contra el brief) y `revisor-datos` (contraste de cada dato de horticultura con fuentes citadas).
+- **Hooks**: no se crea un módulo de `core/` sin su test; no se puede parar con tests, build o comprobación estática en rojo ni con una tarea ✅ sin su línea de verificación; guardas contra acciones irreversibles.
+- **Cómo se usó**: la IA escribió el código y los tests siguiendo TDD; cada tarea pasó por el verificador y, en las pantallas, por las dos revisiones, y sus hallazgos se corrigieron antes de cerrar (el detalle, en la línea «Verificación» de cada tarea). Las decisiones de dominio y de alcance las tomó la autora o el autor del proyecto (por ejemplo, el ciclo por zona, qué pasa al encoger un bancal o el alcance de la temporada) y quedaron escritas antes de que un test las fijara. Los datos de horticultura se contrastaron con las fuentes de abajo; la IA no inventa datos sin fuente.
+- **Límites**: no se ha probado con un lector de pantalla real ni con toque en un móvil real (las comprobaciones de accesibilidad son por árbol de accesibilidad, teclado y Lighthouse).
+
+## Mejoras futuras (más allá del MVP)
+
+Por prioridad:
+
+1. **Dibujo de la planta de cada cultivo** y el trazo que se dibuja al cambiar de mes (`stroke-dashoffset`, el «detalle memorable» completo del brief). Ahora la temporada usa una semilla, un brote y un rastrojo compartidos y el icono del cultivo para la cosecha.
+2. **Arrastrar y soltar** con vista previa de la compatibilidad antes de soltar.
+3. **Deshacer y rehacer** en el editor.
+4. **Resaltar en la cuadrícula la pareja de celdas** al pasar por un aviso del panel, y agrupar los avisos de un mismo cultivo («hinojo junto a 2 tomates»).
+5. **Cultivos que ocupan varias celdas** (calabacín, calabaza, melón, alcachofa, tomate en jaula).
+6. **Rotación por familia botánica** entre temporadas.
+7. **Asistente «Mi primer huerto»** que propone un bancal de partida.
+8. **View Transitions** entre pantallas.
+9. **PWA sin conexión**, **compartir e imprimir** el bancal.
+10. **Tests end-to-end** del guion de la demo (Playwright en CI).
+11. Pulido pendiente anotado en las verificaciones: la paleta en dos columnas recorre con ↓ el botón siguiente y no el de debajo; la alerta de error de guardado desplaza la cuadrícula; en ~1024 px el panel de avisos cae fuera de la primera pantalla; el triángulo ▲ (sol y temporada) en un color propio para que no compita con «se perjudican»; vetas en las esquinas del marco y esqueleto de carga del editor; dividir el JavaScript (el build supera los 500 kB); el error de un campo aparece al teclear y no al salir del campo.
 
 ## Fuentes de los datos
 

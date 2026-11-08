@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { ajo, albahaca, cultivosDePrueba, hinojo, lechuga, tomate } from "../__fixtures__/cultivos";
 import type { Ciclo, Cultivo, Mes, ZonaClimatica } from "../cultivos/model";
 import type { EstadoPlanta, Plantacion } from "./model";
-import { estadoPlanta, mesSiembraPorDefecto, tareasDelMes } from "./temporada";
+import { estadoPlanta, mesSiembraPorDefecto, tareasDelMes, textoEstado } from "./temporada";
 
 const plantar = (cultivoId: string, mesSiembra: Mes, fila = 0, columna = 0): Plantacion => ({
   cultivoId,
@@ -173,5 +173,17 @@ describe("tareasDelMes", () => {
 
   it("un bancal vacío no tiene tareas", () => {
     expect(tareasDelMes([], [albahaca], "atlantica", 5)).toEqual({ sembrar: [], cosechar: [] });
+  });
+});
+
+describe("textoEstado", () => {
+  it.each([
+    [{ tipo: "por-sembrar", siembraEn: 5 }, "por sembrar (se siembra en mayo)"],
+    [{ tipo: "sembrada" }, "recién sembrado"],
+    [{ tipo: "creciendo", cosechaDesde: 7 }, "creciendo (cosecha desde julio)"],
+    [{ tipo: "cosecha", cosechaHasta: 8 }, "en cosecha (hasta agosto)"],
+    [{ tipo: "terminada" }, "terminado: la celda queda libre"],
+  ] as const)("C15.2 · %o → «%s»", (estado, texto) => {
+    expect(textoEstado(estado as EstadoPlanta)).toBe(texto);
   });
 });

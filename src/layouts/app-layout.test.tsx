@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import { createMemoryHistory, createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "../routeTree.gen";
 
@@ -33,6 +33,14 @@ describe("AppLayout", () => {
 
     expect(await screen.findByRole("heading", { level: 1, name: "Mis bancales" })).toBeInTheDocument();
     expect(router.state.location.pathname).toBe("/bancales");
+  });
+
+  it("C16.2 · al cambiar de ruta, el foco va al <h1> de la pantalla nueva (el lector anuncia dónde está)", async () => {
+    renderEn("/bancales");
+    const nav = await screen.findByRole("navigation", { name: "Principal" });
+    within(nav).getByRole("link", { name: "Cultivos" }).click();
+    const titulo = await screen.findByRole("heading", { level: 1, name: "Cultivos" });
+    await waitFor(() => expect(titulo).toHaveFocus());
   });
 
   it("C1.4 · una ruta inexistente muestra «Página no encontrada»", async () => {

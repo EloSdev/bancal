@@ -8,15 +8,17 @@
 // Cada celda plantada lleva en la esquina la marca de cómo se lleva con sus
 // vecinos (✓ círculo, ✕ rombo, – cápsula) y, si la planta tiene un aviso
 // propio (sol, temporada), un triángulo en la otra esquina (T14).
-import { useRef, type KeyboardEvent, type Ref } from "react";
+import { useId, useRef, type KeyboardEvent, type Ref } from "react";
+import { IconoEstado } from "../../common/components/icono-estado";
+import { estadoPlanta, textoEstado } from "../../core/bancales/temporada";
 import { Cota } from "../../common/components/cota";
 import { IconoCultivo } from "../../common/components/icono-cultivo";
 import { IconoAvisoPlanta, IconoCompatibilidad } from "../../common/components/marca-compatibilidad";
 import { moverCelda, type Dimensiones, type Movimiento } from "../../core/bancales/cuadricula";
-import type { Aviso, Celda, Plantacion } from "../../core/bancales/model";
+import type { Aviso, Celda, EstadoPlanta, Plantacion } from "../../core/bancales/model";
 import { estadoVecindad, type EstadoVecindad } from "../../core/bancales/vecindad";
-import { nombreCorto } from "../../core/cultivos/etiquetas";
-import type { Cultivo } from "../../core/cultivos/model";
+import { nombreCorto, nombreMes } from "../../core/cultivos/etiquetas";
+import type { Cultivo, Mes, ZonaClimatica } from "../../core/cultivos/model";
 
 interface CuadriculaProps {
   /** La rejilla, para que el editor lleve el foco a una celda (activa, o la de un aviso). */
@@ -29,6 +31,9 @@ interface CuadriculaProps {
   cultivosPorId: Map<string, Cultivo>;
   /** Los avisos del bancal (derivados): los de sol y temporada se marcan en su celda. */
   avisos: Aviso[];
+  /** El mes de la temporada y la zona del bancal: dan el estado de cada planta (T15). */
+  mes: Mes;
+  zona: ZonaClimatica;
   /** La celda que está en el orden de Tab. */
   activa: Celda;
   /** La celda a la que se acaba de ir desde un aviso: se señala un momento. */
@@ -51,8 +56,8 @@ const TECLAS: Record<string, Movimiento> = {
 export const claveCelda = ({ fila, columna }: Celda) => `${fila}-${columna}`;
 
 export function Cuadricula(props: CuadriculaProps) {
-  const { refRejilla, nombre, ancho, largo, dims, plantaciones, cultivosPorId, avisos, activa, senalada, onActivar, onUsar, onQuitar } =
-    props;
+  const { refRejilla, nombre, ancho, largo, dims, plantaciones, cultivosPorId, avisos, mes, zona, activa, senalada } = props;
+  const { onActivar, onUsar, onQuitar } = props;
   const botones = useRef(new Map<string, HTMLButtonElement>());
   const porCelda = new Map(plantaciones.map((p) => [claveCelda(p.celda), p]));
   const cultivos = [...cultivosPorId.values()];
@@ -99,6 +104,7 @@ export function Cuadricula(props: CuadriculaProps) {
                 <div key={`fila-${f}`} role="row" className="grid gap-px" style={{ gridTemplateColumns: `repeat(${dims.columnas}, ${columna})` }}>
                   {celdas.map((celda) => {
                     const plantacion = porCelda.get(claveCelda(celda));
+                    const cultivo = plantacion && cultivosPorId.get(plantacion.cultivoId);
                     return (
                       <div key={claveCelda(celda)} role="gridcell">
                         <BotonCelda
@@ -108,7 +114,9 @@ export function Cuadricula(props: CuadriculaProps) {
                           }}
                           celda={celda}
                           plantacion={plantacion}
-                          cultivo={plantacion && cultivosPorId.get(plantacion.cultivoId)}
+                          cultivo={cultivo}
+                          estado={plantacion && cultivo ? estadoPlanta(plantacion, cultivo, zona, mes) : undefined}
+                          mes={mes}
                           vecindad={estadoVecindad(celda, plantaciones, cultivos, dims)}
                           avisosPropios={avisosDe(celda)}
                           nombreDe={(id) => cultivosPorId.get(id)?.nombre.toLowerCase() ?? id}
@@ -139,6 +147,9 @@ interface BotonCeldaProps {
   celda: Celda;
   plantacion?: Plantacion;
   cultivo?: Cultivo;
+  /** El estado de la planta en el mes elegido (T15); sin planta, nada. */
+  estado?: EstadoPlanta;
+  mes: Mes;
   /** Cómo se lleva con sus vecinos (null: vacía o sin vecinos plantados). */
   vecindad: EstadoVecindad | null;
   avisosPropios: ("sol" | "fuera-de-temporada")[];
@@ -176,13 +187,19 @@ function textoMarcas(vecindad: EstadoVecindad | null, avisosPropios: BotonCeldaP
  * (frontend-a11y §3): la compatibilidad nunca va solo en el color.
  */
 function BotonCelda(props: BotonCeldaProps) {
-  const { refBoton, celda, plantacion, cultivo, vecindad, avisosPropios, nombreDe, activa, senalada, onClick, onKeyDown } = props;
+  const { refBoton, celda, plantacion, cultivo, estado, mes, vecindad, avisosPropios, nombreDe, activa, senalada } = props;
+  const { onClick, onKeyDown } = props;
+  const idEstado = useId();
   const contenido = plantacion ? (cultivo?.nombre.toLowerCase() ?? "cultivo desconocido") : "vacía";
   return (
     <button
       ref={refBoton}
       type="button"
       data-celda={claveCelda(celda)}
+      data-estado={estado?.tipo}
+      // El estado de la planta en el mes va en la descripción (C15.2): el
+      // nombre sigue siendo la posición, el cultivo y su vecindad.
+      aria-describedby={estado ? idEstado : undefined}
       // Señalada un momento al llegar desde un aviso: con el ratón el foco no se ve.
       data-senalada={senalada}
       tabIndex={activa ? 0 : -1}
@@ -209,11 +226,20 @@ function BotonCelda(props: BotonCeldaProps) {
           <IconoAvisoPlanta pequeno />
         </span>
       )}
+      {estado && (
+        <span id={idEstado} className="sr-only">
+          {mayuscula(nombreMes(mes))}: {textoEstado(estado)}
+        </span>
+      )}
       {plantacion && (
-        // key: al cambiar de cultivo, el dibujo nuevo vuelve a brotar.
-        <span key={plantacion.cultivoId} className="flex max-w-full flex-col items-center gap-0.5 pt-2 motion-safe:animate-brotar @[3.75rem]:pt-0">
-          <span className="[&>svg]:size-5 @[3.75rem]:[&>svg]:size-[max(1.5rem,40cqi)]">
-            <IconoCultivo cultivoId={plantacion.cultivoId} />
+        // key: al cambiar de cultivo o de estado, el dibujo nuevo brota
+        // (C15.3: animación CSS, solo con motion-safe).
+        <span
+          key={`${plantacion.cultivoId}-${estado?.tipo}`}
+          className="flex max-w-full flex-col items-center gap-0.5 pt-2 motion-safe:animate-brotar @[3.75rem]:pt-0"
+        >
+          <span className="[&_svg]:size-5 @[3.75rem]:[&_svg]:size-[max(1.5rem,40cqi)]">
+            <DibujoEstado cultivoId={plantacion.cultivoId} estado={estado} />
           </span>
           {/* En Fraunces (la letra de los cultivos). En una celda de menos de
               60 px, la abreviatura de cuaderno («Remol.»); en una mayor, el
@@ -226,4 +252,30 @@ function BotonCelda(props: BotonCeldaProps) {
       )}
     </button>
   );
+}
+
+const mayuscula = (texto: string) => texto.charAt(0).toUpperCase() + texto.slice(1);
+
+/**
+ * El dibujo de la planta en su estado: semilla y brote compartidos, el icono
+ * del cultivo en cosecha, a lápiz (tenue) si aún no se ha sembrado, y el
+ * rastrojo cuando la celda ya queda libre.
+ */
+function DibujoEstado({ cultivoId, estado }: { cultivoId: string; estado?: EstadoPlanta }) {
+  switch (estado?.tipo) {
+    case "sembrada":
+      return <IconoEstado estado="semilla" />;
+    case "creciendo":
+      return <IconoEstado estado="brote" />;
+    case "terminada":
+      return <IconoEstado estado="rastrojo" />;
+    case "por-sembrar":
+      return (
+        <span className="text-tinta-suave opacity-60">
+          <IconoCultivo cultivoId={cultivoId} />
+        </span>
+      );
+    default:
+      return <IconoCultivo cultivoId={cultivoId} />;
+  }
 }

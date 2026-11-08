@@ -17,17 +17,25 @@ import { exposicion } from "../../core/bancales/exposicion";
 import { useBancal } from "../../core/bancales/hooks";
 import type { Aviso, Celda, Plantacion } from "../../core/bancales/model";
 import { colocar, quitar } from "../../core/bancales/plantaciones";
-import { mesSiembraPorDefecto } from "../../core/bancales/temporada";
+import { mesSiembraPorDefecto, tareasDelMes } from "../../core/bancales/temporada";
 import { aErrorApi, type ErrorApi } from "../../core/comun/api";
 import { etiquetaExposicion, etiquetaZona } from "../../core/cultivos/etiquetas";
 import { ordenarPorNombre } from "../../core/cultivos/filtros";
 import { useCultivos } from "../../core/cultivos/hooks";
-import type { Cultivo } from "../../core/cultivos/model";
+import type { Cultivo, Mes } from "../../core/cultivos/model";
+import { Temporada } from "./temporada.component";
 import { claveCelda, Cuadricula } from "./cuadricula.component";
 import { PanelAvisos } from "./panel-avisos.component";
 import { Paleta, type Herramienta } from "./paleta.component";
 
-export function EditorContainer({ bancalId }: { bancalId: string }) {
+interface EditorContainerProps {
+  bancalId: string;
+  /** El mes de la temporada (de la URL, T15). */
+  mes: Mes;
+  onCambiarMes: (mes: Mes) => void;
+}
+
+export function EditorContainer({ bancalId, mes, onCambiarMes }: EditorContainerProps) {
   const bancal = useBancal(bancalId);
   const cultivos = useCultivos();
 
@@ -49,7 +57,15 @@ export function EditorContainer({ bancalId }: { bancalId: string }) {
   if (!bancal.data) return <BancalNoEncontrado />;
 
   // key: al pasar a otro bancal, el estado de la edición empieza de cero.
-  return <Editor key={bancal.data.bancal.id} detalle={bancal.data} cultivos={cultivos.data} />;
+  return (
+    <Editor
+      key={bancal.data.bancal.id}
+      detalle={bancal.data}
+      cultivos={cultivos.data}
+      mes={mes}
+      onCambiarMes={onCambiarMes}
+    />
+  );
 }
 
 type EstadoGuardado = "" | "guardando" | "guardado";
@@ -86,7 +102,14 @@ function useGuardarPlantaciones(bancalId: string) {
   return { estado, error, guardar };
 }
 
-function Editor({ detalle, cultivos }: { detalle: BancalDetalle; cultivos: Cultivo[] }) {
+interface EditorProps {
+  detalle: BancalDetalle;
+  cultivos: Cultivo[];
+  mes: Mes;
+  onCambiarMes: (mes: Mes) => void;
+}
+
+function Editor({ detalle, cultivos, mes, onCambiarMes }: EditorProps) {
   const { bancal } = detalle;
   const [plantaciones, setPlantaciones] = useState(detalle.plantaciones);
   const [herramienta, setHerramienta] = useState<Herramienta>(null);
@@ -250,6 +273,12 @@ function Editor({ detalle, cultivos }: { detalle: BancalDetalle; cultivos: Culti
           <Paleta cultivos={ordenarPorNombre(cultivos)} elegida={herramienta} onElegir={elegir} />
         </BandaPaleta>
         <div className="min-w-0 space-y-6">
+          <Temporada
+            mes={mes}
+            onCambiarMes={onCambiarMes}
+            tareas={tareasDelMes(plantaciones, cultivos, bancal.zona, mes)}
+            cultivosPorId={cultivosPorId}
+          />
           <Cuadricula
             refRejilla={refRejilla}
             nombre={bancal.nombre}
@@ -259,6 +288,8 @@ function Editor({ detalle, cultivos }: { detalle: BancalDetalle; cultivos: Culti
             plantaciones={plantaciones}
             cultivosPorId={cultivosPorId}
             avisos={avisos}
+            mes={mes}
+            zona={bancal.zona}
             activa={activa}
             senalada={senalada}
             onActivar={setActiva}
