@@ -4,6 +4,7 @@
 // sin datos y hayDatosDescartados() permite avisar al usuario.
 import { z } from "zod";
 import { ErrorApi, esperar, LATENCIA_MS } from "../comun/api";
+import { guardarCache, invalidarCache, versionCache } from "../comun/cache";
 import { bancalGuardadoSchema, bancalSchema, plantacionSchema } from "./bancal.schema";
 import { dentroDeCuadricula, dimensiones } from "./cuadricula";
 import type { Bancal, BancalInput, Plantacion } from "./model";
@@ -68,6 +69,20 @@ function leer(): Almacen {
   return resultado.data;
 }
 
+/**
+ * Caché de los hooks de bancales (T21). Los tres espacios empiezan por
+ * CACHE_BANCALES, así que cada escritura los invalida de una vez.
+ */
+export const CACHE_BANCALES = "bancal";
+export const ESPACIOS_CACHE = {
+  lista: `${CACHE_BANCALES}es`,
+  detalle: `${CACHE_BANCALES}es-detalle`,
+  uno: CACHE_BANCALES,
+} as const;
+
+const detallesDe = (almacen: Almacen): BancalDetalle[] =>
+  almacen.bancales.map((bancal) => ({ bancal, plantaciones: plantacionesDe(almacen, bancal.id) }));
+
 function escribir(almacen: Almacen): void {
   try {
     localStorage.setItem(CLAVE_ALMACEN, JSON.stringify(almacen));
@@ -79,6 +94,15 @@ function escribir(almacen: Almacen): void {
       { cause: error },
     );
   }
+  // Lo guardado cambia: fuera la copia anterior (y lo que se estuviera leyendo
+  // antes de escribir), y dentro lo recién guardado, que la api ya tiene: al
+  // volver a «Mis bancales» o al editor, se ve al momento y al día.
+  invalidarCache(CACHE_BANCALES);
+  const version = versionCache();
+  const detalles = detallesDe(almacen);
+  guardarCache(`${ESPACIOS_CACHE.lista}:todos`, almacen.bancales, version);
+  guardarCache(`${ESPACIOS_CACHE.detalle}:todos`, detalles, version);
+  for (const detalle of detalles) guardarCache(`${ESPACIOS_CACHE.uno}:${detalle.bancal.id}`, detalle, version);
 }
 
 function validar<T>(schema: z.ZodType<T>, valor: unknown): T {
@@ -119,8 +143,7 @@ export async function getBancales(signal?: AbortSignal): Promise<Bancal[]> {
 /** Todos los bancales, cada uno con sus plantaciones (la lista «Mis bancales»). */
 export async function getBancalesDetalle(signal?: AbortSignal): Promise<BancalDetalle[]> {
   await esperar(LATENCIA_MS, signal);
-  const almacen = leer();
-  return almacen.bancales.map((bancal) => ({ bancal, plantaciones: plantacionesDe(almacen, bancal.id) }));
+  return detallesDe(leer());
 }
 
 /** El bancal con sus plantaciones, o undefined si no existe. */

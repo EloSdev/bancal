@@ -255,6 +255,18 @@ dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 
 ---
 
+## T21 · Navegación al instante (caché y precarga) — ✅
+**Depende de:** T8, T20
+**Motivo:** el usuario nota que Cultivos y Mis bancales «tardan en cargar»: cada visita esperaba de nuevo la latencia simulada (400 ms) aunque los datos ya se hubieran leído.
+**Criterios:**
+- C21.1 Con los datos ya leídos, volver a una pantalla los enseña al momento (sin «Cargando») y los refresca por detrás; si el refresco falla, se siguen enseñando los de la caché — `test`
+- C21.2 Guardar, borrar o plantar sustituye la caché de bancales por lo recién guardado (la api ya lo tiene), y una carga empezada antes de la escritura no la vuelve a llenar: nunca se enseña un bancal viejo — `test`
+- C21.3 Al arrancar, la app precarga el catálogo y los bancales; una pantalla que los pide mientras llegan espera esa misma carga en vez de pedirlos otra vez — `test`
+- C21.4 En el build, de la portada a Cultivos y a Mis bancales el contenido está en pantalla en menos de 100 ms tras el clic — `nav`
+**Verificación:** 2026-11-08 · sin verificador, por el límite de uso. C21.1–C21.3 (`test`): `core/comun/cache.test.ts` (6), 5 tests nuevos de `useCarga` con caché y 4 de la api de bancales; 420 tests en verde, sin tocar los anteriores salvo uno de T21 que pasó de «invalida» a «sustituye por lo recién guardado» al afinar C21.2; build sin errores. C21.4 (`nav`, build en el navegador, medido con `performance.now()` del clic a la lista en el DOM): portada → Cultivos 46 ms, → Mis bancales 67 ms, → Cultivos otra vez 72 ms, lista → editor 92 ms; tras plantar en el editor, Mis bancales en 25 ms ya con el recuento nuevo (4 de 12) y el editor reabierto en 24 ms con lo plantado. Antes, cada pantalla esperaba al menos los 400 ms de la latencia simulada. Consola sin errores ni avisos.
+
+---
+
 ## Cobertura
 
 | Requisito | Tareas |

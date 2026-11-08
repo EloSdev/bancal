@@ -1,9 +1,14 @@
 import "@testing-library/jest-dom/vitest";
 import { afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
+import { vaciarCache } from "../core/comun/cache";
 
 // Sin `globals` de Vitest, Testing Library no limpia sola entre tests.
-afterEach(() => cleanup());
+// La caché de datos (T21) tampoco: cada test empieza sin nada leído.
+afterEach(() => {
+  cleanup();
+  vaciarCache();
+});
 
 // jsdom no implementa scrollTo y el router lo llama al navegar (restaurar el scroll).
 window.scrollTo = () => {};

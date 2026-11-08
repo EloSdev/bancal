@@ -1,6 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorApi } from "./api";
+import { invalidarCache, precargar, vaciarCache } from "./cache";
 import { useCarga, type Carga, type EstadoCarga } from "./hooks";
 
 /** Una carga que el test resuelve o rechaza cuando quiere, y que recuerda su clave y su señal. */
@@ -165,6 +166,69 @@ describe("useCarga", () => {
     act(() => result.current.recargar());
     await act(async () => pendientes[1]!.resolver("ahora sí"));
     expect(estado(result.current)).toEqual({ data: "ahora sí", loading: false, error: null });
+  });
+});
+
+describe("useCarga con caché (T21)", () => {
+  afterEach(() => vaciarCache());
+
+  it("C21.1 · la segunda vez que se monta la misma clave enseña los datos al momento y los refresca por detrás", async () => {
+    const { cargar, pendientes } = cargaControlada<string>();
+    const primera = renderHook(() => useCarga(cargar, "a", { cache: "prueba" }));
+    await act(async () => pendientes[0]!.resolver("datos"));
+    primera.unmount();
+
+    const { result } = renderHook(() => useCarga(cargar, "a", { cache: "prueba" }));
+    expect(estado(result.current)).toEqual({ data: "datos", loading: false, error: null });
+    // Refresco por detrás: se pide otra vez y lo nuevo sustituye a lo de la caché.
+    expect(pendientes).toHaveLength(2);
+    await act(async () => pendientes[1]!.resolver("datos nuevos"));
+    expect(result.current.data).toBe("datos nuevos");
+  });
+
+  it("C21.1 · si el refresco falla, se siguen enseñando los datos de la caché", async () => {
+    const { cargar, pendientes } = cargaControlada<string>();
+    const primera = renderHook(() => useCarga(cargar, "a", { cache: "prueba" }));
+    await act(async () => pendientes[0]!.resolver("datos"));
+    primera.unmount();
+
+    const { result } = renderHook(() => useCarga(cargar, "a", { cache: "prueba" }));
+    await act(async () => pendientes[1]!.rechazar(new ErrorApi("red", "Sin conexión.")));
+    expect(estado(result.current)).toEqual({ data: "datos", loading: false, error: null });
+  });
+
+  it("C21.1 · sin la opción cache, cada montaje vuelve a cargar (como antes)", async () => {
+    const { cargar, pendientes } = cargaControlada<string>();
+    const primera = renderHook(() => useCarga(cargar, "a"));
+    await act(async () => pendientes[0]!.resolver("datos"));
+    primera.unmount();
+
+    const { result } = renderHook(() => useCarga(cargar, "a"));
+    expect(estado(result.current)).toEqual(CARGANDO);
+  });
+
+  it("C21.2 · tras invalidar, la siguiente vez vuelve a enseñar «cargando»", async () => {
+    const { cargar, pendientes } = cargaControlada<string>();
+    const primera = renderHook(() => useCarga(cargar, "a", { cache: "prueba" }));
+    await act(async () => pendientes[0]!.resolver("datos"));
+    primera.unmount();
+
+    invalidarCache("prueba");
+    const { result } = renderHook(() => useCarga(cargar, "a", { cache: "prueba" }));
+    expect(estado(result.current)).toEqual(CARGANDO);
+  });
+
+  it("C21.3 · si hay una precarga en curso, la espera en vez de pedir otra vez", async () => {
+    const { cargar, pendientes } = cargaControlada<string>();
+    let resolverPrecarga!: (v: string) => void;
+    void precargar("prueba:a", () => new Promise<string>((r) => (resolverPrecarga = r)));
+
+    const { result } = renderHook(() => useCarga(cargar, "a", { cache: "prueba" }));
+    expect(estado(result.current)).toEqual(CARGANDO);
+    expect(pendientes).toHaveLength(0);
+
+    await act(async () => resolverPrecarga("precargado"));
+    expect(estado(result.current)).toEqual({ data: "precargado", loading: false, error: null });
   });
 });
 

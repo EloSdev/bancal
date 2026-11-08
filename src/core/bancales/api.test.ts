@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorApi, esCancelacion, LATENCIA_MS } from "../comun/api";
+import { guardarCache, leerCache, vaciarCache, versionCache } from "../comun/cache";
 import {
+  CACHE_BANCALES,
   CLAVE_ALMACEN,
   CLAVE_DESCARTADOS,
   deleteBancal,
@@ -306,5 +308,44 @@ describe("localStorage corrupto", () => {
     await tras(getBancales());
     expect(hayDatosDescartados()).toBe(false);
     expect(console.warn).not.toHaveBeenCalled();
+  });
+});
+
+describe("caché de bancales (T21)", () => {
+  afterEach(() => vaciarCache());
+
+  it.each<[string, () => Promise<unknown>]>([
+    ["saveBancal", () => saveBancal(balcon)],
+    ["deleteBancal", () => deleteBancal("x")],
+  ])("C21.2 · %s invalida la caché de bancales y deja la del catálogo", async (_nombre, escribir) => {
+    guardarCache("bancales:detalle", ["viejo"], versionCache());
+    guardarCache("cultivos:todos", ["tomate"], versionCache());
+
+    await tras(escribir());
+
+    expect(leerCache("bancales:detalle")).toBeUndefined();
+    expect(leerCache("cultivos:todos")).toEqual({ valor: ["tomate"] });
+  });
+
+  it("C21.2 · tras escribir, la caché ya tiene lo recién guardado: la lista y cada bancal", async () => {
+    const { id } = await tras(saveBancal(balcon));
+    await tras(savePlantaciones(id, tomateHinojo));
+
+    const detalle = { bancal: { ...balcon, id }, plantaciones: tomateHinojo };
+    expect(leerCache(`${CACHE_BANCALES}es-detalle:todos`)).toEqual({ valor: [detalle] });
+    expect(leerCache(`${CACHE_BANCALES}:${id}`)).toEqual({ valor: detalle });
+
+    await tras(deleteBancal(id));
+    expect(leerCache(`${CACHE_BANCALES}es-detalle:todos`)).toEqual({ valor: [] });
+    expect(leerCache(`${CACHE_BANCALES}:${id}`)).toBeUndefined();
+  });
+
+  it("C21.2 · savePlantaciones sustituye la copia vieja del bancal por lo recién guardado", async () => {
+    const { id } = await tras(saveBancal(balcon));
+    guardarCache("bancal:" + id, ["viejo"], versionCache());
+
+    await tras(savePlantaciones(id, tomateHinojo));
+
+    expect(leerCache("bancal:" + id)).toEqual({ valor: { bancal: { ...balcon, id }, plantaciones: tomateHinojo } });
   });
 });
