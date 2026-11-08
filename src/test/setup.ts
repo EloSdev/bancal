@@ -1,12 +1,12 @@
 import "@testing-library/jest-dom/vitest";
 import { afterEach, beforeEach } from "vitest";
 import { cleanup } from "@testing-library/react";
-import { configurarModoDemo } from "../core/comun/api";
+import { fijarLatencia, LATENCIA_MS } from "../core/comun/api";
 import { vaciarCache } from "../core/comun/cache";
 
-// Los tests prueban la app con el servidor lento del modo demo (T22): así los
-// estados de carga se pueden ver y comprobar (con temporizadores falsos).
-beforeEach(() => configurarModoDemo({ lento: true, fallo: false }));
+// La app responde sin espera; los tests le ponen una (LATENCIA_MS) para que
+// los estados de carga se puedan ver y comprobar con temporizadores falsos.
+beforeEach(() => fijarLatencia(LATENCIA_MS));
 
 // Sin `globals` de Vitest, Testing Library no limpia sola entre tests.
 // La caché de datos (T21) tampoco: cada test empieza sin nada leído.

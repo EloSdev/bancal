@@ -135,12 +135,12 @@ informe, nunca se "arregla" el código para callar al script.
    de empezar, `browser_evaluate(() => localStorage.clear())` y recarga; si
    el criterio necesita bancales, créalos **por la interfaz** (así también se
    prueba el flujo) o siémbralos con `evaluate` y dilo en el informe.
-4. **Modo demo (T22)**: por defecto la capa `api` responde al instante. Para
-   comprobar estados de carga o de error, abre la app con `?lento` (400 ms por
-   llamada) o `?fallo` (la primera llamada de cada operación falla); el modo
-   dura la sesión. Tras navegar o guardar, espera con `browser_wait_for` a
-   que desaparezca «Cargando…» o aparezca el contenido esperado; no midas un
-   estado intermedio.
+4. **Sin latencia simulada (T22)**: la capa `api` de la app responde al
+   instante. Los estados de carga y error se comprueban en los tests (que
+   fijan una latencia); en el navegador, si un criterio lo pide, con el
+   *throttling* de red o haciendo fallar `fetch` desde `evaluate`. Tras
+   navegar o guardar, espera con `browser_wait_for` al contenido esperado;
+   no midas un estado intermedio.
 5. **Cada ruta que toca la tarea, en 360×800 y 1440×900** (y 768×1024 si
    hay rejillas que cambian de columnas), **en un solo lote**:
    ```powershell

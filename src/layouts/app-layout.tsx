@@ -1,7 +1,6 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { IconoEstado } from "../common/components/icono-estado";
-import { modoDemo } from "../core/comun/api";
 import { FOTOS } from "../common/fotos";
 
 /**
@@ -70,7 +69,6 @@ export function AppLayout() {
           </nav>
         </div>
       </header>
-      <AvisoModoDemo />
       <main
         ref={refMain}
         className={esPortada ? "flex-1" : "mx-auto w-full max-w-5xl flex-1 space-y-8 px-4 pt-10 pb-20"}
@@ -78,30 +76,6 @@ export function AppLayout() {
         <Outlet />
       </main>
       <Pie />
-    </div>
-  );
-}
-
-/**
- * El modo demo (T22) cambia cómo responde la app: que se sepa siempre que
- * está activo. «Quitar» recarga la página sin el parámetro (el modo se lee
- * al arrancar), por eso es un <a> y no un <Link>.
- */
-function AvisoModoDemo() {
-  const ruta = useRouterState({ select: (s) => s.location.pathname });
-  const { lento, fallo } = modoDemo();
-  if (!lento && !fallo) return null;
-  const simula = [lento && "servidor lento", fallo && "cada petición falla una vez"].filter(Boolean).join(" · ");
-  return (
-    <div className="border-b-2 border-tinta bg-girasol">
-      <p className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2 text-sm">
-        <span>
-          <strong>Modo demo:</strong> {simula}
-        </span>
-        <a href={ruta} className="font-semibold text-tinta">
-          Quitar el modo demo
-        </a>
-      </p>
     </div>
   );
 }

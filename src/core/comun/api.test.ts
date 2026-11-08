@@ -1,15 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  aErrorApi,
-  configurarModoDemo,
-  ErrorApi,
-  esCancelacion,
-  esperar,
-  LATENCIA_MS,
-  leerModoDemo,
-  modoDemo,
-  simularServidor,
-} from "./api";
+import { aErrorApi, ErrorApi, esCancelacion, esperar, fijarLatencia, LATENCIA_MS, responder } from "./api";
 
 describe("esperar", () => {
   beforeEach(() => {
@@ -44,64 +34,38 @@ describe("esperar", () => {
   });
 });
 
-describe("modo demo (T22)", () => {
+describe("responder (T22: sin latencia simulada en la app)", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
   afterEach(() => {
     vi.useRealTimers();
-    configurarModoDemo({ lento: true, fallo: false }); // el modo de los tests (src/test/setup.ts)
   });
 
-  it("C22.1 · se lee de la URL: ?lento y ?fallo, juntos o por separado, con o sin valor", () => {
-    expect(leerModoDemo("")).toEqual({ lento: false, fallo: false });
-    expect(leerModoDemo("?lento")).toEqual({ lento: true, fallo: false });
-    expect(leerModoDemo("?fallo=1")).toEqual({ lento: false, fallo: true });
-    expect(leerModoDemo("?mes=5&lento&fallo")).toEqual({ lento: true, fallo: true });
-  });
-
-  it("C22.1 · sin modo demo, simularServidor responde sin esperar", async () => {
-    configurarModoDemo({ lento: false, fallo: false });
+  it("C22.1 · sin latencia (la app), responde sin esperar", async () => {
+    fijarLatencia(0);
     let resuelta = false;
-    void simularServidor("getCultivos").then(() => (resuelta = true));
+    void responder().then(() => (resuelta = true));
     await Promise.resolve();
     expect(resuelta).toBe(true);
   });
 
-  it("C22.1 · sin modo demo, una petición ya cancelada se rechaza igual", async () => {
-    configurarModoDemo({ lento: false, fallo: false });
+  it("C22.1 · sin latencia, una petición ya cancelada se rechaza igual que con fetch", async () => {
+    fijarLatencia(0);
     const controller = new AbortController();
     controller.abort();
-    const error = await simularServidor("getCultivos", controller.signal).catch((e: unknown) => e);
+    const error = await responder(controller.signal).catch((e: unknown) => e);
     expect(esCancelacion(error)).toBe(true);
   });
 
-  it("C22.1 · con ?lento, simularServidor espera LATENCIA_MS", async () => {
-    configurarModoDemo({ lento: true, fallo: false });
+  it("C22.2 · con la latencia de los tests, espera LATENCIA_MS", async () => {
+    fijarLatencia(LATENCIA_MS);
     let resuelta = false;
-    void simularServidor("getCultivos").then(() => (resuelta = true));
+    void responder().then(() => (resuelta = true));
     await vi.advanceTimersByTimeAsync(LATENCIA_MS - 1);
     expect(resuelta).toBe(false);
     await vi.advanceTimersByTimeAsync(1);
     expect(resuelta).toBe(true);
-  });
-
-  it("C22.2 · con ?fallo, la primera llamada de cada operación falla con un error de red que lo dice, y la siguiente va bien", async () => {
-    configurarModoDemo({ lento: false, fallo: true });
-
-    const primera = await simularServidor("getCultivos").catch((e: unknown) => e);
-    expect(primera).toBeInstanceOf(ErrorApi);
-    expect((primera as ErrorApi).tipo).toBe("red");
-    expect((primera as ErrorApi).message).toMatch(/fallo simulado/i);
-
-    await expect(simularServidor("getCultivos")).resolves.toBeUndefined();
-    // Otra operación tiene su propio primer fallo.
-    await expect(simularServidor("saveBancal")).rejects.toBeInstanceOf(ErrorApi);
-  });
-
-  it("C22.3 · modoDemo dice lo que está activo", () => {
-    configurarModoDemo({ lento: true, fallo: true });
-    expect(modoDemo()).toEqual({ lento: true, fallo: true });
   });
 });
 

@@ -18,17 +18,7 @@ npm run preview    # sirve el build
 
 Un test concreto: `npx vitest run <ruta> -t "C14.4"` (los tests llevan el id del criterio de `docs/tareas.md`).
 
-### Modo demo: `?lento` y `?fallo`
-
-Por defecto la app responde al instante (el backend es un *mock*, y además los datos se precargan y se guardan en caché). Para enseñar los estados de carga y de error, ábrela con un parámetro en la URL; el modo dura toda la sesión y una franja amarilla avisa de que está activo:
-
-| URL | Qué simula |
-|---|---|
-| `/cultivos?lento` | Un servidor lento: cada llamada a la `api` tarda 400 ms (esqueletos, «Cargando…», «Guardando…») |
-| `/cultivos?fallo` | Un servidor que falla: la primera llamada de cada operación da error y «Reintentar» lo arregla |
-| `/cultivos?lento&fallo` | Las dos cosas |
-
-«Quitar el modo demo», en la franja, recarga la página sin el parámetro.
+La app responde al instante: la capa `api` es un backend simulado sin espera artificial, y además precarga los datos al arrancar y los guarda en caché. Los estados de carga y de error están diseñados y cubiertos por los tests (que sí simulan latencia); para verlos a mano con una red lenta, usa el *throttling* de DevTools (pestaña Network, «Slow 4G»).
 
 Stack: React 19, TypeScript 7 estricto, Vite 8, Tailwind CSS 4, TanStack Router (rutas de fichero, *search params* validados con Zod), TanStack Form + Zod 4, Vitest + Testing Library + jsdom.
 

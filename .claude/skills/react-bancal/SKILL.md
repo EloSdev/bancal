@@ -90,9 +90,9 @@ export const BancalListContainer = () => {
 ## 4. Datos: la capa `api` y sus hooks
 
 - `core/<dominio>/api.ts` es **asíncrona** (un backend simulado) y cada
-  llamada pasa por `simularServidor(operacion, signal)`: sin espera por
-  defecto; con el modo demo `?lento` / `?fallo` (T22) tarda o falla, para
-  que la interfaz trate carga y error como con un backend. Valida con Zod
+  llamada pasa por `responder(signal)`. La app no simula latencia (T22); la
+  interfaz trata igual carga y error, y los tests le ponen latencia
+  (`fijarLatencia` en `src/test/setup.ts`) para comprobarlo. Valida con Zod
   lo que lee (`crops.json` y `localStorage`); un `localStorage` corrupto se
   descarta y se avisa, no rompe la app.
 - `core/<dominio>/hooks.ts`: `useX()` devuelve `{ data, loading, error }`.
@@ -140,7 +140,7 @@ export const BancalListContainer = () => {
 - Números con `event.target.valueAsNumber` (`NaN` se pinta como vacío).
 - Al enviar, `schema.parse(value)` devuelve los valores recortados y sin
   claves extra.
-- Botón de enviar deshabilitado mientras guarda (se ve con `?lento`).
+- Botón de enviar deshabilitado mientras guarda (en el navegador se ve con el *throttling* de DevTools).
 
 ## 7. Estilos
 

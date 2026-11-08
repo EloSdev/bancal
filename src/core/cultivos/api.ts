@@ -1,7 +1,7 @@
-// Capa api del catálogo: public/crops.json, validado con Zod (latencia y fallos solo en el modo demo, T22).
+// Capa api del catálogo: public/crops.json, validado con Zod.
 // Los fallos llegan como ErrorApi; una cancelación se propaga tal cual (AbortError).
 import { z } from "zod";
-import { ErrorApi, esCancelacion, simularServidor } from "../comun/api";
+import { ErrorApi, esCancelacion, responder } from "../comun/api";
 import { cultivoSchema } from "./cultivo.schema";
 import type { Cultivo } from "./model";
 
@@ -30,7 +30,7 @@ async function leerJson(respuesta: Response): Promise<unknown> {
 }
 
 export async function getCultivos(signal?: AbortSignal): Promise<Cultivo[]> {
-  await simularServidor("getCultivos", signal);
+  await responder(signal);
   const respuesta = await descargar(signal);
   if (!respuesta.ok) {
     // El código HTTP no le dice nada a quien usa la app: va en `cause`, no en el mensaje.
