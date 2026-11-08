@@ -151,7 +151,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C10.2 Calendario de siembra y cosecha de las tres zonas, legible sin color (texto o patrón) — `nav` — guía §4
 - C10.3 Compatibles e incompatibles como enlaces a sus fichas — `nav`
 - C10.4 Un id inexistente muestra «Cultivo no encontrado» con un enlace al catálogo — `nav`
-**Verificación:** 2026-11-08 · verificador: FALLA (midió con el código cambiando: tests de TDD en rojo y foco en `<body>`) → PASA; react-reviewer: bloquea → arreglado; design-reviewer: 1 ronda aplicada. La ficha carga el catálogo entero (`useCultivos`) para dar nombre a los vecinos y no recargar de ficha a ficha. Foco: al `<h1>` (`tabIndex=-1`, `w-fit`) al llegar y al cambiar de cultivo; tras «Reintentar» espera en el envoltorio y pasa al `<h1>`; `role="status"` desde el principio. Diseño: «Se perjudican» antes que «Se ayudan», fila entera pulsable, una sola frase sin vecinos, siembra subrayada y cosecha rellena (`ReglaMeses` con `marca`; `descripcion` opcional solo con la ventana en texto visible), «Buscar «x»» en no encontrado, esqueleto con la forma de la ficha. Final: 256 tests, build (vite + tsc), `check-estatico` sin fallos; navegador a 360/1440 sin scroll horizontal ni errores, 15/15 paradas de Tab visibles, movimiento reducido respetado, T9 sin regresiones. Queda, a decidir con el usuario: la miga «Catálogo» no conserva los filtros (Atrás sí); los iconos de cultivo del brief siguen sin tarea; contorno grande del envoltorio mientras recarga tras «Reintentar» (dura la latencia).
+**Verificación:** 2026-11-08 · verificador: FALLA (midió con el código cambiando: tests de TDD en rojo y foco en `<body>`) → PASA; react-reviewer: bloquea → arreglado; design-reviewer: 1 ronda aplicada. La ficha carga el catálogo entero (`useCultivos`) para dar nombre a los vecinos y no recargar de ficha a ficha. Foco: al `<h1>` (`tabIndex=-1`, `w-fit`) al llegar y al cambiar de cultivo; tras «Reintentar» espera en el envoltorio y pasa al `<h1>`; `role="status"` desde el principio. Diseño: «Se perjudican» antes que «Se ayudan», fila entera pulsable, una sola frase sin vecinos, siembra subrayada y cosecha rellena (`ReglaMeses` con `marca`; `descripcion` opcional solo con la ventana en texto visible), «Buscar «x»» en no encontrado, esqueleto con la forma de la ficha. Final: 256 tests, build (vite + tsc), `check-estatico` sin fallos; navegador a 360/1440 sin scroll horizontal ni errores, 15/15 paradas de Tab visibles, movimiento reducido respetado, T9 sin regresiones. Decidido con el usuario: la miga «Catálogo» no conserva los filtros (Atrás sí); los iconos de cultivo van a T19. Queda: contorno grande del envoltorio mientras recarga tras «Reintentar» (dura la latencia).
 
 ## T11 · Mis bancales — ⬜
 **Ruta:** `/bancales`
@@ -160,7 +160,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C11.1 Cada bancal muestra nombre, medidas, celdas, número de plantas y avisos pendientes — `nav` — guía §2
 - C11.2 Sin bancales: estado vacío con un botón «Crear mi primer bancal» — `nav`
 - C11.3 Borrar un bancal pide confirmación y el foco vuelve a un sitio lógico — `nav`
-**Notas:** (de la revisión de T8) `recargar()` de `useCarga` vuelve a «cargando» y desmonta la lista, así que el foco se perdería tras borrar. Antes de construir, decidir: (a) quitar el bancal de la lista en local tras `deleteBancal`, sin recargar; o (b) que `useCarga` conserve los datos mientras recarga la misma clave, con un indicador aparte.
+**Notas:** (de la revisión de T8) `recargar()` de `useCarga` vuelve a «cargando» y desmonta la lista, así que el foco se perdería tras borrar. Decidido con el usuario (2026-11-08): (a) tras `deleteBancal` el contenedor quita el bancal de la lista que ya tiene, sin recargar; `useCarga` no cambia.
 **Verificación:** —
 
 ## T12 · Alta y edición de bancal — ⬜
@@ -175,9 +175,21 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 - C12.6 Si al encoger el bancal quedan plantaciones fuera, el formulario avisa de cuántas se quitarán antes de guardar — `nav` + `test` — decisión T8
 **Verificación:** —
 
+## T19 · Iconos de cultivo — ⬜
+**Qué:** el juego de iconos SVG propios del brief («Cultivos en pantalla»),
+un dibujo de la planta por cultivo, que el editor usa en las celdas. Los
+dibujos por estado (semilla, brote, cosecha) del detalle memorable son de T15.
+**Depende de:** T2, T4, T10
+**Criterios:**
+- C19.1 Cada cultivo de `public/crops.json` tiene su icono: mismo `viewBox`, trazo de 1,5 px en `currentColor`, sin rellenos de color — `test` + `leer` — brief
+- C19.2 `IconoCultivo` es decorativo (`aria-hidden`, el nombre va en texto) y un id sin icono pinta uno genérico sin romper — `test` — brief
+- C19.3 Junto al nombre en el catálogo (≈ 24 px) y junto al `<h1>` y a cada vecino en la ficha (≈ 48 / 24 px) — `nav` — brief
+- C19.4 Los iconos se distinguen entre sí a 24 px y se entienden en gris (captura de los ~24 juntos) — `nav` + captura — brief
+**Verificación:** —
+
 ## T13 · Editor: cuadrícula y colocación — ⬜
 **Ruta:** `/bancales/$bancalId`
-**Depende de:** T12
+**Depende de:** T12, T19
 **Criterios:**
 - C13.1 La cuadrícula tiene tantas celdas como da `dimensiones()` y conserva la proporción del bancal (*container queries*) — `nav` — guía §2
 - C13.2 Elegir un cultivo de la paleta y hacer clic o tocar una celda lo coloca; en una celda ocupada lo sustituye — `nav` — guía §2
@@ -248,6 +260,7 @@ marcadas *(propuesta)*** en la guía §3 y se anotan las decisiones en ella.
 | Build y tests sin errores | puertas comunes, T1 |
 | Teclado, foco, etiquetas, `aria-live` | T12, T13, T14, T16 |
 | Compatibilidad nunca solo por color | T2, T14 |
+| Iconos de cultivo a tinta (brief) | T19, T13 |
 | Responsive móvil → escritorio | puertas comunes, T16 |
 | Interfaz en español, `lang="es"` | T1, puertas comunes |
 | README completo | T17 |
