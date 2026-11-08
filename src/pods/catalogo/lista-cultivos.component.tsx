@@ -5,6 +5,7 @@
 import { Link } from "@tanstack/react-router";
 import { IconoCultivo } from "../../common/components/icono-cultivo";
 import { ReglaMeses } from "../../common/components/regla-meses";
+import { claseTarjetaPulsable } from "../../common/components/tarjeta";
 import { etiquetaDificultad, etiquetaExposicion, ventanaEnTexto } from "../../core/cultivos/etiquetas";
 import type { Cultivo, Mes, ZonaClimatica } from "../../core/cultivos/model";
 
@@ -18,8 +19,7 @@ interface ListaCultivosProps {
 export function ListaCultivos({ cultivos, zona, mes }: ListaCultivosProps) {
   return (
     // role="list": con list-style none, VoiceOver en Safari deja de anunciarla como lista.
-    // -mx-2 + px-2 en la fila: el fondo del hover sangra, el texto queda alineado con el título.
-    <ul role="list" aria-label="Cultivos" className="-mx-2 grid border-t border-lapiz sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-3">
+    <ul role="list" aria-label="Cultivos" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {cultivos.map((cultivo) => (
         <FilaCultivo key={cultivo.id} cultivo={cultivo} zona={zona} mes={mes} />
       ))}
@@ -30,14 +30,17 @@ export function ListaCultivos({ cultivos, zona, mes }: ListaCultivosProps) {
 function FilaCultivo({ cultivo, zona, mes }: { cultivo: Cultivo; zona: ZonaClimatica; mes?: Mes }) {
   const siembra = cultivo.calendario[zona].siembra;
   return (
-    <li className="relative space-y-2 border-b border-lapiz px-2 py-3 transition-colors hover:bg-superficie-elevada has-[a:focus-visible]:bg-superficie-elevada has-[a:active]:bg-superficie-elevada">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+    <li className={`${claseTarjetaPulsable} space-y-3 p-4`}>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
         <Link
           to="/cultivos/$cultivoId"
           params={{ cultivoId: cultivo.id }}
-          className="inline-flex items-center gap-2 font-titulos text-lg font-semibold text-tinta no-underline decoration-acento after:absolute after:inset-0 hover:underline"
+          className="inline-flex items-center gap-3 font-titulos text-xl font-bold text-tinta no-underline decoration-acento after:absolute after:inset-0 hover:underline"
         >
-          <IconoCultivo cultivoId={cultivo.id} />
+          {/* El dibujo en su pegatina girasol: el cultivo se reconoce de un vistazo. */}
+          <span className="grid size-10 place-items-center rounded-full border-2 border-tinta bg-girasol">
+            <IconoCultivo cultivoId={cultivo.id} />
+          </span>
           {cultivo.nombre}
         </Link>
         <p className="text-sm text-tinta-suave">

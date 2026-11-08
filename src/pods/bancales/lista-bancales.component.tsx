@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import type { Ref } from "react";
 import { Boton } from "../../common/components/boton";
 import { IconoCompatibilidad } from "../../common/components/marca-compatibilidad";
+import { claseTarjetaPulsable } from "../../common/components/tarjeta";
 import type { BancalDetalle } from "../../core/bancales/api";
 import { resumenBancal } from "../../core/bancales/resumen";
 import type { Cultivo } from "../../core/cultivos/model";
@@ -19,7 +20,7 @@ interface ListaBancalesProps {
 
 export function ListaBancales({ detalles, cultivos, refEnlace, onBorrar }: ListaBancalesProps) {
   return (
-    <ul role="list" aria-label="Bancales" className="-mx-2 grid grid-cols-1 border-t border-lapiz sm:grid-cols-2 sm:gap-x-8">
+    <ul role="list" aria-label="Bancales" className="grid grid-cols-1 gap-5 sm:grid-cols-2">
       {detalles.map((detalle) => (
         <TarjetaBancal
           key={detalle.bancal.id}
@@ -44,13 +45,13 @@ function TarjetaBancal({ detalle, cultivos, refEnlace, onBorrar }: TarjetaBancal
   const { bancal, plantaciones } = detalle;
   const resumen = resumenBancal(detalle, cultivos);
   return (
-    <li className="relative flex min-w-0 gap-4 border-b border-lapiz px-2 py-4 transition-colors hover:bg-superficie-elevada has-[a:focus-visible]:bg-superficie-elevada has-[a:active]:bg-superficie-elevada">
-      {/* Caja fija (cabe el de 10 celdas): el texto empieza siempre en la misma línea. */}
-      <div className="flex w-30 shrink-0 items-start justify-center">
+    <li className={`${claseTarjetaPulsable} flex min-w-0 gap-4 p-4 sm:p-5`}>
+      {/* Caja fija (cabe el de 10 celdas) sobre tierra: el texto empieza siempre en la misma línea. */}
+      <div className="flex w-32 shrink-0 items-center justify-center self-start rounded-control border-2 border-tinta bg-tierra p-2">
         <Croquis columnas={resumen.columnas} filas={resumen.filas} plantaciones={plantaciones} />
       </div>
-      <div className="min-w-0 flex-1 space-y-1">
-        <h2 className="text-lg">
+      <div className="min-w-0 flex-1 space-y-1.5">
+        <h2 className="text-xl">
           <Link
             ref={refEnlace}
             to="/bancales/$bancalId"
@@ -78,7 +79,7 @@ function TarjetaBancal({ detalle, cultivos, refEnlace, onBorrar }: TarjetaBancal
           <p className="text-sm text-tinta-suave">Sin avisos</p>
         ) : (
           // Lo que hay que mirar de cada bancal: con forma (el rombo), no solo con peso.
-          <p className="flex items-center gap-1.5 text-sm font-medium">
+          <p className="flex w-fit items-center gap-1.5 rounded-full border-2 border-tinta bg-girasol px-2.5 py-0.5 text-sm font-semibold">
             <IconoCompatibilidad tipo="desfavorable" pequeno />
             {resumen.avisos} {resumen.avisos === 1 ? "aviso" : "avisos"}
           </p>

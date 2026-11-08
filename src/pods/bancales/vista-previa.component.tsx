@@ -45,7 +45,11 @@ export function VistaPrevia({ valores, plantaciones }: { valores: BancalInput; p
     : "Corrige las medidas para ver el bancal.";
 
   return (
-    <section aria-label="Vista previa" className="min-w-0 space-y-3 self-start lg:sticky lg:top-6">
+    // Girasol: lo que se está dibujando, como una nota pegada al lado del formulario.
+    <section
+      aria-label="Vista previa"
+      className="min-w-0 space-y-4 self-start rounded-tarjeta border-2 border-tinta bg-girasol p-5 shadow-pegatina sm:p-6 lg:sticky lg:top-6"
+    >
       <h2>Así queda</h2>
       {validas && (
         <div className="grid w-fit grid-cols-[auto_auto] gap-2" aria-hidden="true">
@@ -60,10 +64,10 @@ export function VistaPrevia({ valores, plantaciones }: { valores: BancalInput; p
           <Cota texto={`${valores.largo} cm`} vertical />
         </div>
       )}
-      <p role="status" className="tabular-nums">
+      <p role="status" className="font-semibold tabular-nums">
         {resumen}
       </p>
-      {fuera.length > 0 && <p className="text-sm text-tinta-suave">Los puntos huecos son las plantaciones que se quitan.</p>}
+      {fuera.length > 0 && <p className="text-sm">Los puntos huecos son las plantaciones que se quitan.</p>}
     </section>
   );
 }

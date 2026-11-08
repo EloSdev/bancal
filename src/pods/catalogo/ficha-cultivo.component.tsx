@@ -7,6 +7,7 @@ import { useEffect, useId, useRef } from "react";
 import { IconoCultivo } from "../../common/components/icono-cultivo";
 import { MarcaCompatibilidad } from "../../common/components/marca-compatibilidad";
 import { ReglaMeses } from "../../common/components/regla-meses";
+import { claseTarjeta } from "../../common/components/tarjeta";
 import { zonas } from "../../core/cultivos/cultivo.schema";
 import {
   etiquetaDificultad,
@@ -41,18 +42,18 @@ export function FichaCultivo({ cultivo, compatibles, incompatibles }: FichaCulti
   }, [cultivo.id]);
 
   return (
-    <article className="space-y-8">
-      <header className="space-y-1">
+    <article className="space-y-10">
+      <header className="space-y-3">
         {/* Una miga al catálogo, no un «volver»: Atrás conserva los filtros. */}
-        <Link to="/cultivos" className="inline-flex min-h-6 items-center text-sm">
-          Catálogo
+        <Link to="/cultivos" className="inline-flex min-h-6 items-center text-sm font-semibold">
+          <span aria-hidden="true">←&nbsp;</span>Catálogo
         </Link>
-        <div className="flex items-center gap-3">
-          {/* -ml-2: el dibujo deja aire en su viewBox; así su trazo se alinea con «Catálogo». */}
-          <span className="-ml-2">
+        <div className="flex items-center gap-5">
+          {/* El dibujo en una pegatina girasol, un poco torcida. */}
+          <span className="grid size-20 shrink-0 -rotate-3 place-items-center rounded-full border-2 border-tinta bg-girasol shadow-pegatina sm:size-24">
             <IconoCultivo cultivoId={cultivo.id} grande />
           </span>
-          <h1 ref={refTitulo} tabIndex={-1} className="w-fit">
+          <h1 ref={refTitulo} tabIndex={-1} className="w-fit min-w-0 break-words">
             {cultivo.nombre}
           </h1>
         </div>
@@ -60,15 +61,15 @@ export function FichaCultivo({ cultivo, compatibles, incompatibles }: FichaCulti
 
       <DatosCultivo cultivo={cultivo} />
 
-      <div className="grid gap-x-12 gap-y-8 lg:grid-cols-2">
-        <section aria-labelledby={ids.calendario} className="space-y-4">
+      <div className="grid items-start gap-6 lg:grid-cols-2">
+        <section aria-labelledby={ids.calendario} className={`${claseTarjeta} space-y-5 p-5 sm:p-6`}>
           <h2 id={ids.calendario}>Calendario</h2>
           {zonas.map((zona) => (
             <CalendarioDeZona key={zona} zona={zona} calendario={cultivo.calendario[zona]} />
           ))}
         </section>
 
-        <section aria-labelledby={ids.vecinos} className="space-y-4">
+        <section aria-labelledby={ids.vecinos} className={`${claseTarjeta} space-y-5 p-5 sm:p-6`}>
           <h2 id={ids.vecinos}>Vecinos</h2>
           {compatibles.length === 0 && incompatibles.length === 0 ? (
             <p className="text-tinta-suave">
@@ -96,11 +97,11 @@ function DatosCultivo({ cultivo }: { cultivo: Cultivo }) {
     { termino: "Familia", valor: cultivo.familia },
   ];
   return (
-    <dl className="grid grid-cols-2 gap-x-6 border-y border-lapiz py-3 sm:grid-cols-5">
+    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-5">
       {datos.map(({ termino, valor }) => (
-        <div key={termino} className="py-1.5">
-          <dt className="text-sm text-tinta-suave">{termino}</dt>
-          <dd className="font-medium tabular-nums">{valor}</dd>
+        <div key={termino} className="rounded-tarjeta border-2 border-tinta bg-superficie-elevada px-4 py-3">
+          <dt className="text-xs font-bold tracking-widest text-tinta-suave uppercase">{termino}</dt>
+          <dd className="font-titulos text-xl font-bold tabular-nums">{valor}</dd>
         </div>
       ))}
     </dl>
@@ -153,7 +154,7 @@ function ListaVecinos({ tipo, vecinos, vacio }: ListaVecinosProps) {
             // Como en la lista del catálogo: toda la fila responde, el enlace accesible es el nombre.
             <li
               key={vecino.id}
-              className="relative -mx-2 border-b border-lapiz px-2 py-2 transition-colors hover:bg-superficie-elevada has-[a:focus-visible]:bg-superficie-elevada has-[a:active]:bg-superficie-elevada"
+              className="relative -mx-2 border-b border-lapiz px-2 py-2 transition-colors last:border-b-0 hover:bg-girasol/40 has-[a:focus-visible]:bg-girasol/40 has-[a:active]:bg-girasol/40"
             >
               <Link
                 to="/cultivos/$cultivoId"

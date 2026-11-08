@@ -102,7 +102,8 @@ function BotonPaleta({ refBoton, pulsado, enTab, onFocus, onKeyDown, onClick, ch
       onFocus={onFocus}
       onKeyDown={onKeyDown}
       onClick={onClick}
-      className="inline-flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-control border border-lapiz bg-superficie-elevada px-3 py-1.5 text-left text-sm text-tinta transition-[transform,background-color,color] duration-100 hover:border-acento motion-safe:active:scale-[0.97] aria-pressed:border-acento aria-pressed:bg-acento aria-pressed:text-sobre-acento lg:min-h-9 lg:w-full lg:py-1"
+      // Pegatina: el cultivo elegido se queda «pegado» en azul pluma con su sombra dura.
+      className="inline-flex min-h-11 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-control border-2 border-tinta bg-superficie-elevada px-2 py-1.5 text-left text-sm font-medium text-tinta transition-[translate,box-shadow,background-color,color] duration-100 hover:bg-girasol motion-safe:active:translate-0.5 aria-pressed:bg-acento aria-pressed:text-sobre-acento aria-pressed:shadow-[2px_2px_0_var(--color-tinta)] lg:min-h-9 lg:w-full lg:py-1"
     >
       {children}
     </button>

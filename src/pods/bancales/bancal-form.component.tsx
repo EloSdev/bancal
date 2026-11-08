@@ -6,6 +6,7 @@ import { useForm } from "@tanstack/react-form";
 import { useId, type ReactNode } from "react";
 import { Alerta } from "../../common/components/alerta";
 import { Boton } from "../../common/components/boton";
+import { claseTarjeta } from "../../common/components/tarjeta";
 import { bancalSchema, LADO_MAXIMO_CM, LADO_MINIMO_CM } from "../../core/bancales/bancal.schema";
 import { plantacionesFuera } from "../../core/bancales/cuadricula";
 import type { BancalInput, Plantacion } from "../../core/bancales/model";
@@ -69,13 +70,13 @@ export function BancalForm({
   return (
     <form
       noValidate
-      className="grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,26rem)_1fr]"
+      className="grid items-start gap-6 lg:grid-cols-[minmax(0,28rem)_1fr] lg:gap-10"
       onSubmit={(evento) => {
         evento.preventDefault();
         if (!form.state.isSubmitting) void form.handleSubmit();
       }}
     >
-      <div className="space-y-5">
+      <div className={`${claseTarjeta} space-y-5 p-5 sm:p-6`}>
         <form.Field name="nombre">
           {(field) => (
             <Campo id={id("nombre")} etiqueta="Nombre" error={errorVisible(field.state.meta)}>

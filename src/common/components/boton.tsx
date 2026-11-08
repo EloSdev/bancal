@@ -18,7 +18,7 @@ const variantes: Record<Variante, string> = {
   peligro: `${caja} bg-desfavorable text-sobre-acento hover:bg-desfavorable/90 active:bg-desfavorable/90`,
   // Zona de toque de 24 px (tailwind-clases-limpias §6); el subrayado es el del enlace.
   enlace:
-    "inline-flex min-h-6 items-center rounded-control text-acento underline decoration-1 underline-offset-4 transition-colors hover:decoration-2 active:text-acento-intenso",
+    "inline-flex min-h-6 items-center rounded-control text-left text-acento underline decoration-1 underline-offset-4 transition-colors hover:decoration-2 active:text-acento-intenso",
 };
 
 /**

@@ -6,6 +6,7 @@
 import { useId, type Ref } from "react";
 import { Boton } from "../../common/components/boton";
 import { IconoAvisoPlanta, IconoCompatibilidad } from "../../common/components/marca-compatibilidad";
+import { claseTarjeta } from "../../common/components/tarjeta";
 import { claveAviso, textoAviso } from "../../core/bancales/avisos";
 import type { Aviso, Celda } from "../../core/bancales/model";
 import type { Cultivo } from "../../core/cultivos/model";
@@ -28,8 +29,8 @@ export function PanelAvisos({ avisos, cultivos, onIr, refTitulo }: PanelAvisosPr
   const id = useId();
   const nombre = (cultivoId: string) => (cultivos.find((c) => c.id === cultivoId)?.nombre ?? cultivoId).toLowerCase();
   return (
-    <section aria-labelledby={id} className="space-y-3">
-      <h2 ref={refTitulo} id={id} tabIndex={-1} className="w-fit text-lg">
+    <section aria-labelledby={id} className={`${claseTarjeta} space-y-3 p-4 sm:p-5`}>
+      <h2 ref={refTitulo} id={id} tabIndex={-1} className="w-fit text-xl">
         Avisos ({avisos.length})
       </h2>
       {avisos.length === 0 ? (
@@ -44,7 +45,7 @@ export function PanelAvisos({ avisos, cultivos, onIr, refTitulo }: PanelAvisosPr
             // misma celda no se confunden en la lista de botones del lector.
             const idTexto = `${id}-aviso-${i}`;
             return (
-              <li key={claveAviso(aviso)} className="flex gap-3 border-b border-lapiz py-3">
+              <li key={claveAviso(aviso)} className="flex gap-3 border-b border-lapiz py-3 last:border-b-0 last:pb-0">
                 <span className="pt-0.5">
                   {aviso.tipo === "vecindad" ? <IconoCompatibilidad tipo="desfavorable" /> : <IconoAvisoPlanta />}
                 </span>

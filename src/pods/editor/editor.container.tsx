@@ -255,11 +255,11 @@ function Editor({ detalle, cultivos, mes, onCambiarMes }: EditorProps) {
       )}
 
       {/* lg: paleta | bancal (avisos debajo). xl: paleta | bancal | avisos al lado (brief). */}
-      <div className="lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start lg:gap-8 xl:grid-cols-[17rem_minmax(0,1fr)_20rem]">
+      <div className="lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start lg:gap-8 xl:grid-cols-[18rem_minmax(0,1fr)_18rem]">
         {/* Primero en el orden de Tab: se elige qué plantar y luego dónde. */}
         <BandaPaleta idTitulo={idPaleta}>
           <div className="flex flex-wrap items-baseline gap-x-3">
-            <h2 id={idPaleta} className="font-sans text-sm font-medium">
+            <h2 id={idPaleta} className="text-lg">
               Elige qué plantar
             </h2>
             {pideElegir && <p className="border-l-2 border-tinta pl-2 text-sm font-medium">Elige primero un cultivo.</p>}
@@ -296,7 +296,9 @@ function Editor({ detalle, cultivos, mes, onCambiarMes }: EditorProps) {
             onUsar={usar}
             onQuitar={quitarDe}
           />
-          <LeyendaCompatibilidad conAvisoPlanta />
+          <div className="text-sm">
+            <LeyendaCompatibilidad conAvisoPlanta />
+          </div>
         </div>
         <div className="mt-6 lg:col-start-2 xl:sticky xl:top-6 xl:col-start-3 xl:row-start-1 xl:mt-0 xl:max-h-[calc(100dvh-3rem)] xl:overflow-y-auto xl:p-1">
           <PanelAvisos avisos={avisos} cultivos={cultivos} onIr={irA} refTitulo={refAvisos} />
@@ -343,7 +345,7 @@ function BandaPaleta({ idTitulo, children }: { idTitulo: string; children: React
       aria-labelledby={idTitulo}
       // El pie del layout lo busca para dejar el hueco de la banda en el móvil.
       data-banda-movil
-      className="fixed inset-x-0 bottom-0 z-20 space-y-2 border-t border-lapiz bg-superficie-elevada px-4 py-3 shadow-flota lg:sticky lg:top-6 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none">
+      className="fixed inset-x-0 bottom-0 z-20 space-y-2 border-t-2 border-tinta bg-superficie-elevada px-4 py-3 shadow-flota lg:sticky lg:top-6 lg:rounded-tarjeta lg:border-2 lg:p-3 lg:shadow-pegatina">
       {children}
     </aside>
   );

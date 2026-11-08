@@ -44,7 +44,7 @@ export function ConfirmarBorrado({ detalle, borrando, error, onConfirmar, onCerr
       onClose={onCerrar}
       // Mientras se borra, Escape no cierra: el resultado tiene que verse.
       onCancel={(evento) => borrando && evento.preventDefault()}
-      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-hoja bg-superficie-elevada p-5 text-tinta shadow-hoja backdrop:bg-tinta/40"
+      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-tarjeta border-2 border-tinta bg-superficie-elevada p-6 text-tinta shadow-pegatina-lg backdrop:bg-tinta/50"
     >
       {detalle && (
         <div className="space-y-4">

@@ -21,49 +21,52 @@ export function Temporada({ mes, onCambiarMes, tareas, cultivosPorId }: Temporad
   const nombre = (cultivoId: string) => cultivosPorId.get(cultivoId)?.nombre ?? cultivoId;
   const mesTexto = nombreMes(mes);
   return (
-    // Apilados: el deslizador ocupa todo el ancho del bancal y su regla de
-    // letras queda alineada con él.
-    <div className="max-w-md space-y-4">
-      <div className="space-y-1">
-        <label htmlFor={`${id}-mes`} className="flex items-baseline justify-between gap-3">
-          <span>Mes</span>
-          <span aria-hidden="true" className="font-titulos text-lg font-semibold">
-            {mayuscula(mesTexto)}
-          </span>
-        </label>
-        <input
-          id={`${id}-mes`}
-          type="range"
-          min={1}
-          max={12}
-          step={1}
-          value={mes}
-          aria-valuetext={mesTexto}
-          onChange={(e) => onCambiarMes(e.target.valueAsNumber)}
-          className="w-full min-h-11 accent-acento"
-        />
-        <div aria-hidden="true" className="grid grid-cols-12 text-center text-xs text-tinta-suave tabular-nums">
-          {["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"].map((letra, i) => (
-            <span key={`${letra}-${i}`} className={i + 1 === mes ? "font-semibold text-tinta" : undefined}>
-              {letra}
+    // Girasol: la temporada es el detalle memorable del editor (docs/brief.md).
+    // @container: dos columnas solo si la tarjeta tiene sitio (en xl la columna central es estrecha).
+    <div className="@container rounded-tarjeta border-2 border-tinta bg-girasol p-4 shadow-pegatina sm:p-5">
+      <div className="grid gap-x-8 gap-y-4 @lg:grid-cols-2">
+        <div className="space-y-1">
+          <label htmlFor={`${id}-mes`} className="flex items-baseline justify-between gap-3">
+            <span>Mes</span>
+            <span aria-hidden="true" className="font-titulos text-3xl font-black">
+              {mayuscula(mesTexto)}
             </span>
-          ))}
-        </div>
-      </div>
-
-      <section aria-labelledby={`${id}-tareas`} className="space-y-1">
-        <h2 id={`${id}-tareas`} className="text-base">
-          Tareas de {mesTexto}
-        </h2>
-        {tareas.sembrar.length === 0 && tareas.cosechar.length === 0 ? (
-          <p className="text-sm text-tinta-suave">Nada que sembrar ni cosechar en {mesTexto}.</p>
-        ) : (
-          <div className="space-y-1 text-sm">
-            <ListaTarea titulo="Sembrar" ids={tareas.sembrar} nombre={nombre} />
-            <ListaTarea titulo="Cosechar" ids={tareas.cosechar} nombre={nombre} />
+          </label>
+          <input
+            id={`${id}-mes`}
+            type="range"
+            min={1}
+            max={12}
+            step={1}
+            value={mes}
+            aria-valuetext={mesTexto}
+            onChange={(e) => onCambiarMes(e.target.valueAsNumber)}
+            // Sin la caja de los campos de texto (estilos base de input): solo la pista.
+            className="min-h-11 w-full border-0 bg-transparent px-0 accent-tinta focus-visible:shadow-none"
+          />
+          <div aria-hidden="true" className="grid grid-cols-12 text-center text-xs tabular-nums">
+            {["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"].map((letra, i) => (
+              <span key={`${letra}-${i}`} className={i + 1 === mes ? "font-black underline decoration-2 underline-offset-4" : undefined}>
+                {letra}
+              </span>
+            ))}
           </div>
-        )}
-      </section>
+        </div>
+  
+        <section aria-labelledby={`${id}-tareas`} className="space-y-1">
+          <h2 id={`${id}-tareas`} className="text-lg">
+            Tareas de {mesTexto}
+          </h2>
+          {tareas.sembrar.length === 0 && tareas.cosechar.length === 0 ? (
+            <p className="text-sm">Nada que sembrar ni cosechar en {mesTexto}.</p>
+          ) : (
+            <div className="space-y-1 text-sm">
+              <ListaTarea titulo="Sembrar" ids={tareas.sembrar} nombre={nombre} />
+              <ListaTarea titulo="Cosechar" ids={tareas.cosechar} nombre={nombre} />
+            </div>
+          )}
+        </section>
+      </div>
     </div>
   );
 }

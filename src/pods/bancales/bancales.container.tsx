@@ -99,9 +99,12 @@ export function BancalesContainer() {
   const vacio = bancales.data !== null && cultivos.data !== null && visibles.length === 0;
 
   return (
-    <div ref={refRaiz} tabIndex={-1} className="space-y-5">
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-        <h1>Mis bancales</h1>
+    <div ref={refRaiz} tabIndex={-1} className="space-y-8">
+      <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
+        <div className="space-y-3">
+          <h1>Mis bancales</h1>
+          <p className="text-lg text-tinta-suave">Toca un bancal para plantarlo y ver cómo cambia mes a mes.</p>
+        </div>
         {!vacio && (
           <Link to="/bancales/nuevo" className={claseBoton("primario")}>
             Nuevo bancal
@@ -153,10 +156,10 @@ function quedan(n: number): string {
 /** La forma de la lista mientras carga: dos tarjetas con su croquis. */
 function ListaCargando() {
   return (
-    <ul aria-hidden="true" className="-mx-2 grid border-t border-lapiz sm:grid-cols-2 sm:gap-x-8">
+    <ul aria-hidden="true" className="grid gap-5 sm:grid-cols-2">
       {["a", "b"].map((clave) => (
-        <li key={clave} className="flex gap-4 border-b border-lapiz px-2 py-4">
-          <div className="size-12 rounded-control bg-lapiz/30 motion-safe:animate-pulse" />
+        <li key={clave} className="flex gap-4 rounded-tarjeta border-2 border-lapiz p-5">
+          <div className="h-20 w-32 rounded-control bg-lapiz/30 motion-safe:animate-pulse" />
           <div className="flex-1 space-y-2">
             <div className="h-5 w-2/5 rounded-control bg-lapiz/30 motion-safe:animate-pulse" />
             <div className="h-4 w-4/5 rounded-control bg-lapiz/20 motion-safe:animate-pulse" />

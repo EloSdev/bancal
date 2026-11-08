@@ -90,9 +90,9 @@ function sinResultados({ q, sol, temporada, zona }: FiltrosCatalogo): string {
 /** La estructura de la lista mientras carga: las líneas del cuaderno, sin contenido. */
 function ListaCargando() {
   return (
-    <ul aria-hidden="true" className="-mx-2 grid border-t border-lapiz sm:grid-cols-2 sm:gap-x-8 lg:grid-cols-3">
+    <ul aria-hidden="true" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {["a", "b", "c", "d", "e", "f"].map((clave) => (
-        <li key={clave} className="space-y-3 border-b border-lapiz px-2 py-4">
+        <li key={clave} className="space-y-3 rounded-tarjeta border-2 border-lapiz p-4">
           <div className="h-5 w-2/5 rounded-control bg-lapiz/30 motion-safe:animate-pulse" />
           <div className="h-4 w-full rounded-control bg-lapiz/20 motion-safe:animate-pulse" />
         </li>

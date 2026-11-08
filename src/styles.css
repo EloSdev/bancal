@@ -43,8 +43,8 @@
   /* Radios: casi rectos, de cuaderno. Control = botones, campos, celdas;
      hoja = lo que flota (banda móvil, diálogo). Solo existen estos dos. */
   --radius-*: initial;
-  --radius-control: 0.25rem;
-  --radius-hoja: 0.5rem;
+  --radius-control: 0.5rem;
+  --radius-hoja: 0.75rem;
   /* Tarjetas y fotos de la portada («cuaderno pop», brief). */
   --radius-tarjeta: 1rem;
 
@@ -144,8 +144,9 @@
     font-variation-settings: "SOFT" 100;
     font-optical-sizing: auto;
   }
-  h1 { @apply text-3xl leading-tight font-semibold; }
-  h2 { @apply text-xl font-semibold; }
+  /* «Cuaderno pop»: titulares en Fraunces muy gruesa. */
+  h1 { @apply text-4xl leading-[1.05] font-black tracking-tight sm:text-5xl; }
+  h2 { @apply text-2xl font-bold; }
   h3 { @apply text-lg font-medium; }
   p { @apply text-pretty; }
 
@@ -165,10 +166,12 @@
 
   label { @apply font-medium; }
   input, select, textarea {
-    @apply rounded-control border border-tinta-suave bg-superficie-elevada px-3 py-2 text-base text-tinta;
+    @apply rounded-control border-2 border-tinta bg-superficie-elevada px-3 py-2 text-base text-tinta;
+    /* Con el foco, el campo se despega del papel como una pegatina. */
+    @apply transition-shadow duration-150 focus-visible:shadow-pegatina;
     /* Campo con error: el trazo se dobla en tinta (grosor, no color: el rojo es
        de la compatibilidad y en gris no se distinguiría). inset-ring: sin mover nada. */
-    @apply placeholder:text-tinta-suave aria-invalid:border-tinta aria-invalid:inset-ring aria-invalid:inset-ring-tinta;
+    @apply placeholder:text-tinta-suave aria-invalid:border-tinta aria-invalid:inset-ring-2 aria-invalid:inset-ring-tinta;
   }
   /* Misma altura para campos y desplegables, y zona de toque de 44 px. */
   input, select {

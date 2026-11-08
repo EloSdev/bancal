@@ -25,7 +25,8 @@ export function FiltrosCatalogoForm({ filtros, onBuscar, onFiltrar, refBusqueda 
     <form
       role="search"
       aria-label="Filtrar cultivos"
-      className="grid grid-cols-2 gap-x-4 gap-y-3 lg:grid-cols-[2fr_1fr_1fr_1fr]"
+      // Tarjeta girasol: la mesa de trabajo del catálogo (docs/brief.md, «cuaderno pop»).
+      className="grid grid-cols-2 gap-x-4 gap-y-3 rounded-tarjeta border-2 border-tinta bg-girasol p-4 shadow-pegatina sm:p-5 lg:grid-cols-[2fr_1fr_1fr_1fr]"
       onSubmit={(e) => e.preventDefault()}
     >
       <Campo id={ids.q} etiqueta="Buscar por nombre" ancho>

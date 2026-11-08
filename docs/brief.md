@@ -117,6 +117,14 @@ maquetación (*Tueste*), traducido a Bancal:
 - **Botones pegatina en toda la app** (un solo sistema): borde de 2 px,
   sombra dura que crece al pasar el ratón y desaparece al pulsar («se
   aplasta»), todo el desplazamiento con `motion-safe:`.
+- **El resto de pantallas** (2026-11-08, también a petición del usuario):
+  titulares en Fraunces 900; tarjetas pegatina (`claseTarjeta` /
+  `claseTarjetaPulsable` en `common/components/tarjeta.ts`) para cultivos,
+  bancales, calendario, vecinos, formulario y avisos; **girasol** para lo
+  que se está trabajando (filtros del catálogo, vista previa del bancal,
+  temporada del editor); campos con borde de 2 px en tinta que se despegan
+  con el foco; radios de 0,5 rem. La cuadrícula del editor sigue dibujada a
+  tinta (marco de tablones, tierra y lápiz): es el sujeto, no se toca.
 - Se mantiene: verde y rojo solo para la compatibilidad (por eso el acento
   nuevo es amarillo), Fraunces + Public Sans, el papel de fondo.
 

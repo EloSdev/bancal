@@ -71,7 +71,7 @@ export function AppLayout() {
       </header>
       <main
         ref={refMain}
-        className={esPortada ? "flex-1" : "mx-auto w-full max-w-5xl flex-1 space-y-5 px-4 py-6"}
+        className={esPortada ? "flex-1" : "mx-auto w-full max-w-5xl flex-1 space-y-8 px-4 pt-10 pb-20"}
       >
         <Outlet />
       </main>
@@ -88,7 +88,7 @@ const autoresFotos = [...new Map(Object.values(FOTOS).map((foto) => [foto.autor,
 /** El pie, en tinta para toda la app: el proyecto, los datos y las fotos. */
 function Pie() {
   return (
-    <footer className="border-t-2 border-tinta bg-tinta text-sm text-superficie/80 group-has-[[data-banda-movil]]/app:pb-32 lg:group-has-[[data-banda-movil]]/app:pb-0">
+    <footer className="border-t-2 border-tinta bg-tinta text-sm text-superficie/80 group-has-[[data-banda-movil]]/app:pb-44 lg:group-has-[[data-banda-movil]]/app:pb-0">
       <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
         <div className="space-y-3">
           <p className="font-titulos text-3xl font-black text-superficie">Bancal</p>

@@ -11,10 +11,13 @@ import { Croquis } from "./croquis.component";
  */
 export function BancalesVacio({ refCrear }: { refCrear: Ref<HTMLAnchorElement> }) {
   return (
-    <div className="flex flex-wrap items-center gap-6 border-y border-lapiz py-8">
-      <Croquis columnas={4} filas={3} />
+    <div className="flex flex-wrap items-center gap-8 rounded-tarjeta border-2 border-dashed border-tinta bg-superficie-elevada p-8 sm:p-10">
+      <div className="-rotate-3 rounded-control border-2 border-tinta bg-tierra p-3 shadow-pegatina">
+        <Croquis columnas={4} filas={3} grande />
+      </div>
       <div className="space-y-4">
-        <p>Aún no tienes bancales.</p>
+        <p className="font-titulos text-2xl font-bold">Aún no tienes bancales.</p>
+        <p className="max-w-sm text-tinta-suave">Mide el tuyo con un metro: con el ancho, el largo y las horas de sol ya lo puedes dibujar.</p>
         <Link ref={refCrear} to="/bancales/nuevo" className={claseBoton("primario")}>
           Crear mi primer bancal
         </Link>
