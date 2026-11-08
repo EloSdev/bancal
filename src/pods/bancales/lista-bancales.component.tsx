@@ -50,29 +50,16 @@ function TarjetaBancal({ detalle, cultivos, refEnlace, onBorrar }: TarjetaBancal
         <Croquis columnas={resumen.columnas} filas={resumen.filas} plantaciones={plantaciones} />
       </div>
       <div className="min-w-0 flex-1 space-y-1">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-          <h2 className="text-lg">
-            <Link
-              ref={refEnlace}
-              to="/bancales/$bancalId"
-              params={{ bancalId: bancal.id }}
-              className="break-words text-tinta no-underline decoration-acento after:absolute after:inset-0 hover:underline"
-            >
-              {bancal.nombre}
-            </Link>
-          </h2>
-          {/* relative: por encima del enlace que cubre la tarjeta. */}
-          <span className="relative">
-            {/* El nombre accesible dice cuál; empieza por la palabra visible («label in name»). */}
-            <Boton
-              variante="enlace"
-              aria-label={`Borrar «${bancal.nombre}»`}
-              onClick={(evento) => onBorrar(detalle, evento.currentTarget)}
-            >
-              Borrar
-            </Boton>
-          </span>
-        </div>
+        <h2 className="text-lg">
+          <Link
+            ref={refEnlace}
+            to="/bancales/$bancalId"
+            params={{ bancalId: bancal.id }}
+            className="break-words text-tinta no-underline decoration-acento after:absolute after:inset-0 hover:underline"
+          >
+            {bancal.nombre}
+          </Link>
+        </h2>
         {/* Cada dato entero: a 360 px el corte cae en el «·», no a mitad de dato. */}
         <p className="text-sm text-tinta-suave tabular-nums">
           <span className="whitespace-nowrap">
@@ -96,6 +83,26 @@ function TarjetaBancal({ detalle, cultivos, refEnlace, onBorrar }: TarjetaBancal
             {resumen.avisos} {resumen.avisos === 1 ? "aviso" : "avisos"}
           </p>
         )}
+        {/* Siempre en su línea, al final: el nombre se lee igual en todas las
+            tarjetas. relative: por encima del enlace que cubre la tarjeta. */}
+        <div className="relative flex gap-4 pt-1">
+          {/* Los nombres accesibles dicen cuál; empiezan por la palabra visible («label in name»). */}
+          <Link
+            to="/bancales/$bancalId/editar"
+            params={{ bancalId: bancal.id }}
+            aria-label={`Editar «${bancal.nombre}»`}
+            className="inline-flex min-h-6 items-center"
+          >
+            Editar
+          </Link>
+          <Boton
+            variante="enlace"
+            aria-label={`Borrar «${bancal.nombre}»`}
+            onClick={(evento) => onBorrar(detalle, evento.currentTarget)}
+          >
+            Borrar
+          </Boton>
+        </div>
       </div>
     </li>
   );

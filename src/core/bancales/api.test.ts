@@ -232,6 +232,16 @@ describe("errores tipados", () => {
     expect((error as ErrorApi).tipo).toBe("almacenamiento");
   });
 
+  it("C8.3 · el error al escribir dice que no se puede guardar y qué mirar (no habla de leer)", async () => {
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new DOMException("Cuota superada", "QuotaExceededError");
+    });
+    const { message } = (await falla(saveBancal(balcon))) as ErrorApi;
+    expect(message).toMatch(/no deja guardar/);
+    expect(message).toMatch(/modo privado|espacio/);
+    expect(message).not.toMatch(/leer/);
+  });
+
   it("C8.3 · si localStorage no deja leer (navegación privada estricta), llega un ErrorApi «almacenamiento»", async () => {
     vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
       throw new DOMException("Acceso denegado", "SecurityError");

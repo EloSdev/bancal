@@ -58,6 +58,10 @@ describe("Mis bancales (/bancales)", () => {
 
     const demo = tarjeta("Bancal de la demo");
     expect(screen.getByRole("link", { name: "Bancal de la demo" })).toHaveAttribute("href", "/bancales/demo");
+    expect(within(demo).getByRole("link", { name: "Editar «Bancal de la demo»" })).toHaveAttribute(
+      "href",
+      "/bancales/demo/editar",
+    );
     expect(demo).toHaveTextContent("120 × 90 cm");
     expect(demo).toHaveTextContent("4 × 3 celdas");
     expect(demo).toHaveTextContent("3 de 12 plantadas");

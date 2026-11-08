@@ -1,5 +1,5 @@
 // Cuadrícula de un bancal en celdas de 30 × 30 cm («Reglas del dominio» de CLAUDE.md).
-import type { Celda } from "./model";
+import type { Celda, Plantacion } from "./model";
 
 export const LADO_CELDA_CM = 30;
 
@@ -32,4 +32,10 @@ export function vecinos({ fila, columna }: Celda, dims: Dimensiones): Celda[] {
     }
   }
   return resultado;
+}
+
+/** Las plantaciones que se quedarían fuera si el bancal pasara a medir ancho × largo (C12.6). */
+export function plantacionesFuera(plantaciones: Plantacion[], ancho: number, largo: number): Plantacion[] {
+  const dims = dimensiones(ancho, largo);
+  return plantaciones.filter(({ celda }) => !dentroDeCuadricula(celda, dims));
 }

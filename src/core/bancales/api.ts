@@ -72,7 +72,12 @@ function escribir(almacen: Almacen): void {
   try {
     localStorage.setItem(CLAVE_ALMACEN, JSON.stringify(almacen));
   } catch (error) {
-    throw errorAlmacenamiento(error);
+    // Al escribir, reintentar no suele servir: se dice qué mirar.
+    throw new ErrorApi(
+      "almacenamiento",
+      "Tu navegador no deja guardar datos de esta web. Mira si estás en modo privado o sin espacio.",
+      { cause: error },
+    );
   }
 }
 

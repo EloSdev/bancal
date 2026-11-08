@@ -15,6 +15,7 @@ import { Route as BancalesNuevoRouteImport } from './routes/bancales/nuevo'
 import { Route as CultivosIndexRouteImport } from './routes/cultivos/index'
 import { Route as CultivosCultivoIdRouteImport } from './routes/cultivos/$cultivoId'
 import { Route as BancalesBancalIdIndexRouteImport } from './routes/bancales/$bancalId/index'
+import { Route as BancalesBancalIdEditarRouteImport } from './routes/bancales/$bancalId/editar'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +47,11 @@ const BancalesBancalIdIndexRoute = BancalesBancalIdIndexRouteImport.update({
   path: '/bancales/$bancalId/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BancalesBancalIdEditarRoute = BancalesBancalIdEditarRouteImport.update({
+  id: '/bancales/$bancalId/editar',
+  path: '/bancales/$bancalId/editar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/cultivos/$cultivoId': typeof CultivosCultivoIdRoute
   '/bancales/': typeof BancalesIndexRoute
   '/cultivos/': typeof CultivosIndexRoute
+  '/bancales/$bancalId/editar': typeof BancalesBancalIdEditarRoute
   '/bancales/$bancalId/': typeof BancalesBancalIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/cultivos/$cultivoId': typeof CultivosCultivoIdRoute
   '/bancales': typeof BancalesIndexRoute
   '/cultivos': typeof CultivosIndexRoute
+  '/bancales/$bancalId/editar': typeof BancalesBancalIdEditarRoute
   '/bancales/$bancalId': typeof BancalesBancalIdIndexRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/cultivos/$cultivoId': typeof CultivosCultivoIdRoute
   '/bancales/': typeof BancalesIndexRoute
   '/cultivos/': typeof CultivosIndexRoute
+  '/bancales/$bancalId/editar': typeof BancalesBancalIdEditarRoute
   '/bancales/$bancalId/': typeof BancalesBancalIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/cultivos/$cultivoId'
     | '/bancales/'
     | '/cultivos/'
+    | '/bancales/$bancalId/editar'
     | '/bancales/$bancalId/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/cultivos/$cultivoId'
     | '/bancales'
     | '/cultivos'
+    | '/bancales/$bancalId/editar'
     | '/bancales/$bancalId'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/cultivos/$cultivoId'
     | '/bancales/'
     | '/cultivos/'
+    | '/bancales/$bancalId/editar'
     | '/bancales/$bancalId/'
   fileRoutesById: FileRoutesById
 }
@@ -105,6 +117,7 @@ export interface RootRouteChildren {
   CultivosCultivoIdRoute: typeof CultivosCultivoIdRoute
   BancalesIndexRoute: typeof BancalesIndexRoute
   CultivosIndexRoute: typeof CultivosIndexRoute
+  BancalesBancalIdEditarRoute: typeof BancalesBancalIdEditarRoute
   BancalesBancalIdIndexRoute: typeof BancalesBancalIdIndexRoute
 }
 
@@ -152,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BancalesBancalIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bancales/$bancalId/editar': {
+      id: '/bancales/$bancalId/editar'
+      path: '/bancales/$bancalId/editar'
+      fullPath: '/bancales/$bancalId/editar'
+      preLoaderRoute: typeof BancalesBancalIdEditarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -161,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   CultivosCultivoIdRoute: CultivosCultivoIdRoute,
   BancalesIndexRoute: BancalesIndexRoute,
   CultivosIndexRoute: CultivosIndexRoute,
+  BancalesBancalIdEditarRoute: BancalesBancalIdEditarRoute,
   BancalesBancalIdIndexRoute: BancalesBancalIdIndexRoute,
 }
 export const routeTree = rootRouteImport

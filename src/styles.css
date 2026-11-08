@@ -93,7 +93,9 @@
   label { @apply font-medium; }
   input, select, textarea {
     @apply rounded-control border border-tinta-suave bg-superficie-elevada px-3 py-2 text-base text-tinta;
-    @apply placeholder:text-tinta-suave aria-invalid:border-desfavorable;
+    /* Campo con error: el trazo se dobla en tinta (grosor, no color: el rojo es
+       de la compatibilidad y en gris no se distinguiría). inset-ring: sin mover nada. */
+    @apply placeholder:text-tinta-suave aria-invalid:border-tinta aria-invalid:inset-ring aria-invalid:inset-ring-tinta;
   }
   /* Misma altura para campos y desplegables, y zona de toque de 44 px. */
   input, select {

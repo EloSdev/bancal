@@ -58,7 +58,7 @@ export function ConfirmarBorrado({ detalle, borrando, error, onConfirmar, onCerr
           <p>{queSeBorra(detalle.plantaciones.length)} No se puede deshacer.</p>
           {error && (
             <Alerta>
-              <p>No se ha podido borrar. {error.message} Inténtalo otra vez en un momento.</p>
+              <p>No se ha podido borrar. {error.message}</p>
             </Alerta>
           )}
           <div className="flex flex-wrap justify-end gap-3">

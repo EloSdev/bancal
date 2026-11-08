@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { dentroDeCuadricula, dimensiones, vecinos } from "./cuadricula";
-import type { Celda } from "./model";
+import { dentroDeCuadricula, dimensiones, plantacionesFuera, vecinos } from "./cuadricula";
+import type { Celda, Plantacion } from "./model";
 
 describe("dimensiones", () => {
   it("C5.1 · un bancal de 120 × 90 cm tiene 4 columnas × 3 filas", () => {
@@ -102,5 +102,23 @@ describe("vecinos", () => {
       { fila: 0, columna: 0 },
       { fila: 0, columna: 2 },
     ]);
+  });
+});
+
+describe("plantacionesFuera", () => {
+  const en = (fila: number, columna: number): Plantacion => ({ cultivoId: "tomate", celda: { fila, columna }, mesSiembra: 5 });
+  const plantaciones = [en(0, 0), en(0, 3), en(2, 1), en(2, 3)];
+
+  it("C12.6 · al encoger de 120 × 90 a 90 × 60 quedan fuera las de la columna 4 y la fila 3", () => {
+    expect(plantacionesFuera(plantaciones, 90, 60)).toEqual([en(0, 3), en(2, 1), en(2, 3)]);
+  });
+
+  it("C12.6 · con las mismas medidas o más grandes no queda ninguna fuera", () => {
+    expect(plantacionesFuera(plantaciones, 120, 90)).toEqual([]);
+    expect(plantacionesFuera(plantaciones, 300, 300)).toEqual([]);
+  });
+
+  it("C12.6 · los cm que no llegan a una celda no cuentan (119 cm = 3 columnas)", () => {
+    expect(plantacionesFuera(plantaciones, 119, 90)).toEqual([en(0, 3), en(2, 3)]);
   });
 });
