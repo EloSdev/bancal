@@ -2,6 +2,7 @@
 // cotas a lápiz, las celdas y la exposición. Al editar, las plantaciones
 // (las que quedarían fuera, con el punto hueco). La región de estado lo
 // resume para el lector, también cuántas plantaciones se quitarían.
+import { Cota } from "../../common/components/cota";
 import { bancalSchema } from "../../core/bancales/bancal.schema";
 import { dimensiones, plantacionesFuera } from "../../core/bancales/cuadricula";
 import { exposicion } from "../../core/bancales/exposicion";
@@ -47,7 +48,7 @@ export function VistaPrevia({ valores, plantaciones }: { valores: BancalInput; p
     <section aria-label="Vista previa" className="min-w-0 space-y-3 self-start lg:sticky lg:top-6">
       <h2>Así queda</h2>
       {validas && (
-        <div className="grid w-fit grid-cols-[auto_auto] gap-2 text-xs text-tinta-suave tabular-nums" aria-hidden="true">
+        <div className="grid w-fit grid-cols-[auto_auto] gap-2" aria-hidden="true">
           <Cota texto={`${valores.ancho} cm`} />
           <span />
           <Croquis
@@ -64,20 +65,5 @@ export function VistaPrevia({ valores, plantaciones }: { valores: BancalInput; p
       </p>
       {fuera.length > 0 && <p className="text-sm text-tinta-suave">Los puntos huecos son las plantaciones que se quitan.</p>}
     </section>
-  );
-}
-
-/** Cota a lápiz, como en el cuaderno: «├── 120 cm ──┤» (o en vertical, al lado). */
-function Cota({ texto, vertical = false }: { texto: string; vertical?: boolean }) {
-  const tramo = vertical ? "w-px flex-1 bg-lapiz" : "h-px flex-1 bg-lapiz";
-  const tope = vertical ? "h-px w-2 bg-lapiz" : "h-2 w-px bg-lapiz";
-  return (
-    <span className={`flex items-center gap-1 ${vertical ? "flex-col" : ""}`}>
-      <span className={tope} />
-      <span className={tramo} />
-      <span className={vertical ? "[writing-mode:vertical-rl]" : ""}>{texto}</span>
-      <span className={tramo} />
-      <span className={tope} />
-    </span>
   );
 }

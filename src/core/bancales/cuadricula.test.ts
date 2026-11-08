@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { dentroDeCuadricula, dimensiones, plantacionesFuera, vecinos } from "./cuadricula";
+import { dentroDeCuadricula, dimensiones, moverCelda, plantacionesFuera, vecinos } from "./cuadricula";
 import type { Celda, Plantacion } from "./model";
 
 describe("dimensiones", () => {
@@ -120,5 +120,27 @@ describe("plantacionesFuera", () => {
 
   it("C12.6 · los cm que no llegan a una celda no cuentan (119 cm = 3 columnas)", () => {
     expect(plantacionesFuera(plantaciones, 119, 90)).toEqual([en(0, 3), en(2, 3)]);
+  });
+});
+describe("moverCelda", () => {
+  const dims = { columnas: 4, filas: 3 };
+  const centro = { fila: 1, columna: 1 };
+
+  it.each([
+    ["arriba", { fila: 0, columna: 1 }],
+    ["abajo", { fila: 2, columna: 1 }],
+    ["izquierda", { fila: 1, columna: 0 }],
+    ["derecha", { fila: 1, columna: 2 }],
+    ["inicio", { fila: 1, columna: 0 }],
+    ["fin", { fila: 1, columna: 3 }],
+  ] as const)("C13.3 · «%s» desde el centro", (movimiento, esperada) => {
+    expect(moverCelda(centro, movimiento, dims)).toEqual(esperada);
+  });
+
+  it("C13.3 · en los bordes no sale de la cuadrícula", () => {
+    expect(moverCelda({ fila: 0, columna: 0 }, "arriba", dims)).toEqual({ fila: 0, columna: 0 });
+    expect(moverCelda({ fila: 0, columna: 0 }, "izquierda", dims)).toEqual({ fila: 0, columna: 0 });
+    expect(moverCelda({ fila: 2, columna: 3 }, "abajo", dims)).toEqual({ fila: 2, columna: 3 });
+    expect(moverCelda({ fila: 2, columna: 3 }, "derecha", dims)).toEqual({ fila: 2, columna: 3 });
   });
 });

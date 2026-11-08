@@ -7,6 +7,8 @@ afterEach(() => cleanup());
 
 // jsdom no implementa scrollTo y el router lo llama al navegar (restaurar el scroll).
 window.scrollTo = () => {};
+// Ni scrollIntoView (el editor lo usa para que la banda fija no tape la celda con el foco).
+Element.prototype.scrollIntoView = () => {};
 
 // jsdom (31) tiene <dialog> con `open`, pero no showModal() ni close(). Lo justo
 // para los tests: abrir, cerrar y avisar con «close». El foco atrapado, Esc y

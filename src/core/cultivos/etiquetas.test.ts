@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { etiquetaDificultad, etiquetaExposicion, etiquetaRiego, etiquetaZona, MESES, nombreMes, ventanaEnTexto } from "./etiquetas";
+import { etiquetaDificultad, etiquetaExposicion, etiquetaRiego, etiquetaZona, MESES, nombreCorto, nombreMes, ventanaEnTexto } from "./etiquetas";
 
 describe("etiquetas", () => {
   it("los doce meses, de enero a diciembre", () => {
@@ -18,6 +18,18 @@ describe("etiquetas", () => {
     expect(etiquetaExposicion).toEqual({ "pleno-sol": "Pleno sol", semisombra: "Semisombra", sombra: "Sombra" });
     expect(etiquetaZona).toEqual({ atlantica: "Atlántica", mediterranea: "Mediterránea", interior: "Interior" });
     expect(etiquetaDificultad).toEqual({ facil: "Fácil", media: "Media", dificil: "Difícil" });
+  });
+
+  it.each([
+    ["Tomate", "Tomate"],
+    ["Lechuga", "Lechuga"],
+    ["Ajo", "Ajo"],
+    ["Remolacha", "Remol."],
+    ["Zanahoria", "Zanah."],
+    ["Caléndula", "Calén."],
+    ["Judía verde", "Judía"],
+  ])("C13.1 · nombre corto para una celda pequeña: «%s» → «%s» (abreviatura de cuaderno, nunca cortada)", (nombre, corto) => {
+    expect(nombreCorto(nombre)).toBe(corto);
   });
 
   it("riego en español", () => {

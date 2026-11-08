@@ -52,6 +52,16 @@
 
   /* La pluma: arranca rápido y se posa */
   --ease-pluma: cubic-bezier(0.3, 0.7, 0.2, 1);
+
+  /* Colocar un cultivo: el dibujo aparece con un trazo corto (brief,
+     «Movimiento»: ~180 ms). Siempre con motion-safe:. */
+  --animate-brotar: brotar 180ms var(--ease-pluma);
+  @keyframes brotar {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+  }
 }
 
 @layer base {

@@ -39,3 +39,28 @@ export function plantacionesFuera(plantaciones: Plantacion[], ancho: number, lar
   const dims = dimensiones(ancho, largo);
   return plantaciones.filter(({ celda }) => !dentroDeCuadricula(celda, dims));
 }
+
+export type Movimiento = "arriba" | "abajo" | "izquierda" | "derecha" | "inicio" | "fin";
+
+/** La celda a la que lleva una tecla de flecha, Inicio o Fin, sin salir de la cuadrícula (editor, T13). */
+export function moverCelda({ fila, columna }: Celda, movimiento: Movimiento, { columnas, filas }: Dimensiones): Celda {
+  const limitar = (valor: number, maximo: number) => Math.min(Math.max(valor, 0), maximo - 1);
+  switch (movimiento) {
+    case "arriba":
+      return { fila: limitar(fila - 1, filas), columna };
+    case "abajo":
+      return { fila: limitar(fila + 1, filas), columna };
+    case "izquierda":
+      return { fila, columna: limitar(columna - 1, columnas) };
+    case "derecha":
+      return { fila, columna: limitar(columna + 1, columnas) };
+    case "inicio":
+      return { fila, columna: 0 };
+    case "fin":
+      return { fila, columna: columnas - 1 };
+    default: {
+      const nunca: never = movimiento;
+      return nunca;
+    }
+  }
+}
