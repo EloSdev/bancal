@@ -1,5 +1,7 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
+import { IconoEstado } from "../common/components/icono-estado";
+import { FOTOS } from "../common/fotos";
 
 /**
  * Al cambiar de ruta, el foco va al <h1> de la pantalla nueva para que el
@@ -31,19 +33,28 @@ function useFocoAlCambiarDeRuta() {
 
 export function AppLayout() {
   const refMain = useFocoAlCambiarDeRuta();
+  // La portada va a sangre (sus bandas de color ocupan todo el ancho): cada
+  // sección pone su propio contenedor. El resto de pantallas, en la columna.
+  const esPortada = useRouterState({ select: (s) => s.location.pathname === "/" });
   return (
     // El pie se queda abajo aunque la pantalla sea corta. En el editor, en el
     // móvil, la banda fija tapa lo último de la página: el pie deja su hueco.
     <div className="group/app flex min-h-dvh flex-col">
-      <header className="border-b border-lapiz">
+      <header className="border-b-2 border-tinta">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-2">
           {/* El logo lleva a la portada. En la portada sí lleva aria-current,
               y es el único: la portada no está en el <nav>. */}
           <Link
             to="/"
             activeOptions={{ exact: true }}
-            className="py-2 font-titulos text-xl font-semibold tracking-wide text-tinta no-underline"
+            className="flex items-center gap-2 py-2 font-titulos text-2xl font-black tracking-tight text-tinta no-underline"
           >
+            <span
+              aria-hidden="true"
+              className="grid size-9 -rotate-6 place-items-center rounded-full border-2 border-tinta bg-girasol shadow-[2px_2px_0_var(--color-tinta)] [&>svg]:size-6"
+            >
+              <IconoEstado estado="brote" />
+            </span>
             Bancal
           </Link>
           <nav aria-label="Principal">
@@ -58,7 +69,10 @@ export function AppLayout() {
           </nav>
         </div>
       </header>
-      <main ref={refMain} className="mx-auto w-full max-w-5xl flex-1 space-y-5 px-4 py-6">
+      <main
+        ref={refMain}
+        className={esPortada ? "flex-1" : "mx-auto w-full max-w-5xl flex-1 space-y-5 px-4 py-6"}
+      >
         <Outlet />
       </main>
       <Pie />
@@ -68,26 +82,65 @@ export function AppLayout() {
 
 const REPOSITORIO = "https://github.com/EloSdev/bancal";
 
+// Las fotos de la portada, una vez cada autor (Markus Spiske firma tres).
+const autoresFotos = [...new Map(Object.values(FOTOS).map((foto) => [foto.autor, foto])).values()];
+
+/** El pie, en tinta para toda la app: el proyecto, los datos y las fotos. */
 function Pie() {
   return (
-    <footer className="border-t border-lapiz group-has-[[data-banda-movil]]/app:pb-32 lg:group-has-[[data-banda-movil]]/app:pb-0">
-      <div className="mx-auto grid max-w-5xl gap-x-12 gap-y-4 px-4 py-8 text-sm text-tinta-suave sm:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="max-w-[40rem] space-y-2">
-          <p className="font-titulos text-lg font-semibold text-tinta">Bancal</p>
+    <footer className="border-t-2 border-tinta bg-tinta text-sm text-superficie/80 group-has-[[data-banda-movil]]/app:pb-32 lg:group-has-[[data-banda-movil]]/app:pb-0">
+      <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="space-y-3">
+          <p className="font-titulos text-3xl font-black text-superficie">Bancal</p>
           <p>
             Cuaderno para planificar bancales urbanos. Proyecto final del curso Front End Moderno y Herramientas IA, de
             la Fundación Luckia y Lemoncode.
           </p>
-          <p>
-            Tus bancales se guardan solo en este navegador. Los datos de horticultura llevan sus{" "}
-            <a href={`${REPOSITORIO}#readme`}>fuentes citadas en el README</a>.
-          </p>
         </div>
-        <p className="sm:pt-8">
-          <a href={REPOSITORIO}>Ver el código en GitHub</a>
+        <div className="space-y-3">
+          <p className="font-bold tracking-widest text-girasol uppercase">El proyecto</p>
+          <p>Tus bancales se guardan solo en este navegador.</p>
+          <ul className="space-y-1">
+            <li>
+              <EnlacePie href={`${REPOSITORIO}#readme`}>Los datos y sus fuentes citadas</EnlacePie>
+            </li>
+            <li>
+              <EnlacePie href={REPOSITORIO}>Ver el código en GitHub</EnlacePie>
+            </li>
+          </ul>
+        </div>
+        <div className="space-y-3">
+          <p className="font-bold tracking-widest text-girasol uppercase">Fotos</p>
+          <p>
+            De Unsplash, con la <EnlacePie href="https://unsplash.com/license">licencia de Unsplash</EnlacePie>:
+          </p>
+          <ul className="space-y-1">
+            {autoresFotos.map((foto) => (
+              <li key={foto.autor}>
+                <EnlacePie href={foto.enlace}>{foto.autor}</EnlacePie>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="mx-auto max-w-5xl px-4">
+        <p className="border-t border-superficie/20 py-6 text-xs">
+          Hecho con React 19, TanStack Router, Tailwind CSS 4 y mucha tierra en las uñas.
         </p>
       </div>
     </footer>
+  );
+}
+
+/** Enlace sobre la tinta: en papel con subrayado girasol, foco en girasol. */
+function EnlacePie({ href, children }: { href: string; children: string }) {
+  return (
+    <a
+      href={href}
+      className="inline-flex min-h-6 items-center text-superficie decoration-girasol hover:text-girasol focus-visible:outline-girasol active:text-girasol"
+    >
+      {children}
+    </a>
   );
 }
 

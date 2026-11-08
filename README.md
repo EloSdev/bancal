@@ -24,7 +24,7 @@ Stack: React 19, TypeScript 7 estricto, Vite 8, Tailwind CSS 4, TanStack Router 
 
 | Ruta | Pantalla |
 |---|---|
-| `/` | Redirige a `/bancales` |
+| `/` | Portada: qué es Bancal, cómo funciona, lo que vigila y los cultivos del catálogo |
 | `/cultivos?q=&sol=&temporada=&zona=` | Catálogo: búsqueda y filtros en la URL (recargar o compartir conserva el resultado) |
 | `/cultivos/$cultivoId` | Ficha de un cultivo: datos, calendario de las tres zonas y vecinos que ayudan o perjudican |
 | `/bancales` | Mis bancales: croquis a escala, medidas, celdas plantadas y avisos; borrar con confirmación |
@@ -93,6 +93,18 @@ Por prioridad:
 9. **PWA sin conexión**, **compartir e imprimir** el bancal.
 10. **Tests end-to-end** del guion de la demo (Playwright en CI).
 11. Pulido pendiente anotado en las verificaciones: la paleta en dos columnas recorre con ↓ el botón siguiente y no el de debajo; la alerta de error de guardado desplaza la cuadrícula; en ~1024 px el panel de avisos cae fuera de la primera pantalla; el triángulo ▲ (sol y temporada) en un color propio para que no compita con «se perjudican»; vetas en las esquinas del marco y esqueleto de carga del editor; dividir el JavaScript (el build supera los 500 kB); el error de un campo aparece al teclear y no al salir del campo.
+
+## Fotos de la portada
+
+Fotos de [Unsplash](https://unsplash.com), con la [licencia de Unsplash](https://unsplash.com/license), servidas en webp a 800 y 1600 px desde `public/img/portada/`:
+
+| Dónde | Autor | Foto |
+|---|---|---|
+| Cabecera | Markus Spiske | [Lechugas y cebollino en un bancal elevado](https://unsplash.com/photos/lettuce-and-chives-in-garden-bed-bk11wZwb9F4) |
+| Paso 1 | Markus Spiske | [Brotes en una bandeja de semillero](https://unsplash.com/photos/selective-focus-photo-of-plant-spouts-vrbZVyX2k4I) |
+| Paso 2 | Jonathan Kemper | [Plantando en un bancal elevado](https://unsplash.com/photos/person-planting-seedlings-in-raised-bed-VTXw4_5SsNA) |
+| Paso 3 | Zoe Richardson | [Caja de cosecha con tomates y verduras](https://unsplash.com/photos/harvest-basket-with-tomatoes-and-vegetables-hmoDcZnB7uw) |
+| «Mes a mes» | Markus Spiske | [Regando plantas jóvenes](https://unsplash.com/photos/person-watering-plant-sFydXGrt5OA) |
 
 ## Fuentes de los datos
 

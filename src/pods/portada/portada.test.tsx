@@ -101,6 +101,33 @@ describe("Portada (/)", () => {
   });
 });
 
+describe("Fotos (C20.6)", () => {
+  it("C20.6 · la portada lleva fotos reales, cada una con alt descriptivo y srcset", async () => {
+    await abrir("/");
+    const fotos = screen.getAllByRole("img").filter((el) => el.tagName === "IMG");
+
+    expect(fotos.length).toBeGreaterThanOrEqual(4);
+    for (const foto of fotos) {
+      expect(foto.getAttribute("alt")?.length).toBeGreaterThan(10);
+      expect(foto).toHaveAttribute("srcset", expect.stringMatching(/1600w/));
+      expect(foto).toHaveAttribute("src", expect.stringMatching(/^\/img\/portada\/.+\.webp$/));
+    }
+  });
+
+  it("C20.6 · el pie cita a los autores de las fotos y la licencia de Unsplash", async () => {
+    await abrir("/");
+    const pie = screen.getByRole("contentinfo");
+
+    expect(within(pie).getByRole("link", { name: /licencia de unsplash/i })).toHaveAttribute(
+      "href",
+      "https://unsplash.com/license",
+    );
+    expect(pie).toHaveTextContent(/Markus Spiske/);
+    expect(pie).toHaveTextContent(/Jonathan Kemper/);
+    expect(pie).toHaveTextContent(/Zoe Richardson/);
+  });
+});
+
 describe("Pie", () => {
   it.each(["/", "/cultivos", "/bancales"])("C20.4 · %s tiene un pie con el contexto del curso, los datos y el código", async (ruta) => {
     await abrir(ruta);

@@ -28,6 +28,10 @@
   --color-acento-intenso: #173c6c;
   --color-sobre-acento: #fbf8f1;
 
+  /* Girasol: pegatinas y subrayados de la portada. Solo como fondo, con
+     texto en tinta (10,6:1); el verde y el rojo son de la compatibilidad. */
+  --color-girasol: #f2c14e;
+
   /* Compatibilidad: siempre con icono de forma propia y texto */
   --color-favorable: #2f7a3b;
   --color-desfavorable: #b3261e;
@@ -41,6 +45,8 @@
   --radius-*: initial;
   --radius-control: 0.25rem;
   --radius-hoja: 0.5rem;
+  /* Tarjetas y fotos de la portada («cuaderno pop», brief). */
+  --radius-tarjeta: 1rem;
 
   /* Celda de la cuadrícula: 44 px mínimos para el dedo (size-celda, w-celda…) */
   --spacing-celda: 2.75rem;
@@ -49,6 +55,12 @@
   --shadow-flota: 0 -1px 0 rgb(42 41 37 / 0.06), 0 -6px 20px rgb(42 41 37 / 0.08);
   /* La hoja de un diálogo, posada sobre la página: la sombra cae hacia abajo */
   --shadow-hoja: 0 1px 0 rgb(42 41 37 / 0.06), 0 12px 32px rgb(42 41 37 / 0.18);
+
+  /* Sombra dura de pegatina, desplazada y sin difuminar: botones, fotos y
+     tarjetas de la portada. La -lg es el hover de lo que «se aplasta». */
+  --shadow-pegatina: 4px 4px 0 var(--color-tinta);
+  --shadow-pegatina-lg: 6px 6px 0 var(--color-tinta);
+  --shadow-pegatina-girasol: 6px 6px 0 var(--color-girasol);
 
   /* La pluma: arranca rápido y se posa */
   --ease-pluma: cubic-bezier(0.3, 0.7, 0.2, 1);
@@ -64,8 +76,8 @@
   }
 
   /* Portada: el bancal de ejemplo se dibuja celda a celda (de izquierda a
-     derecha, como la pluma), el subrayado del título se traza y la nota del
-     aviso se posa al final. Con retraso en línea: fill-mode both. */
+     derecha, como la pluma) y la nota del aviso se posa al final. Con
+     retraso en línea: fill-mode both. */
   --animate-trazar: trazar 420ms var(--ease-pluma) both;
   @keyframes trazar {
     from {
@@ -75,13 +87,35 @@
       clip-path: inset(0 0 0 0);
     }
   }
-  --animate-pluma: pluma 700ms 500ms var(--ease-pluma) both;
-  @keyframes pluma {
+  /* El sello de la foto de la cabecera gira despacio; la cinta de cultivos
+     desfila (su contenido va dos veces: -50 % es una vuelta exacta). */
+  --animate-girar: girar 18s linear infinite;
+  @keyframes girar {
+    to {
+      rotate: 360deg;
+    }
+  }
+  --animate-desfilar: desfilar 45s linear infinite;
+  @keyframes desfilar {
+    to {
+      translate: -50% 0;
+    }
+  }
+  --animate-aparecer: aparecer 600ms var(--ease-pluma) both;
+  @keyframes aparecer {
     from {
-      stroke-dashoffset: 1;
+      opacity: 0;
+      translate: 0 1rem;
+    }
+  }
+  /* El marcador girasol del titular se pinta de izquierda a derecha. */
+  --animate-resaltar: resaltar 700ms 450ms var(--ease-pluma) both;
+  @keyframes resaltar {
+    from {
+      background-size: 0% 100%;
     }
     to {
-      stroke-dashoffset: 0;
+      background-size: 100% 100%;
     }
   }
   --animate-posarse: posarse 360ms 1100ms var(--ease-pluma) both;

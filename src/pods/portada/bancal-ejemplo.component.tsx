@@ -39,7 +39,7 @@ export function BancalEjemplo() {
   const idPie = useId();
   return (
     <figure aria-labelledby={idPie} className="mx-auto w-fit max-w-full">
-      <div className="relative">
+      <div className="space-y-4">
         <div aria-hidden="true" className="grid grid-cols-[auto_auto] gap-2">
           <Cota texto="120 cm" />
           <span />
@@ -53,8 +53,8 @@ export function BancalEjemplo() {
           <Cota texto="90 cm" vertical />
         </div>
 
-        {/* La nota del aviso, posada sobre el dibujo como en el panel del editor. */}
-        <div className="relative z-10 mx-2 mt-3 max-w-64 space-y-1 rounded-hoja border border-lapiz bg-superficie-elevada p-3 text-sm shadow-hoja motion-safe:animate-posarse sm:absolute sm:right-0 sm:-bottom-14 sm:mx-0 sm:mt-0 sm:-rotate-1">
+        {/* La nota del aviso, como en el panel del editor, pegada debajo. */}
+        <div className="max-w-80 -rotate-1 space-y-1 rounded-hoja border-2 border-tinta bg-superficie-elevada p-3 text-sm shadow-pegatina motion-safe:animate-posarse">
           <p className="flex items-center gap-2 font-semibold">
             <IconoCompatibilidad tipo="desfavorable" />
             <span>Hinojo junto a tomate</span>
@@ -63,7 +63,7 @@ export function BancalEjemplo() {
         </div>
       </div>
 
-      <figcaption id={idPie} className="mt-4 max-w-80 text-xs text-tinta-suave italic sm:mt-14">
+      <figcaption id={idPie} className="mt-4 max-w-80 text-xs text-tinta-suave italic">
         Bancal de ejemplo de 120 × 90 cm: tomate, albahaca, lechuga, rábano, hinojo, zanahoria, cebolla y caléndula.
         El tomate se ayuda con la albahaca y se perjudica con el hinojo.
       </figcaption>
@@ -73,7 +73,7 @@ export function BancalEjemplo() {
 
 function Celda({ celda, orden }: { celda: CeldaEjemplo | null; orden: number }) {
   return (
-    <div className="relative grid size-16 place-items-center bg-tierra sm:size-20">
+    <div className="relative grid size-15 place-items-center bg-tierra sm:size-18">
       {celda && (
         <>
           <span className="absolute top-0.5 right-0.5">

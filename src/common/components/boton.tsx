@@ -7,12 +7,14 @@ import type { ButtonHTMLAttributes, Ref } from "react";
 
 type Variante = "primario" | "secundario" | "peligro" | "enlace";
 
+// Pegatina (docs/brief.md, «cuaderno pop»): borde de tinta y sombra dura. Al
+// pasar el ratón sube y la sombra crece; al pulsar se hunde hasta taparla.
 const caja =
-  "inline-flex min-h-11 items-center justify-center gap-2 px-4 py-2 font-medium rounded-control transition-[transform,background-color,color] duration-150 ease-pluma motion-safe:active:scale-[0.97]";
+  "inline-flex min-h-11 items-center justify-center gap-2 px-5 py-2 font-semibold rounded-control border-2 border-tinta shadow-pegatina transition-[translate,box-shadow,background-color] duration-150 ease-pluma hover:shadow-pegatina-lg motion-safe:hover:-translate-0.5 active:shadow-none motion-safe:active:translate-1 disabled:shadow-none disabled:translate-0";
 
 const variantes: Record<Variante, string> = {
   primario: `${caja} bg-acento text-sobre-acento hover:bg-acento-intenso active:bg-acento-intenso`,
-  secundario: `${caja} border border-acento text-acento hover:bg-acento/10 active:bg-acento/10`,
+  secundario: `${caja} bg-superficie-elevada text-tinta hover:bg-tierra active:bg-tierra`,
   peligro: `${caja} bg-desfavorable text-sobre-acento hover:bg-desfavorable/90 active:bg-desfavorable/90`,
   // Zona de toque de 24 px (tailwind-clases-limpias §6); el subrayado es el del enlace.
   enlace:

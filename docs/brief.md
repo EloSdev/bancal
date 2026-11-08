@@ -98,6 +98,28 @@ regañan ni suenan a error del sistema.
   dato lo valida `revisor-datos` en T4)*
 - Vacío: «Aún no tienes bancales.» + «Crear mi primer bancal».
 
+## Portada y pie: «cuaderno pop» (T20, 2026-11-08)
+
+Pedido por el usuario: la primera versión de la portada era «muy simple y
+nada moderna». La portada sube el volumen con el lenguaje del lab de
+maquetación (*Tueste*), traducido a Bancal:
+
+- **Fotos reales** de huertos (Unsplash, licencia libre, créditos en el
+  pie), en webp a 800 y 1600 px con `srcset`, enmarcadas con borde de 2 px
+  en tinta y **sombra dura** desplazada (`shadow-pegatina`), sin difuminar.
+- **Fraunces muy gruesa** (900) y grande en los titulares; pegatinas giradas
+  en **girasol** (`#F2C14E`, solo fondo, texto en tinta); un **sello
+  giratorio** sobre la foto de la cabecera.
+- **Bloques a sangre**: una cinta de cultivos que desfila en tinta, un
+  *bento* oscuro con lo que vigila la app (el bancal dibujado a tinta, el
+  sol, la temporada, las tareas, los datos) y una invitación final en azul
+  pluma. El pie, en tinta, para toda la app.
+- **Botones pegatina en toda la app** (un solo sistema): borde de 2 px,
+  sombra dura que crece al pasar el ratón y desaparece al pulsar («se
+  aplasta»), todo el desplazamiento con `motion-safe:`.
+- Se mantiene: verde y rojo solo para la compatibilidad (por eso el acento
+  nuevo es amarillo), Fraunces + Public Sans, el papel de fondo.
+
 ## Decidido por la IA (revísalo)
 
 - Los valores hexadecimales de la paleta y los tokens «superficie elevada»,
