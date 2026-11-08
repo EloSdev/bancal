@@ -47,6 +47,8 @@
 
   /* Solo lo que flota (banda fija en móvil, diálogos) lleva sombra */
   --shadow-flota: 0 -1px 0 rgb(42 41 37 / 0.06), 0 -6px 20px rgb(42 41 37 / 0.08);
+  /* La hoja de un diálogo, posada sobre la página: la sombra cae hacia abajo */
+  --shadow-hoja: 0 1px 0 rgb(42 41 37 / 0.06), 0 12px 32px rgb(42 41 37 / 0.18);
 
   /* La pluma: arranca rápido y se posa */
   --ease-pluma: cubic-bezier(0.3, 0.7, 0.2, 1);
@@ -83,6 +85,9 @@
      son el componente <Boton>; las celdas del editor también son <button>. */
   button {
     @apply cursor-pointer disabled:cursor-not-allowed disabled:opacity-60;
+    /* aria-disabled: no se puede usar pero conserva el foco y su contraste
+       («Borrando…» es la señal de que algo pasa: no se aclara). */
+    @apply aria-disabled:cursor-progress;
   }
 
   label { @apply font-medium; }

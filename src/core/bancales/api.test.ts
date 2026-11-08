@@ -6,6 +6,7 @@ import {
   deleteBancal,
   getBancal,
   getBancales,
+  getBancalesDetalle,
   hayDatosDescartados,
   olvidarDatosDescartados,
   saveBancal,
@@ -95,6 +96,25 @@ describe("bancales en localStorage", () => {
     await tras(savePlantaciones(a.id, tomateHinojo));
     expect(await tras(getBancal(a.id))).toEqual({ bancal: a, plantaciones: tomateHinojo });
     expect(await tras(getBancal(b.id))).toEqual({ bancal: b, plantaciones: [] });
+  });
+
+  it("C11.1 · getBancalesDetalle devuelve cada bancal con sus plantaciones, en orden de alta", async () => {
+    const a = await tras(saveBancal(balcon));
+    const b = await tras(saveBancal(patio));
+    await tras(savePlantaciones(a.id, tomateHinojo));
+    expect(await tras(getBancalesDetalle())).toEqual([
+      { bancal: a, plantaciones: tomateHinojo },
+      { bancal: b, plantaciones: [] },
+    ]);
+  });
+
+  it("C11.1 · getBancalesDetalle tiene latencia simulada", async () => {
+    let listo = false;
+    void getBancalesDetalle().then(() => (listo = true));
+    await vi.advanceTimersByTimeAsync(LATENCIA_MS - 1);
+    expect(listo).toBe(false);
+    await vi.advanceTimersByTimeAsync(1);
+    expect(listo).toBe(true);
   });
 
   it("C8.2 · deleteBancal borra el bancal y sus plantaciones", async () => {

@@ -4,7 +4,7 @@ import { bancalDemo } from "../__fixtures__/bancales";
 import { LATENCIA_MS } from "../comun/api";
 import type { Carga } from "../comun/hooks";
 import { CLAVE_ALMACEN, deleteBancal } from "./api";
-import { useBancal, useBancales } from "./hooks";
+import { useBancal, useBancales, useBancalesDetalle } from "./hooks";
 import type { Plantacion } from "./model";
 
 const pasarLatencia = () => act(() => vi.advanceTimersByTimeAsync(LATENCIA_MS));
@@ -58,6 +58,19 @@ describe("useBancales", () => {
     act(() => result.current.recargar());
     await pasarLatencia();
     expect(estado(result.current)).toEqual({ data: [], loading: false, error: null });
+  });
+});
+
+describe("useBancalesDetalle", () => {
+  it("C11.1 · carga cada bancal con sus plantaciones", async () => {
+    const { result } = renderHook(() => useBancalesDetalle());
+    expect(estado(result.current)).toEqual({ data: null, loading: true, error: null });
+    await pasarLatencia();
+    expect(estado(result.current)).toEqual({
+      data: [{ bancal: bancalDemo, plantaciones: [tomate] }],
+      loading: false,
+      error: null,
+    });
   });
 });
 

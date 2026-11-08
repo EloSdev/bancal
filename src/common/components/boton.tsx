@@ -19,6 +19,12 @@ const variantes: Record<Variante, string> = {
     "inline-flex min-h-6 items-center rounded-control text-acento underline decoration-1 underline-offset-4 transition-colors hover:decoration-2 active:text-acento-intenso",
 };
 
+/**
+ * Las clases de una variante, para un enlace que se ve como botón: navegar
+ * es un <Link>, no un <button> (frontend-a11y §2), pero el aspecto es el mismo.
+ */
+export const claseBoton = (variante: Exclude<Variante, "enlace"> = "primario") => `${variantes[variante]} no-underline`;
+
 interface BotonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {
   variante?: Variante;
   ref?: Ref<HTMLButtonElement>;

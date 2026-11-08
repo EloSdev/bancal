@@ -111,6 +111,13 @@ export async function getBancales(signal?: AbortSignal): Promise<Bancal[]> {
   return leer().bancales;
 }
 
+/** Todos los bancales, cada uno con sus plantaciones (la lista «Mis bancales»). */
+export async function getBancalesDetalle(signal?: AbortSignal): Promise<BancalDetalle[]> {
+  await esperar(LATENCIA_MS, signal);
+  const almacen = leer();
+  return almacen.bancales.map((bancal) => ({ bancal, plantaciones: plantacionesDe(almacen, bancal.id) }));
+}
+
 /** El bancal con sus plantaciones, o undefined si no existe. */
 export async function getBancal(id: string, signal?: AbortSignal): Promise<BancalDetalle | undefined> {
   await esperar(LATENCIA_MS, signal);
