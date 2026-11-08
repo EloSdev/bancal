@@ -28,11 +28,11 @@ describe("AppLayout", () => {
     expect(document.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
   });
 
-  it("C1.4 · / redirige a /bancales", async () => {
+  it("C1.4 · / es la portada (desde T20 ya no redirige a /bancales)", async () => {
     const router = renderEn("/");
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Mis bancales" })).toBeInTheDocument();
-    expect(router.state.location.pathname).toBe("/bancales");
+    expect(await screen.findByRole("link", { name: "Crear mi primer bancal" })).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe("/");
   });
 
   it("C16.2 · al cambiar de ruta, el foco va al <h1> de la pantalla nueva (el lector anuncia dónde está)", async () => {

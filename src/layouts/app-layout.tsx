@@ -32,11 +32,13 @@ function useFocoAlCambiarDeRuta() {
 export function AppLayout() {
   const refMain = useFocoAlCambiarDeRuta();
   return (
-    <>
+    // El pie se queda abajo aunque la pantalla sea corta. En el editor, en el
+    // móvil, la banda fija tapa lo último de la página: el pie deja su hueco.
+    <div className="group/app flex min-h-dvh flex-col">
       <header className="border-b border-lapiz">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-2">
-          {/* El logo lleva a la portada (/ redirige a /bancales) con coincidencia
-              exacta: nunca está activo, así que no repite el aria-current del <nav>. */}
+          {/* El logo lleva a la portada. En la portada sí lleva aria-current,
+              y es el único: la portada no está en el <nav>. */}
           <Link
             to="/"
             activeOptions={{ exact: true }}
@@ -56,10 +58,36 @@ export function AppLayout() {
           </nav>
         </div>
       </header>
-      <main ref={refMain} className="mx-auto max-w-5xl space-y-5 px-4 py-6">
+      <main ref={refMain} className="mx-auto w-full max-w-5xl flex-1 space-y-5 px-4 py-6">
         <Outlet />
       </main>
-    </>
+      <Pie />
+    </div>
+  );
+}
+
+const REPOSITORIO = "https://github.com/EloSdev/bancal";
+
+function Pie() {
+  return (
+    <footer className="border-t border-lapiz group-has-[[data-banda-movil]]/app:pb-32 lg:group-has-[[data-banda-movil]]/app:pb-0">
+      <div className="mx-auto grid max-w-5xl gap-x-12 gap-y-4 px-4 py-8 text-sm text-tinta-suave sm:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="max-w-[40rem] space-y-2">
+          <p className="font-titulos text-lg font-semibold text-tinta">Bancal</p>
+          <p>
+            Cuaderno para planificar bancales urbanos. Proyecto final del curso Front End Moderno y Herramientas IA, de
+            la Fundación Luckia y Lemoncode.
+          </p>
+          <p>
+            Tus bancales se guardan solo en este navegador. Los datos de horticultura llevan sus{" "}
+            <a href={`${REPOSITORIO}#readme`}>fuentes citadas en el README</a>.
+          </p>
+        </div>
+        <p className="sm:pt-8">
+          <a href={REPOSITORIO}>Ver el código en GitHub</a>
+        </p>
+      </div>
+    </footer>
   );
 }
 

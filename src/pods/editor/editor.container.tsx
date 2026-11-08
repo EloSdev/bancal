@@ -341,6 +341,8 @@ function BandaPaleta({ idTitulo, children }: { idTitulo: string; children: React
   return (
     <aside
       aria-labelledby={idTitulo}
+      // El pie del layout lo busca para dejar el hueco de la banda en el móvil.
+      data-banda-movil
       className="fixed inset-x-0 bottom-0 z-20 space-y-2 border-t border-lapiz bg-superficie-elevada px-4 py-3 shadow-flota lg:sticky lg:top-6 lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none">
       {children}
     </aside>

@@ -30,7 +30,7 @@ Testing Library + jsdom; layout con navegación y rutas vacías.
 - C1.1 `package.json` tiene `start`, `build` (`vite build && tsc --noEmit`), `typecheck`, `test` y `test:watch` — `leer` — guía §4
 - C1.2 Un test de humo de `core/` y otro de componente (Testing Library) pasan con `npm test` — `test` — guía §4
 - C1.3 Un solo test se lanza con `npx vitest run <ruta> -t "<nombre>"` — `test` — guía §4
-- C1.4 `/` redirige a `/bancales`; una ruta inexistente muestra «Página no encontrada» — `nav` — guía §2
+- C1.4 `/` muestra la portada (antes redirigía a `/bancales`; cambiado en T20); una ruta inexistente muestra «Página no encontrada» — `nav` — guía §2
 - C1.5 La cabecera enlaza a «Cultivos» y «Mis bancales» con `<nav>` y marca la ruta activa con `aria-current="page"` — `nav`
 - C1.6 `<html lang="es">` y `<title>` propio — `leer` — guía §4
 - C1.7 Repositorio git con un primer commit y el `.gitignore` en vigor (`node_modules/` y `dist/` sin seguimiento) — `leer` — bases (Git)
@@ -242,6 +242,18 @@ dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 
 ---
 
+## T20 · Portada — ✅
+**Depende de:** T17
+**Criterios:**
+- C20.1 `/` es la portada: un `<h1>` que dice qué es Bancal y dos acciones, «Crear mi primer bancal» (→ `/bancales/nuevo`) y «Explorar cultivos» (→ `/cultivos`); el logo de la cabecera lleva a ella — `test`
+- C20.2 La portada enseña un bancal de ejemplo dibujado a tinta (iconos de cultivo, marcas de compatibilidad con forma propia, cotas) y el aviso del hinojo junto al tomate con su `motivo`; el dibujo es decorativo y se describe en texto — `test`
+- C20.3 «Cómo funciona» en tres pasos y la tira de los cultivos del catálogo, cada uno con su icono y enlace a su ficha; la tira tiene estados de carga y error — `test`
+- C20.4 Todas las pantallas tienen un pie con el contexto del curso, de dónde salen los datos y el enlace al código (no repite la navegación de la cabecera: un solo `aria-current`, C1.5), sin quedar tapado por la banda móvil del editor — `test` · `nav`
+- C20.5 Responsive de 360 a 1440 px sin scroll horizontal; el movimiento de la portada solo con `motion-safe:` — `nav`
+**Verificación:** 2026-11-08 · comprobación ligera por el límite de uso, sin verificador ni revisores. C20.1–C20.4 (`test`): `src/pods/portada/portada.test.tsx` (9 tests; el aviso del ejemplo se compara con el `motivo` real de `crops.json`) y C1.4 actualizado en `app-layout.test.tsx`; 403 tests en verde y `npm run build` sin errores. Las marcas del bancal de ejemplo se calcularon con los datos reales antes de dibujarlas. C20.4 y C20.5 (`nav`): capturas del build a 1440 y 360 px, sin scroll horizontal (scrollWidth = clientWidth); las animaciones (`trazar`, `pluma`, `posarse`) solo con `motion-safe:`; el pie deja el hueco de la banda del editor en el móvil (`data-banda-movil`, regla presente en el CSS generado; no comprobado en captura).
+
+---
+
 ## Cobertura
 
 | Requisito | Tareas |
@@ -259,6 +271,7 @@ dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 | Capa `api` con latencia, carga y error | T8, T9 |
 | Build y tests sin errores | puertas comunes, T1 |
 | Teclado, foco, etiquetas, `aria-live` | T12, T13, T14, T16 |
+| Portada y pie | T20 |
 | Compatibilidad nunca solo por color | T2, T14 |
 | Iconos de cultivo a tinta (brief) | T19, T13 |
 | Responsive móvil → escritorio | puertas comunes, T16 |
