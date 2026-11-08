@@ -6,11 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Bancal**, a Spanish-language SPA for planning urban vegetable gardens: the user draws raised beds (*bancales*) with real measurements, places crops on a 30 × 30 cm grid, and the app reports **live** which neighbours help or harm each other, whether there is enough sun, and how the garden evolves month by month. Final project of the course *Front End Moderno y Herramientas IA* (Fundación Luckia + Lemoncode): individual, frontend only, simulated data.
 
+**Status (2026-11-08): development closed.** The MVP (T1–T17) and the iterations T18–T24 are all ✅ (448 tests, build clean). Any new work starts from the iterations list at the end of `docs/tareas.md` (skill `plan-tasks`), as a new task with criteria.
+
 Sources of truth:
 
-- `docs/tareas.md` — **the MVP plan**: tasks T1–T17 with checkable criteria `C<n>.<m>`, each tagged with how it is verified (`test`, `build`, `nav`, `leer`, `datos`), plus the common gates, coverage table and the post-MVP iterations list. Work happens task by task, in order.
+- `bases-trabajo-fin-de-curso.pdf` — the course rules (not tracked in git): front end is the focus, the backend is optional and may be mocked, the course stack is mandatory, MVP first then iterations, Git with frequent commits; presentation on 9 November (idea and problem, MVP and iterations, demo, tech and AI tools, challenges and learnings, next steps). The README follows that outline.
+- `docs/tareas.md` — **the plan**: tasks T1–T24 with checkable criteria `C<n>.<m>`, each tagged with how it is verified (`test`, `build`, `nav`, `leer`, `datos`), plus the common gates, coverage table and the post-MVP iterations list. Work happens task by task, in order.
 - `docs/guia-proyecto.md` — the full project guide (scope, domain, stack, quality). **Private: git-ignored, only on the author's machine.** This `CLAUDE.md` is its versioned summary; if the guide is missing, rely on this file and `docs/tareas.md`.
-- `docs/brief.md` — visual direction, created in T2 (skill `brief-grill`).
+- `docs/brief.md` — visual direction, created in T2 (skill `brief-grill`), extended in T20 to **«cuaderno pop»** at the user's request: real photos on the landing (Unsplash, credited in the footer and README), Fraunces 900 headings, «sticker» cards and buttons (2 px ink border, hard offset shadow) across the whole app, a sunflower-yellow accent (`girasol`, background only) because green and red stay reserved for compatibility.
 
 Use the Spanish domain terms (Cultivo, Bancal, Celda, Plantación, Vecindad, Exposición, Zona climática, Estado de la planta, Aviso) in code, UI and conversation.
 
@@ -37,16 +40,22 @@ Same layering as `lab-react` (detail and examples in the skill `react-bancal`):
 src/
   routes/   navigation only: read params / search params, render a scene
   scenes/   compose a screen and decide navigation
-  pods/     catalogo/, bancales/, editor/ — *.container.tsx (data, state) and
+  pods/     portada/, catalogo/, bancales/, editor/ — *.container.tsx (data, state) and
             *.component.tsx (props → render); imported only via index.ts, never from each other
-  core/     <dominio>/model.ts, *.schema.ts, api.ts, hooks.ts and pure domain logic (+ tests)
-  common/   shared components (loading, error…)
+  core/     <dominio>/model.ts, *.schema.ts, api.ts, hooks.ts and pure domain logic (+ tests);
+            comun/ holds the shared api pieces and the data cache
+  common/   shared components and their class helpers (claseBoton, claseTarjeta), crop icons,
+            compatibility marks, and fotos.ts (landing photos + credits)
+  layouts/  app-layout.tsx: header, footer (course context, data sources, photo credits),
+            focus to the <h1> on route change; the landing `/` is full-bleed, other routes sit in a column
 ```
+
+- **One visual system**: the only styled button is `Boton` / `claseBoton`, the only card is `claseTarjeta` / `claseTarjetaPulsable`; tokens live in `@theme` (`src/styles.css`). Change them there, not per screen.
 
 - **The heart of the project is pure functions in `core/`, built with TDD** (skill `tdd-core`): neighbours of a cell, compatibility, warnings for a bed, plant state in a month, tasks of the month. `core/` imports no React except `hooks.ts`.
 - Data: `public/crops.json` (~24 crops) + `localStorage`, behind an **async `api` layer** validated with Zod (a mock backend: the course rules only say the backend is optional and may be mocked). The app answers **without simulated latency** (T22, decided with the user: no demo modes; a slow network is tried with DevTools throttling). Every api call goes through `responder(signal)`; only the tests set a latency (`fijarLatencia(LATENCIA_MS)` in `src/test/setup.ts`) so loading states can be checked with fake timers. Data hooks return `{ data, loading, error }` and cancel with `AbortController`; since T21 they take `{ cache }` (`core/comun/cache.ts`): data already read is shown at once and refreshed in the background, every bancales write puts what it just saved into the cache, and `main.tsx` preloads the catalogue and the beds at start-up. Tests start with an empty cache (`src/test/setup.ts`).
 - Derived values (warnings, plant states, monthly tasks, counts) are computed during render, never stored. Filters and the month live in the URL.
-- Routes: `/cultivos?q=&sol=&temporada=&zona=`, `/cultivos/$cultivoId`, `/bancales`, `/bancales/nuevo`, `/bancales/$bancalId/editar`, `/bancales/$bancalId?mes=5`.
+- Routes: `/` (landing, T20), `/cultivos?q=&sol=&temporada=&zona=`, `/cultivos/$cultivoId`, `/bancales`, `/bancales/nuevo`, `/bancales/$bancalId/editar`, `/bancales/$bancalId?mes=5`.
 
 ## Reglas del dominio
 
@@ -67,6 +76,7 @@ Versioned record of domain decisions, confirmed with the user in T3 (2026-11-07)
 - **Catalogue filters** (decided in T9, 2026-11-07): `q` = name contains the text (ignoring case and accents); `sol` = the crop's sun need is exactly that exposure; `temporada` = a month 1–12: crops whose **sowing window in the chosen zone** contains it; `zona` = the zone for that window and for the sowing months shown in the list (atlántica if absent). Invalid values are ignored.
 - **Tareas del mes** (T7): for a bed and a month, *sembrar* = crops of the plantations whose `mesSiembra` is that month; *cosechar* = crops of the plantations in cosecha that month; each crop listed once.
 - Warnings (unfavourable neighbour, insufficient sun, out-of-season sowing) are **recommendations with an explanation, never blocks**. An unfavourable neighbourhood gives **one warning per pair of cells**, not one per side (C6.2); its explanation comes from the `motivo` stored in the crop's relation. `EstadoPlanta` and `Aviso` are discriminated unions.
+- **Landing notes** (T23–T24, decided with the user, 2026-11-08): the «se ayudan» / «se perjudican» notes on the landing photo show **a real pair from the catalogue chosen at random on each visit** (same rule as the editor: symmetric, unfavourable wins); the **month note** is a **generic tip per month, never tied to a zone** (`pods/portada/notas-del-mes.ts`), and any crop it names must be sown or harvested that month **in all three zones** (a test checks it against `crops.json`). A note per user's location is a future iteration (needs user accounts).
 - Every horticulture data point is verified against cited sources (agent `revisor-datos`); sources go in the README. This is the project's main risk of errors.
 
 ## How work is done (harness)
@@ -102,7 +112,7 @@ Browser checks use the Playwright MCP from `.mcp.json` (pinned `@playwright/mcp`
 - `npm run build` and the tests pass with no errors; no `only`/`skip`; tests are never weakened to go green.
 - Fully keyboard-usable, visible focus, labelled fields, warnings announced with `aria-live`; **compatibility is never conveyed by colour alone** (colour + icon + text).
 - Responsive from 360 px to desktop; UI in Spanish (`<html lang="es">`).
-- README documents how to run, route map, screenshots, data sources and an AI-usage log.
+- README follows the presentation outline of the course rules: 1 idea and problem, 2 MVP and completed iterations, 3 demo (how to run, script, screenshots in `docs/capturas/`, route map), 4 tech and AI tools and how they were used, 5 challenges and learnings, 6 next steps; then photo credits and data sources. Keep it in step with `docs/tareas.md` (new iterations, test count) and retake the screenshots when a screen changes.
 
 ## Working with this user
 
