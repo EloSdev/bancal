@@ -106,23 +106,21 @@ describe("Notas de la foto (T23)", () => {
   /** La nota que contiene un texto: el <p> entero (lleva icono, mes y texto). */
   const nota = (texto: RegExp) => screen.getByText(texto).closest("p")!;
 
-  it("C23.1 · en noviembre dice noviembre y lo que se siembra entonces en la zona atlántica", async () => {
+  it("C24.1 · la nota del mes dice el mes actual y su consejo genérico, sin zona, con su dibujo", async () => {
     vi.setSystemTime(new Date(2026, 10, 8));
     await abrir("/");
 
-    const delMes = nota(/^Toca sembrar/);
-    expect(delMes).toHaveTextContent(/noviembre/i);
-    expect(delMes).toHaveTextContent("Toca sembrar ajo y lechuga");
-    expect(delMes.querySelector('[data-cultivo="ajo"]')).not.toBeNull();
+    const delMes = nota(/^Toca sembrar habas y guisantes$/);
+    expect(delMes).toHaveTextContent(/^noviembre/i);
+    expect(delMes).not.toHaveTextContent(/zona/i);
+    expect(delMes.querySelector('[data-cultivo="haba"]')).not.toBeNull();
   });
 
-  it("C23.1 · con más de dos cultivos dice los dos primeros y cuántos más", async () => {
+  it("C24.1 · cada mes tiene su consejo", async () => {
     vi.setSystemTime(new Date(2026, 4, 15));
     await abrir("/");
 
-    const delMes = nota(/^Toca sembrar/);
-    expect(delMes).toHaveTextContent(/mayo/i);
-    expect(delMes).toHaveTextContent("Toca sembrar albahaca, hinojo y 1 más");
+    expect(nota(/^Es el mes del tomate/)).toHaveTextContent(/^mayo/i);
   });
 
   it("C23.3 · las notas de vecinos son parejas reales del catálogo", async () => {
@@ -153,12 +151,14 @@ describe("Notas de la foto (T23)", () => {
     expect(nota(/se ayudan$/)).toHaveTextContent("Lechuga y ajo se ayudan");
   });
 
-  it("C23.4 · mientras el catálogo no ha llegado, las notas no se pintan", async () => {
+  it("C23.4 · mientras el catálogo no ha llegado, las notas de vecinos no se pintan; la del mes, sí (no lo necesita)", async () => {
+    vi.setSystemTime(new Date(2026, 10, 8));
     renderRuta("/");
     await screen.findByRole("heading", { level: 1 });
 
     expect(screen.queryByText(/se ayudan$/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/^Toca sembrar/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/se perjudican$/)).not.toBeInTheDocument();
+    expect(screen.getByText(/^Toca sembrar habas y guisantes$/)).toBeInTheDocument();
   });
 });
 

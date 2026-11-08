@@ -94,7 +94,8 @@ Por prioridad:
 8. **View Transitions** entre pantallas.
 9. **PWA sin conexión**, **compartir e imprimir** el bancal.
 10. **Tests end-to-end** del guion de la demo (Playwright en CI).
-11. Pulido pendiente anotado en las verificaciones: la paleta en dos columnas recorre con ↓ el botón siguiente y no el de debajo; la alerta de error de guardado desplaza la cuadrícula; en ~1024 px el panel de avisos cae fuera de la primera pantalla; el triángulo ▲ (sol y temporada) en un color propio para que no compita con «se perjudican»; vetas en las esquinas del marco y esqueleto de carga del editor; dividir el JavaScript (el build supera los 500 kB); el error de un campo aparece al teclear y no al salir del campo.
+11. **Registro de usuarios con su localidad**: con una cuenta, la nota del mes de la portada (hoy un consejo genérico, válido en todas las zonas) diría qué toca sembrar y cosechar en la zona climática de cada usuario, y sus bancales nacerían ya con esa zona.
+12. Pulido pendiente anotado en las verificaciones: la paleta en dos columnas recorre con ↓ el botón siguiente y no el de debajo; la alerta de error de guardado desplaza la cuadrícula; en ~1024 px el panel de avisos cae fuera de la primera pantalla; el triángulo ▲ (sol y temporada) en un color propio para que no compita con «se perjudican»; vetas en las esquinas del marco y esqueleto de carga del editor; dividir el JavaScript (el build supera los 500 kB); el error de un campo aparece al teclear y no al salir del campo.
 
 ## Fotos de la portada
 

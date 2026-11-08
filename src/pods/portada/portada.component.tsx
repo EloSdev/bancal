@@ -10,33 +10,32 @@ import { IconoCultivo } from "../../common/components/icono-cultivo";
 import { IconoEstado } from "../../common/components/icono-estado";
 import { IconoAvisoPlanta, IconoCompatibilidad, MarcaCompatibilidad } from "../../common/components/marca-compatibilidad";
 import { FOTOS, fuenteFoto, type Foto } from "../../common/fotos";
-import { etiquetaZona, nombreMes } from "../../core/cultivos/etiquetas";
-import type { Cultivo, Mes, ZonaClimatica } from "../../core/cultivos/model";
+import { nombreMes } from "../../core/cultivos/etiquetas";
+import type { Mes } from "../../core/cultivos/model";
 import type { Pareja } from "../../core/cultivos/parejas";
 import { BancalEjemplo } from "./bancal-ejemplo.component";
+import { NOTAS_DEL_MES } from "./notas-del-mes";
 
 // El mismo ancho que la cabecera y el resto de pantallas: los bordes se alinean.
 const CONTENEDOR = "mx-auto max-w-5xl px-4";
 
-/** Lo que dicen las notas pegadas a la foto (T23); null mientras llega el catálogo. */
-export interface NotasFoto {
-  mes: Mes;
-  zona: ZonaClimatica;
-  /** Lo que se siembra este mes en esa zona, por orden alfabético. */
-  siembra: Cultivo[];
+/** Las notas de vecinos pegadas a la foto (T23); null mientras llega el catálogo. */
+export interface VecinosFoto {
   ayudan?: Pareja;
   perjudican?: Pareja;
 }
 
 interface PortadaProps {
-  notas: NotasFoto | null;
+  /** El mes actual: la nota del mes (T24). */
+  mes: Mes;
+  vecinos: VecinosFoto | null;
   tira: ReactNode;
 }
 
-export function Portada({ notas, tira }: PortadaProps) {
+export function Portada({ mes, vecinos, tira }: PortadaProps) {
   return (
     <>
-      <Presentacion notas={notas} />
+      <Presentacion mes={mes} vecinos={vecinos} />
       <Cinta />
       <ComoFunciona />
       <LoQueVigila />
@@ -48,7 +47,7 @@ export function Portada({ notas, tira }: PortadaProps) {
 
 /* ───────────── Presentación ───────────── */
 
-function Presentacion({ notas }: { notas: NotasFoto | null }) {
+function Presentacion({ mes, vecinos }: { mes: Mes; vecinos: VecinosFoto | null }) {
   return (
     // overflow-hidden: las pegatinas que asoman por los bordes no ensanchan la página.
     <section className="overflow-hidden">
@@ -72,7 +71,7 @@ function Presentacion({ notas }: { notas: NotasFoto | null }) {
           </div>
           <p className="text-sm text-tinta-suave">Gratis y sin registro: tus bancales se guardan en este navegador.</p>
         </div>
-        <FotoPrincipal notas={notas} />
+        <FotoPrincipal mes={mes} vecinos={vecinos} />
       </div>
     </section>
   );
@@ -97,7 +96,7 @@ function Pegatina({ giro, children }: { giro: string; children: ReactNode }) {
   );
 }
 
-function FotoPrincipal({ notas }: { notas: NotasFoto | null }) {
+function FotoPrincipal({ mes, vecinos }: { mes: Mes; vecinos: VecinosFoto | null }) {
   return (
     <div className="relative mx-auto w-full max-w-md motion-safe:animate-aparecer motion-safe:[animation-delay:150ms] lg:max-w-none">
       <Imagen
@@ -109,15 +108,15 @@ function FotoPrincipal({ notas }: { notas: NotasFoto | null }) {
         className="aspect-[4/5] w-full rotate-1 rounded-tarjeta border-2 border-tinta object-cover shadow-pegatina-lg"
       />
       <Sello />
-      {/* Lo que diría Bancal, en texto, como notas pegadas a la foto (T23).
-          Llegan con el catálogo: hasta entonces no hay notas, ni provisionales. */}
-      {notas?.ayudan && (
-        <NotaVecinos tipo="favorable" pareja={notas.ayudan} className="top-14 -right-1 rotate-2 sm:-right-6" />
+      {/* Lo que diría Bancal, en texto, como notas pegadas a la foto. Las de
+          vecinos (T23) llegan con el catálogo: hasta entonces, ni provisionales. */}
+      {vecinos?.ayudan && (
+        <NotaVecinos tipo="favorable" pareja={vecinos.ayudan} className="top-14 -right-1 rotate-2 sm:-right-6" />
       )}
-      {notas?.perjudican && (
-        <NotaVecinos tipo="desfavorable" pareja={notas.perjudican} className="bottom-28 -left-1 -rotate-2 sm:-left-8" />
+      {vecinos?.perjudican && (
+        <NotaVecinos tipo="desfavorable" pareja={vecinos.perjudican} className="bottom-28 -left-1 -rotate-2 sm:-left-8" />
       )}
-      {notas && notas.siembra.length > 0 && <NotaDelMes notas={notas} />}
+      <NotaMes mes={mes} />
     </div>
   );
 }
@@ -148,18 +147,16 @@ function NotaVecinos({ tipo, pareja, className }: NotaVecinosProps) {
   );
 }
 
-/** «Noviembre · zona atlántica — Toca sembrar ajo, guisante y 2 más», con el dibujo del primero. */
-function NotaDelMes({ notas }: { notas: NotasFoto }) {
-  const [primero, segundo, ...resto] = notas.siembra.map((c) => c.nombre.toLowerCase());
-  const nombres = [primero, segundo, resto.length > 0 && `${resto.length} más`].filter((n): n is string => Boolean(n));
+/** «Noviembre — Toca sembrar habas y guisantes»: el consejo genérico del mes (T24), con su dibujo. */
+function NotaMes({ mes }: { mes: Mes }) {
+  const nota = NOTAS_DEL_MES[mes];
+  if (!nota) return null;
   return (
     <p className="absolute right-3 -bottom-6 flex max-w-72 -rotate-1 items-center gap-3 rounded-tarjeta border-2 border-tinta bg-girasol px-4 py-2 font-semibold shadow-pegatina [&>svg]:size-8 [&>svg]:shrink-0">
-      <IconoCultivo cultivoId={notas.siembra[0]!.id} />
+      <IconoCultivo cultivoId={nota.icono} />
       <span className="leading-tight">
-        <span className="block text-xs font-bold tracking-widest whitespace-nowrap uppercase">
-          {nombreMes(notas.mes)} · zona {etiquetaZona[notas.zona].toLowerCase()}
-        </span>
-        Toca sembrar {enumeracion.format(nombres)}
+        <span className="block text-xs font-bold tracking-widest uppercase">{nombreMes(mes)}</span>
+        {nota.texto}
       </span>
     </p>
   );

@@ -283,11 +283,22 @@ dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 **Depende de:** T20, T21
 **Motivo:** pedido por el usuario: las notas pegadas a la foto de la portada eran fijas («Mayo · Toca sembrar el tomate», «Tomate y albahaca se ayudan», «Hinojo y tomate se perjudican»).
 **Criterios:**
-- C23.1 La nota del mes dice el mes actual y qué toca sembrar ese mes en la zona atlántica (la zona por defecto), con la misma regla que el filtro «Se siembra en» del catálogo: hasta dos nombres por orden alfabético y «y N más» si hay más; el icono es el del primero — `test`
+- C23.1 *(sustituido por C24.1: el usuario quiere un texto genérico, sin zona)* La nota del mes dice el mes actual y qué toca sembrar ese mes en la zona atlántica (la zona por defecto), con la misma regla que el filtro «Se siembra en» del catálogo: hasta dos nombres por orden alfabético y «y N más» si hay más; el icono es el del primero — `test`
 - C23.2 `parejas(cultivos, tipo)` da cada pareja del catálogo que se ayuda o se perjudica una sola vez (la relación es simétrica y, si figura de las dos formas, manda la desfavorable, como en el editor) — `test`
 - C23.3 Cada vez que se abre la portada, las notas «se ayudan» y «se perjudican» enseñan una pareja elegida al azar entre las reales — `test`
 - C23.4 Mientras el catálogo no ha llegado, las notas no se pintan (nada de textos provisionales que cambien después); las notas largas caben a 360 px — `test` · `nav`
 **Verificación:** 2026-11-08 · sin verificador, por el límite de uso. C23.2–C23.3 (`test`): `core/cultivos/parejas.test.ts` (7: una vez por pareja, simetría, manda la desfavorable, `elegir` de 0 a 1). C23.1, C23.3, C23.4 (`test`): 5 tests nuevos en `portada.test.tsx` (noviembre → «Toca sembrar ajo y lechuga» con el icono del ajo; mayo → «albahaca, hinojo y 1 más»; parejas reales con «tomate e hinojo»; azar distinto → pareja distinta; sin notas antes del catálogo). 435 tests en verde y build sin errores. C23.4 (`nav`, build): cuatro visitas seguidas a la portada dieron parejas distintas («Pimiento y lechuga», «Lechuga y espinaca», «Berenjena y zanahoria»…; «Haba y ajo», «Zanahoria e hinojo»…), y la nota del mes, «Noviembre · zona atlántica — Toca sembrar ajo, guisante y 2 más»; a 1440 y 360 px sin scroll horizontal, «Judía verde y cebolla se perjudican» cabe.
+
+---
+
+## T24 · Nota del mes genérica — ✅
+**Depende de:** T23
+**Motivo:** el usuario pide que la nota del mes no hable de una zona («zona atlántica»): un texto genérico para cada mes. Que dependa de la localidad del usuario queda como mejora futura (cuando haya registro), en el README.
+**Criterios:**
+- C24.1 La nota del mes dice el mes actual y un consejo escrito para ese mes, sin zona; hay uno para cada uno de los 12 meses — `test`
+- C24.2 Si un consejo nombra cultivos que sembrar, el catálogo los siembra ese mes en las tres zonas (comprobado contra `public/crops.json`): nada que sea cierto solo en una zona — `test` · `datos`
+- C24.3 El README apunta la mejora: con registro de usuarios, la nota según la localidad (zona climática) de cada uno — `leer`
+**Verificación:** 2026-11-08 · sin verificador ni `revisor-datos`, por el límite de uso. C24.1 (`test`): `notas-del-mes.test.ts` (12 meses con consejo, ninguno habla de zonas) y 2 tests en `portada.test.tsx` (noviembre → «Toca sembrar habas y guisantes» con el dibujo de la haba y sin «zona»; mayo → «Es el mes del tomate…»); la nota del mes ya no espera al catálogo (C23.4 ajustado). C24.2 (`test` · `datos`): un test por mes comprueba contra `public/crops.json` que lo que el consejo manda sembrar o cosechar está en esa ventana en las tres zonas; los consejos solo nombran cultivos que lo cumplen (en verano, cosechas; ningún cultivo se siembra en junio–agosto en las tres zonas a la vez). 448 tests en verde y build sin errores. C24.3 (`leer`): README «Mejoras futuras» (n.º 11) y la lista de iteraciones del plan. En el navegador (build, 1440 px): «Noviembre — Toca sembrar habas y guisantes».
 
 ---
 
@@ -321,4 +332,6 @@ dibujos por estado (semilla, brote, planta) del detalle memorable son de T15.
 Arrastrar y soltar con vista previa de compatibilidad · deshacer y rehacer ·
 View Transitions · asistente «Mi primer huerto» · rotación por familia
 botánica · PWA sin conexión · compartir e imprimir · tests end-to-end ·
-cultivos que ocupan varias celdas (calabacín, calabaza, melón, alcachofa).
+cultivos que ocupan varias celdas (calabacín, calabaza, melón, alcachofa) ·
+registro de usuarios con su localidad (la nota del mes de la portada según su
+zona climática, T24).
