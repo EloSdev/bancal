@@ -4,16 +4,18 @@
 // celda activa) y guarda cada cambio con la api; lo derivado (la cuadrícula,
 // los nombres) se calcula en el render.
 import { Link } from "@tanstack/react-router";
-import { useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { Alerta } from "../../common/components/alerta";
 import { Boton } from "../../common/components/boton";
 import { ErrorCarga } from "../../common/components/error-carga";
 import { TituloPagina } from "../../common/components/titulo-pagina";
+import { IconoAvisoPlanta, IconoCompatibilidad, LeyendaCompatibilidad } from "../../common/components/marca-compatibilidad";
 import { savePlantaciones, type BancalDetalle } from "../../core/bancales/api";
+import { avisosBancal, diferenciaAvisos, resumenAviso } from "../../core/bancales/avisos";
 import { dimensiones } from "../../core/bancales/cuadricula";
 import { exposicion } from "../../core/bancales/exposicion";
 import { useBancal } from "../../core/bancales/hooks";
-import type { Celda, Plantacion } from "../../core/bancales/model";
+import type { Aviso, Celda, Plantacion } from "../../core/bancales/model";
 import { colocar, quitar } from "../../core/bancales/plantaciones";
 import { mesSiembraPorDefecto } from "../../core/bancales/temporada";
 import { aErrorApi, type ErrorApi } from "../../core/comun/api";
@@ -21,7 +23,8 @@ import { etiquetaExposicion, etiquetaZona } from "../../core/cultivos/etiquetas"
 import { ordenarPorNombre } from "../../core/cultivos/filtros";
 import { useCultivos } from "../../core/cultivos/hooks";
 import type { Cultivo } from "../../core/cultivos/model";
-import { Cuadricula } from "./cuadricula.component";
+import { claveCelda, Cuadricula } from "./cuadricula.component";
+import { PanelAvisos } from "./panel-avisos.component";
 import { Paleta, type Herramienta } from "./paleta.component";
 
 export function EditorContainer({ bancalId }: { bancalId: string }) {
@@ -102,19 +105,62 @@ function Editor({ detalle, cultivos }: { detalle: BancalDetalle; cultivos: Culti
   const refRejilla = useRef<HTMLDivElement>(null);
   const idPaleta = useId();
 
+  const refAvisos = useRef<HTMLHeadingElement>(null);
+  const [senalada, setSenalada] = useState<Celda | null>(null);
+  // La señal se apaga sola: sincroniza con un temporizador (efecto con limpieza).
+  useEffect(() => {
+    if (!senalada) return;
+    const temporizador = setTimeout(() => setSenalada(null), 1500);
+    return () => clearTimeout(temporizador);
+  }, [senalada]);
+
   const dims = dimensiones(bancal.ancho, bancal.largo);
   const cultivosPorId = new Map(cultivos.map((c) => [c.id, c]));
+  // Derivados en cada render, nunca guardados (react-bancal §3).
+  const avisos = avisosBancal(bancal, plantaciones, cultivos);
   const posicion = ({ fila, columna }: Celda) => `la fila ${fila + 1}, columna ${columna + 1}`;
 
-  /** core devuelve la misma lista cuando no cambia nada: entonces ni se guarda. */
+  /**
+   * core devuelve la misma lista cuando no cambia nada: entonces ni se guarda.
+   * Si cambia, se anuncia lo hecho y los avisos que aparecen o se resuelven (C14.3).
+   */
   const cambiar = (nuevas: Plantacion[], hecho: string, sinCambio: string) => {
     if (nuevas === plantaciones) {
       anunciar(sinCambio);
       return;
     }
-    anunciar(hecho);
+    const { nuevos, resueltos } = diferenciaAvisos(avisos, avisosBancal(bancal, nuevas, cultivos));
+    // Un resumen, no la lista entera (frontend-a11y §5): el primero y cuántos
+    // más; la explicación completa está en el panel.
+    const resumir = (cambiados: Aviso[], uno: string) => {
+      const [primero, ...resto] = cambiados;
+      if (!primero) return [];
+      const mas = resto.length === 0 ? "" : ` (y ${resto.length} más)`;
+      return [`${uno}: ${resumenAviso(primero, cultivos)}${mas}.`];
+    };
+    anunciar([hecho, ...resumir(nuevos, "Nuevo aviso"), ...resumir(resueltos, "Aviso resuelto")].join(" "));
     setPlantaciones(nuevas);
     guardar(nuevas);
+  };
+
+  /**
+   * «Ver avisos» (móvil): foco al título del panel y, además, traerlo a la
+   * vista: el navegador lo dejaría pegado abajo, tapado por la banda fija.
+   */
+  const irAlPanel = () => {
+    const titulo = refAvisos.current;
+    titulo?.focus({ preventScroll: true });
+    titulo?.scrollIntoView({ block: "start" });
+  };
+
+  /**
+   * Lleva el foco a una celda (desde el panel de avisos) y la señala un
+   * momento: tras un clic con el ratón, el anillo de foco no se ve.
+   */
+  const irA = (celda: Celda) => {
+    setActiva(celda);
+    setSenalada(celda);
+    refRejilla.current?.querySelector<HTMLButtonElement>(`[data-celda="${claveCelda(celda)}"]`)?.focus();
   };
 
   const quitarDe = (celda: Celda) =>
@@ -185,7 +231,8 @@ function Editor({ detalle, cultivos }: { detalle: BancalDetalle; cultivos: Culti
         </Alerta>
       )}
 
-      <div className="lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start lg:gap-8">
+      {/* lg: paleta | bancal (avisos debajo). xl: paleta | bancal | avisos al lado (brief). */}
+      <div className="lg:grid lg:grid-cols-[19rem_minmax(0,1fr)] lg:items-start lg:gap-8 xl:grid-cols-[17rem_minmax(0,1fr)_20rem]">
         {/* Primero en el orden de Tab: se elige qué plantar y luego dónde. */}
         <BandaPaleta idTitulo={idPaleta}>
           <div className="flex flex-wrap items-baseline gap-x-3">
@@ -193,24 +240,65 @@ function Editor({ detalle, cultivos }: { detalle: BancalDetalle; cultivos: Culti
               Elige qué plantar
             </h2>
             {pideElegir && <p className="border-l-2 border-tinta pl-2 text-sm font-medium">Elige primero un cultivo.</p>}
+            {/* En el móvil el panel queda debajo: la banda dice cuántos hay y lleva a él. */}
+            {avisos.length > 0 && (
+              <span className="ml-auto lg:hidden">
+                <ContadorAvisos avisos={avisos} onVer={irAlPanel} />
+              </span>
+            )}
           </div>
           <Paleta cultivos={ordenarPorNombre(cultivos)} elegida={herramienta} onElegir={elegir} />
         </BandaPaleta>
-        <Cuadricula
-          refRejilla={refRejilla}
-          nombre={bancal.nombre}
-          ancho={bancal.ancho}
-          largo={bancal.largo}
-          dims={dims}
-          plantaciones={plantaciones}
-          cultivosPorId={cultivosPorId}
-          activa={activa}
-          onActivar={setActiva}
-          onUsar={usar}
-          onQuitar={quitarDe}
-        />
+        <div className="min-w-0 space-y-6">
+          <Cuadricula
+            refRejilla={refRejilla}
+            nombre={bancal.nombre}
+            ancho={bancal.ancho}
+            largo={bancal.largo}
+            dims={dims}
+            plantaciones={plantaciones}
+            cultivosPorId={cultivosPorId}
+            avisos={avisos}
+            activa={activa}
+            senalada={senalada}
+            onActivar={setActiva}
+            onUsar={usar}
+            onQuitar={quitarDe}
+          />
+          <LeyendaCompatibilidad conAvisoPlanta />
+        </div>
+        <div className="mt-6 lg:col-start-2 xl:sticky xl:top-6 xl:col-start-3 xl:row-start-1 xl:mt-0 xl:max-h-[calc(100dvh-3rem)] xl:overflow-y-auto xl:p-1">
+          <PanelAvisos avisos={avisos} cultivos={cultivos} onIr={irA} refTitulo={refAvisos} />
+        </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * El contador de la banda del móvil (brief: «✕ 1 · ✓ 2»): cuántos avisos hay
+ * de cada forma, y lleva al panel. El texto visible empieza por «Ver avisos»,
+ * así que el nombre accesible lo contiene («label in name»).
+ */
+function ContadorAvisos({ avisos, onVer }: { avisos: Aviso[]; onVer: () => void }) {
+  const vecindad = avisos.filter((a) => a.tipo === "vecindad").length;
+  const planta = avisos.length - vecindad;
+  return (
+    <Boton variante="enlace" aria-label={`Ver avisos (${avisos.length})`} onClick={onVer}>
+      <span className="inline-flex items-center gap-2 tabular-nums">
+        Ver avisos
+        {vecindad > 0 && (
+          <span className="inline-flex items-center gap-0.5">
+            <IconoCompatibilidad tipo="desfavorable" pequeno /> {vecindad}
+          </span>
+        )}
+        {planta > 0 && (
+          <span className="inline-flex items-center gap-0.5">
+            <IconoAvisoPlanta pequeno /> {planta}
+          </span>
+        )}
+      </span>
+    </Boton>
   );
 }
 

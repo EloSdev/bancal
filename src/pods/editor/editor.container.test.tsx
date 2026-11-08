@@ -70,9 +70,10 @@ describe("Editor del bancal (/bancales/$bancalId)", () => {
     await elegir("Albahaca");
     expect(within(paleta()).getByRole("button", { name: "Albahaca" })).toHaveAttribute("aria-pressed", "true");
     await usuario().click(celda(1, 2));
-    expect(celda(1, 2)).toHaveAccessibleName("Fila 1, columna 2: albahaca");
+    // Desde T14 el nombre dice también cómo se lleva con sus vecinos.
+    expect(celda(1, 2)).toHaveAccessibleName("Fila 1, columna 2: albahaca, se ayuda con tomate");
     await usuario().click(celda(1, 1));
-    expect(celda(1, 1)).toHaveAccessibleName("Fila 1, columna 1: albahaca");
+    expect(celda(1, 1)).toHaveAccessibleName("Fila 1, columna 1: albahaca, sin efecto con sus vecinos");
   });
 
   it("C13.2 · con «Quitar» elegido, hacer clic en una celda la deja vacía", async () => {

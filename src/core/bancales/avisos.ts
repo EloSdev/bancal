@@ -85,14 +85,59 @@ export function textoAviso(aviso: Aviso, cultivos: Cultivo[]): string {
       const [a, b] = aviso.cultivoIds;
       return `${nombre(a)} junto a ${nombre(b).toLowerCase()}. ${aviso.motivo}`;
     }
+    // Como los de vecindad: el porqué y qué hacer (docs/brief.md, «Tono»).
     case "sol":
-      return `${nombre(aviso.cultivoId)} necesita ${exposicionEnFrase(aviso.necesita)} y este bancal está en ${exposicionEnFrase(aviso.tiene)}.`;
+      return `${nombre(aviso.cultivoId)} necesita ${exposicionEnFrase(aviso.necesita)} y este bancal está en ${exposicionEnFrase(aviso.tiene)}. Busca un sitio con más sol o elige un cultivo que aguante la ${exposicionEnFrase(aviso.tiene)}.`;
     case "fuera-de-temporada": {
       const ventana = cultivo(aviso.cultivoId)?.calendario[aviso.zona].siembra;
       const mes = nombreMes(aviso.mesSiembra);
       if (!ventana) return `${nombre(aviso.cultivoId)}: ${mes} queda fuera de su temporada de siembra.`;
-      return `${nombre(aviso.cultivoId)} se siembra ${ventanaEnTexto(ventana)} en la zona ${zonaEnFrase(aviso.zona)}; ${mes} queda fuera de temporada.`;
+      return `${nombre(aviso.cultivoId)} se siembra ${ventanaEnTexto(ventana)} en la zona ${zonaEnFrase(aviso.zona)}; ${mes} queda fuera de temporada. Espera a ${nombreMes(ventana.desde)} para la siembra.`;
     }
+    default:
+      return nunca(aviso);
+  }
+}
+
+export interface DiferenciaAvisos {
+  nuevos: Aviso[];
+  resueltos: Aviso[];
+}
+
+/** Qué avisos aparecen y cuáles desaparecen entre dos momentos (para anunciarlo, C14.3). */
+export function diferenciaAvisos(antes: Aviso[], despues: Aviso[]): DiferenciaAvisos {
+  const claves = (lista: Aviso[]) => new Set(lista.map(claveAviso));
+  const habia = claves(antes);
+  const hay = claves(despues);
+  return {
+    nuevos: despues.filter((a) => !habia.has(claveAviso(a))),
+    resueltos: antes.filter((a) => !hay.has(claveAviso(a))),
+  };
+}
+
+/** Identidad estable de un aviso: su tipo, sus celdas y sus cultivos (React key, diferencias). */
+export function claveAviso(aviso: Aviso): string {
+  switch (aviso.tipo) {
+    case "vecindad":
+      return `vecindad:${aviso.celdas.map(clave).join("|")}:${aviso.cultivoIds.join("|")}`;
+    case "sol":
+    case "fuera-de-temporada":
+      return `${aviso.tipo}:${clave(aviso.celda)}:${aviso.cultivoId}`;
+    default:
+      return nunca(aviso);
+  }
+}
+
+/** El aviso en pocas palabras, sin el motivo (el anuncio resume; el panel explica). */
+export function resumenAviso(aviso: Aviso, cultivos: Cultivo[]): string {
+  const nombre = (id: string) => (cultivos.find((c) => c.id === id)?.nombre ?? id).toLowerCase();
+  switch (aviso.tipo) {
+    case "vecindad":
+      return `${nombre(aviso.cultivoIds[0])} junto a ${nombre(aviso.cultivoIds[1])}`;
+    case "sol":
+      return `${nombre(aviso.cultivoId)}: le falta sol`;
+    case "fuera-de-temporada":
+      return `${nombre(aviso.cultivoId)}: fuera de temporada`;
     default:
       return nunca(aviso);
   }

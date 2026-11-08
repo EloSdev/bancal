@@ -67,6 +67,25 @@ export function IconoCompatibilidad({ tipo, pequeno = false }: { tipo: Compatibi
   );
 }
 
+/**
+ * Aviso de la propia planta (le falta sol, sembrada fuera de temporada): un
+ * triángulo ▲ con «!», en el color desfavorable (docs/brief.md). Otra forma
+ * que la de vecindad, para que no se confundan sin color.
+ */
+export function IconoAvisoPlanta({ pequeno = false }: { pequeno?: boolean }) {
+  return (
+    <svg
+      viewBox="-1.5 -1.5 23 23"
+      className={`${pequeno ? "size-4" : "size-5"} shrink-0 text-desfavorable`}
+      data-forma="triangulo"
+      aria-hidden="true"
+    >
+      <path d="M10 -0.2 20.6 19.4H-0.6z" fill="currentColor" {...sello} />
+      <path d="M10 6.5v6M10 16.2v.1" {...signo} />
+    </svg>
+  );
+}
+
 export function MarcaCompatibilidad({ tipo }: { tipo: Compatibilidad }) {
   return (
     <span className="inline-flex items-center gap-2">
@@ -78,14 +97,24 @@ export function MarcaCompatibilidad({ tipo }: { tipo: Compatibilidad }) {
 
 const tipos: Compatibilidad[] = ["favorable", "desfavorable", "neutra"];
 
-export function LeyendaCompatibilidad() {
+/** Las tres marcas de vecindad y, en el editor, también el triángulo de la planta. */
+export function LeyendaCompatibilidad({ conAvisoPlanta = false }: { conAvisoPlanta?: boolean }) {
   return (
-    <ul aria-label="Cómo se llevan los vecinos" className="flex flex-wrap gap-x-6 gap-y-2">
+    <ul
+      aria-label={conAvisoPlanta ? "Qué dicen las marcas" : "Cómo se llevan los vecinos"}
+      className="flex flex-wrap gap-x-6 gap-y-2"
+    >
       {tipos.map((tipo) => (
         <li key={tipo}>
           <MarcaCompatibilidad tipo={tipo} />
         </li>
       ))}
+      {conAvisoPlanta && (
+        <li className="inline-flex items-center gap-2">
+          <IconoAvisoPlanta />
+          <span>Le falta sol o va fuera de temporada</span>
+        </li>
+      )}
     </ul>
   );
 }

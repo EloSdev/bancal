@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { bancalDemo } from "../__fixtures__/bancales";
 import { cultivosDePrueba, hinojo } from "../__fixtures__/cultivos";
 import type { Mes } from "../cultivos/model";
-import { avisosBancal, textoAviso } from "./avisos";
+import { avisosBancal, diferenciaAvisos, resumenAviso, textoAviso } from "./avisos";
 import type { Aviso, Bancal, Plantacion } from "./model";
 
 const plantar = (cultivoId: string, fila: number, columna: number, mesSiembra: Mes = 5): Plantacion => ({
@@ -156,5 +156,48 @@ describe("avisosBancal · escenario de la demo", () => {
     const lista = avisos([...huerto, plantar("hinojo", 2, 3)]);
     expect(deTipo(lista, "vecindad")).toEqual([]);
     expect(lista).toEqual([]);
+  });
+});
+
+describe("diferenciaAvisos", () => {
+  const vecindad: Aviso = {
+    tipo: "vecindad",
+    celdas: [
+      { fila: 0, columna: 0 },
+      { fila: 0, columna: 1 },
+    ],
+    cultivoIds: ["tomate", "hinojo"],
+    motivo: "m",
+  };
+  const sol: Aviso = { tipo: "sol", celda: { fila: 1, columna: 1 }, cultivoId: "tomate", necesita: "pleno-sol", tiene: "sombra" };
+
+  it("C14.3 · dice qué avisos aparecen y cuáles se resuelven con un cambio", () => {
+    expect(diferenciaAvisos([vecindad], [sol])).toEqual({ nuevos: [sol], resueltos: [vecindad] });
+  });
+
+  it("C14.3 · un aviso que sigue igual (aunque sea otro objeto) no es nuevo ni resuelto", () => {
+    expect(diferenciaAvisos([vecindad], [{ ...vecindad, celdas: [...vecindad.celdas] }])).toEqual({ nuevos: [], resueltos: [] });
+  });
+});
+describe("textoAviso · qué hacer", () => {
+  const sol: Aviso = { tipo: "sol", celda: { fila: 0, columna: 0 }, cultivoId: "tomate", necesita: "pleno-sol", tiene: "semisombra" };
+  const temporada: Aviso = { tipo: "fuera-de-temporada", celda: { fila: 0, columna: 0 }, cultivoId: "tomate", mesSiembra: 4, zona: "atlantica" };
+
+  it("C14.2 · el de sol dice qué hacer (brief: el porqué y qué hacer)", () => {
+    expect(textoAviso(sol, cultivosDePrueba)).toMatch(/Busca un sitio con más sol o elige un cultivo que aguante la semisombra\.$/);
+  });
+
+  it("C14.2 · el de temporada dice cuándo sembrarlo", () => {
+    expect(textoAviso(temporada, cultivosDePrueba)).toMatch(/Espera a mayo para la siembra\.$/);
+  });
+});
+
+describe("resumenAviso", () => {
+  it.each([
+    [{ tipo: "vecindad", celdas: [{ fila: 0, columna: 0 }, { fila: 0, columna: 1 }], cultivoIds: ["tomate", "hinojo"], motivo: "m" }, "tomate junto a hinojo"],
+    [{ tipo: "sol", celda: { fila: 0, columna: 0 }, cultivoId: "tomate", necesita: "pleno-sol", tiene: "sombra" }, "tomate: le falta sol"],
+    [{ tipo: "fuera-de-temporada", celda: { fila: 0, columna: 0 }, cultivoId: "hinojo", mesSiembra: 1, zona: "atlantica" }, "hinojo: fuera de temporada"],
+  ] as const)("C14.3 · un resumen corto, sin el motivo, para anunciarlo: %o → «%s»", (aviso, esperado) => {
+    expect(resumenAviso(aviso as Aviso, cultivosDePrueba)).toBe(esperado);
   });
 });
